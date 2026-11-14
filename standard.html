@@ -1,0 +1,3435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1346 Russell Road, Gibsons — Interactive 3D Matterport Digital Twin &amp; Renovation Studio</title>
+  <meta name="description" content="Hyper-realistic interactive 3D architectural model and Matterport digital twin renovation simulator for 1346 Russell Road, Gibsons, BC (MLS R3119342)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: hsl(215, 22%, 9%);
+      --bg-panel: hsl(215, 20%, 12%);
+      --bg-elevated: hsl(215, 18%, 16%);
+      --bg-glass: hsla(215, 22%, 11%, 0.86);
+      --border-subtle: hsla(210, 18%, 75%, 0.12);
+      --border-strong: hsla(210, 18%, 75%, 0.24);
+      --text-primary: hsl(40, 25%, 95%);
+      --text-secondary: hsl(215, 14%, 72%);
+      --text-muted: hsl(215, 12%, 52%);
+      --accent-amber: hsl(36, 88%, 56%);
+      --accent-amber-soft: hsla(36, 88%, 56%, 0.16);
+      --accent-teal: hsl(182, 68%, 48%);
+      --accent-teal-soft: hsla(182, 68%, 48%, 0.16);
+      --accent-crimson: hsl(4, 78%, 60%);
+      --accent-emerald: hsl(152, 62%, 48%);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-elevated: 0 18px 42px rgba(0, 0, 0, 0.52);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13.5px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* App Layout */
+    .app-shell {
+      display: grid;
+      grid-template-rows: 58px 1fr;
+      grid-template-columns: 350px 1fr 340px;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Top Header */
+    .top-header {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 30;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, hsl(36, 82%, 48%), hsl(28, 78%, 34%));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 13px;
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      flex-shrink: 0;
+    }
+
+    .brand-titles h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .brand-meta span.dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    /* Mode Switcher */
+    .mode-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--bg-base);
+      padding: 3px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      gap: 3px;
+    }
+
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .mode-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .mode-btn.active {
+      background: var(--bg-elevated);
+      color: var(--accent-amber);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .action-btn:hover {
+      border-color: var(--border-strong);
+      background: hsl(215, 18%, 20%);
+    }
+
+    .action-btn.active {
+      background: var(--accent-amber-soft);
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .action-btn.reset-btn:hover {
+      border-color: var(--accent-crimson);
+      color: var(--accent-crimson);
+    }
+
+    /* Left Sidebar: Renovation Prompt & Controls */
+    .left-sidebar {
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    /* Right Sidebar: Rooms, Panoramas, Structural & Cost Summary */
+    .right-sidebar {
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    .panel-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-secondary);
+    }
+
+    .section-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-elevated);
+      color: var(--accent-amber);
+    }
+
+    /* Prompt Box */
+    .prompt-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      min-height: 74px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      resize: vertical;
+      transition: border-color 0.15s ease;
+    }
+
+    .prompt-textarea:focus {
+      outline: none;
+      border-color: var(--accent-amber);
+    }
+
+    .prompt-submit-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .prompt-submit-btn {
+      flex: 1;
+      background: var(--accent-amber);
+      color: hsl(215, 28%, 8%);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-weight: 600;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: filter 0.15s ease;
+    }
+
+    .prompt-submit-btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .prompt-feedback {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      background: hsla(152, 62%, 48%, 0.1);
+      border: 1px solid hsla(152, 62%, 48%, 0.3);
+      color: hsl(152, 70%, 75%);
+      font-size: 12px;
+      display: none;
+    }
+
+    .prompt-feedback.visible {
+      display: block;
+    }
+
+    /* Preset Chips */
+    .preset-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .preset-chip {
+      text-align: left;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      color: var(--text-primary);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .preset-chip:hover {
+      border-color: var(--accent-amber);
+      background: hsl(215, 18%, 18%);
+    }
+
+    .preset-chip.active {
+      background: var(--accent-amber-soft);
+      border-color: var(--accent-amber);
+    }
+
+    .preset-chip-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preset-chip-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Toggles & Select Controls */
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 6px 8px;
+      background: var(--bg-base);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .toggle-label {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .toggle-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .switch-input {
+      appearance: none;
+      width: 36px;
+      height: 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.18s ease;
+    }
+
+    .switch-input::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .switch-input:checked {
+      background: var(--accent-amber);
+      border-color: var(--accent-amber);
+    }
+
+    .switch-input:checked::after {
+      transform: translateX(16px);
+      background: hsl(215, 28%, 8%);
+    }
+
+    .select-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .select-row label {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .studio-select {
+      width: 100%;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 6px 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    .slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    .studio-slider {
+      width: 100%;
+      accent-color: var(--accent-amber);
+      cursor: pointer;
+    }
+
+    /* Center Viewport */
+    .viewport-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 35%, hsl(215, 20%, 15%), hsl(215, 24%, 7%));
+      overflow: hidden;
+    }
+
+    #webgl-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+
+    #webgl-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* Floating Overlays inside Viewport */
+    .viewport-hud-top {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      pointer-events: none;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .hud-pill {
+      pointer-events: auto;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      box-shadow: var(--shadow-elevated);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hud-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hud-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .hud-stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .hud-stat-val.highlight {
+      color: var(--accent-amber);
+    }
+
+    .hud-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-subtle);
+    }
+
+    /* Camera Quick Bar */
+    .viewport-hud-bottom {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .camera-bar {
+      pointer-events: auto;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .cam-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+
+    .cam-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .cam-btn.active {
+      background: var(--accent-amber-soft);
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    /* Selected Wall / Element Floating Inspector */
+    .wall-inspector-card {
+      pointer-events: auto;
+      position: absolute;
+      top: 74px;
+      left: 14px;
+      width: 300px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--accent-amber);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-elevated);
+      display: none;
+      z-index: 15;
+    }
+
+    .wall-inspector-card.visible {
+      display: block;
+    }
+
+    .inspector-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .inspector-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--accent-amber);
+    }
+
+    .inspector-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .inspector-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .inspector-action-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 11.5px;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+
+    .inspector-action-btn:hover {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .inspector-action-btn.active {
+      background: var(--accent-amber);
+      color: #111;
+      border-color: var(--accent-amber);
+      font-weight: 600;
+    }
+
+    /* 2D Blueprint Overlay Modal / Mode */
+    .blueprint-overlay {
+      position: absolute;
+      inset: 0;
+      background: hsl(215, 24%, 9%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 8;
+    }
+
+    .blueprint-overlay.visible {
+      display: flex;
+    }
+
+    #blueprint-canvas {
+      max-width: 100%;
+      max-height: calc(100% - 50px);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background: #0d1219;
+      box-shadow: var(--shadow-elevated);
+      cursor: pointer;
+    }
+
+    /* Photo Reference Drawer / Modal */
+    .photo-preview-card {
+      position: relative;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-base);
+      margin-bottom: 10px;
+    }
+
+    .photo-preview-card img {
+      width: 100%;
+      height: 156px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-caption {
+      padding: 7px 10px;
+      font-size: 11.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-elevated);
+    }
+
+    .photo-thumb-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+
+    .photo-thumb-btn {
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      overflow: hidden;
+      padding: 0;
+      background: var(--bg-base);
+      cursor: pointer;
+      height: 44px;
+      transition: border-color 0.14s ease;
+    }
+
+    .photo-thumb-btn.active,
+    .photo-thumb-btn:hover {
+      border-color: var(--accent-amber);
+    }
+
+    .photo-thumb-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Room Cards in Right Sidebar */
+    .room-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .room-item {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+
+    .room-item:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-elevated);
+    }
+
+    .room-item.active {
+      border-color: var(--accent-teal);
+      background: var(--accent-teal-soft);
+    }
+
+    .room-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 12.5px;
+    }
+
+    .room-dims {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent-amber);
+    }
+
+    .room-item-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Structural & Cost Breakdown */
+    .cost-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cost-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    .cost-item-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-primary);
+    }
+
+    .cost-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-strong);
+      font-weight: 600;
+    }
+
+    .cost-total-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--accent-emerald);
+    }
+
+    /* 3D Room Labels Overlay */
+    #labels-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .room-label-3d {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background: hsla(215, 24%, 9%, 0.82);
+      backdrop-filter: blur(6px);
+      border: 1px solid hsla(210, 20%, 80%, 0.22);
+      border-radius: 5px;
+      padding: 3px 7px;
+      pointer-events: auto;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .room-label-3d:hover {
+      border-color: var(--accent-amber);
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .room-label-3d .lbl-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .room-label-3d .lbl-dim {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      color: var(--accent-amber);
+      display: block;
+    }
+
+    /* Pano HUD Banner */
+    .pano-banner {
+      position: absolute;
+      top: 72px;
+      right: 14px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--accent-teal);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      max-width: 310px;
+      display: none;
+      z-index: 12;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .pano-banner.visible {
+      display: block;
+    }
+
+    @media (max-width: 1180px) {
+      .app-shell {
+        grid-template-columns: 300px 1fr 290px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="brand-group">
+        <div class="brand-badge">3D</div>
+        <div class="brand-titles">
+          <h1>1346 Russell Road, Gibsons — Digital Twin &amp; Renovation Studio</h1>
+          <div class="brand-meta">
+            <span>Matterport ID: rfwtuskak8Q</span>
+            <span class="dot"></span>
+            <span>1,279 sq ft Rancher (1963)</span>
+            <span class="dot"></span>
+            <span>10.82 Acres · MLS R3119342</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="mode-switcher" aria-label="3D View Modes">
+        <button id="mode-hybrid-btn" class="mode-btn active" type="button">
+          Hybrid Scan + 3D Twin
+        </button>
+        <button id="mode-arch-btn" class="mode-btn" type="button">
+          Hyper-Real Architectural 3D
+        </button>
+        <button id="mode-pano-btn" class="mode-btn" type="button">
+          360° Matterport Walk-Through
+        </button>
+        <button id="mode-blueprint-btn" class="mode-btn" type="button">
+          2D/3D Floorplan Blueprint
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button id="toggle-before-after-btn" class="action-btn" type="button" title="Toggle between As-Built 1963 state and your current Renovation state">
+          Compare: As-Built vs. Renovated
+        </button>
+        <button id="toggle-roof-btn" class="action-btn active" type="button" title="Cut away roof &amp; ceilings for dollhouse interior inspection">
+          Roof Cutaway: ON
+        </button>
+        <button id="reset-renovations-btn" class="action-btn reset-btn" type="button">
+          Reset to 1963 As-Built
+        </button>
+      </div>
+    </header>
+
+    <!-- Left Sidebar: AI / Natural Language Renovation Prompt + Structural & Finish Controls -->
+    <aside class="left-sidebar" aria-label="Renovation Prompt and Controls">
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Prompt Space Renovations</span>
+          <span class="section-badge">NLP 3D Engine</span>
+        </div>
+        <form id="renovation-prompt-form" class="prompt-form">
+          <textarea
+            id="renovation-prompt-input"
+            class="prompt-textarea"
+            placeholder="Describe any renovation (e.g. 'Open up the kitchen &amp; hallway closet wall, install a white oak waterfall quartz island, remove the office pony wall, and add white oak floors')..."
+          ></textarea>
+          <div class="prompt-submit-row">
+            <button id="apply-prompt-btn" class="prompt-submit-btn" type="submit">
+              Apply Renovation to 3D House
+            </button>
+          </div>
+        </form>
+        <div id="prompt-feedback-box" class="prompt-feedback"></div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">One-Click Renovation Scenarios</span>
+          <span class="section-badge">Presets</span>
+        </div>
+        <div class="preset-grid">
+          <button id="preset-open-greatroom" class="preset-chip" type="button">
+            <span class="preset-chip-title">
+              <span>1. Open-Concept Great Room + Island</span>
+              <span style="color: var(--accent-amber);">Popular</span>
+            </span>
+            <span class="preset-chip-desc">Removes kitchen hanging cabinets, U-peninsula &amp; central hallway closet wall; adds 9'6" white oak waterfall island.</span>
+          </button>
+
+          <button id="preset-office-loft" class="preset-chip" type="button">
+            <span class="preset-chip-title">
+              <span>2. Open Vaulted Living + Office</span>
+            </span>
+            <span class="preset-chip-desc">Removes the 1963 wood pony wall between Living Room &amp; Office, levels the step-up floor, and unifies under the vaulted cedar ceiling.</span>
+          </button>
+
+          <button id="preset-primary-suite" class="preset-chip" type="button">
+            <span class="preset-chip-title">
+              <span>3. Primary Suite + Spa Bathroom</span>
+            </span>
+            <span class="preset-chip-desc">Cuts a double French doorway between Office &amp; Bedroom 2 and upgrades Bathroom to walk-in glass shower &amp; floating oak vanity.</span>
+          </button>
+
+          <button id="preset-butler-pantry" class="preset-chip" type="button">
+            <span class="preset-chip-title">
+              <span>4. Kitchen-to-Laundry Butler's Pantry</span>
+            </span>
+            <span class="preset-chip-desc">Opens the east wall between Kitchen, Storage &amp; Laundry Room with an archway into a mudroom &amp; walk-in pantry.</span>
+          </button>
+
+          <button id="preset-full-modern" class="preset-chip" type="button">
+            <span class="preset-chip-title">
+              <span>5. Complete Coast Modern Transformation</span>
+              <span style="color: var(--accent-teal);">Full</span>
+            </span>
+            <span class="preset-chip-desc">Combines open great room, waterfall island, alabaster walls, wide-plank white oak floors, linear stone fireplace &amp; folding patio glass.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Walls, Openings &amp; Layout</span>
+          <span class="section-badge">Click Any Wall in 3D</span>
+        </div>
+        <div class="control-group">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Remove Central Hallway Closet</span>
+              <span class="toggle-sub">Opens Hallway (10'3"×6'9") to Dining Room</span>
+            </div>
+            <input id="chk-remove-hall-closet" class="switch-input" type="checkbox" />
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Remove Kitchen Hanging Cabinets</span>
+              <span class="toggle-sub">Opens sightline from Kitchen to Dining &amp; Living</span>
+            </div>
+            <input id="chk-remove-hanging-cabs" class="switch-input" type="checkbox" />
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Modify Living / Office Pony Wall</span>
+              <span class="toggle-sub">13'10" partition at vaulted ridge (x = 7.43m)</span>
+            </div>
+            <select id="sel-office-wall" class="studio-select" style="width: 132px;">
+              <option value="pony">1963 Half-Wall</option>
+              <option value="open">Removed (Open)</option>
+              <option value="glass">Steel &amp; Glass Wall</option>
+              <option value="full">Full Wall + Door</option>
+            </select>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Level Office Floor Step-Up</span>
+              <span class="toggle-sub">Brings +18 cm Office floor flush with Living Room</span>
+            </div>
+            <input id="chk-level-office-floor" class="switch-input" type="checkbox" />
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Office ↔ Bedroom 2 Wall Opening</span>
+              <span class="toggle-sub">Partition wall E49 (x: 7.43–11.63m)</span>
+            </div>
+            <select id="sel-office-bed2" class="studio-select" style="width: 132px;">
+              <option value="solid">Solid Wall (1963)</option>
+              <option value="french">5' French Doors</option>
+              <option value="open">Wide 9' Opening</option>
+            </select>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>Kitchen ↔ Storage/Laundry Opening</span>
+              <span class="toggle-sub">East wall E60/E38 into 5'×5'10" Storage &amp; Laundry</span>
+            </div>
+            <select id="sel-kitchen-laundry" class="studio-select" style="width: 132px;">
+              <option value="solid">Solid Wall (1963)</option>
+              <option value="door">Pantry Doorway</option>
+              <option value="open">Open Butler Pantry</option>
+            </select>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span>South Orchard Folding Glass Doors</span>
+              <span class="toggle-sub">Expands Living &amp; Dining south windows to patio</span>
+            </div>
+            <input id="chk-south-bifold" class="switch-input" type="checkbox" />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Kitchen, Finishes &amp; Fixtures</span>
+        </div>
+        <div class="control-group">
+          <div class="select-row">
+            <label for="sel-kitchen-style">Kitchen Layout &amp; Cabinetry</label>
+            <select id="sel-kitchen-style" class="studio-select">
+              <option value="original">1963 Original (Birch + Turquoise Laminate U-Peninsula)</option>
+              <option value="oak_island">Coast White Oak + 9'6" Calacatta Quartz Waterfall Island</option>
+              <option value="scandi_marble">Scandinavian Matte White + Carrara Marble Chef Island</option>
+              <option value="sage_shaker">Pacific Sage Shaker + Butcher Block &amp; Brass</option>
+            </select>
+          </div>
+
+          <div class="select-row">
+            <label for="sel-wall-finish">Interior Wall Finish</label>
+            <select id="sel-wall-finish" class="studio-select">
+              <option value="original">1963 Original Walnut &amp; Birch Vertical Paneling</option>
+              <option value="alabaster">Warm Alabaster Painted Drywall (#F3EFE6)</option>
+              <option value="limewash">Sunshine Coast Sage Limewash</option>
+              <option value="birch_modern">Light Architectural Birch Veneer</option>
+            </select>
+          </div>
+
+          <div class="select-row">
+            <label for="sel-floor-finish">Flooring Material</label>
+            <select id="sel-floor-finish" class="studio-select">
+              <option value="original">1963 Original (Oak Mosaic Parquet + Hex Vinyl + Carpet)</option>
+              <option value="white_oak">Continuous 7" Wide-Plank European White Oak</option>
+              <option value="walnut_herringbone">Restored Dark Walnut Herringbone Hardwood</option>
+              <option value="concrete">Polished Architectural Warm Grey Concrete</option>
+            </select>
+          </div>
+
+          <div class="select-row">
+            <label for="sel-fireplace-style">Living Room Corner Fireplace</label>
+            <select id="sel-fireplace-style" class="studio-select">
+              <option value="original">1963 Diagonal Dark Brick Wood-Burning Fireplace</option>
+              <option value="stone_modern">Fluted Travertine &amp; Linear Glass Gas Fireplace</option>
+              <option value="whitewash_brick">Whitewashed Brick &amp; Cedar Mantel</option>
+              <option value="removed">Removed (Opens Corner between Living &amp; Bedroom 2)</option>
+            </select>
+          </div>
+
+          <div class="select-row">
+            <label for="sel-bath-style">Bathroom (6'10" × 10'1")</label>
+            <select id="sel-bath-style" class="studio-select">
+              <option value="original">1963 Speckled Mosaic Tile &amp; Round Turquoise Sink</option>
+              <option value="spa_modern">Spa Walk-In Rain Shower + Floating Oak Vanity</option>
+            </select>
+          </div>
+
+          <div class="slider-row" style="margin-top: 4px;">
+            <div class="slider-header">
+              <span>Matterport Scan Opacity (Hybrid Mode)</span>
+              <span id="scan-opacity-val">75%</span>
+            </div>
+            <input id="scan-opacity-slider" class="studio-slider" type="range" min="0" max="100" value="75" />
+          </div>
+
+          <div class="slider-row">
+            <div class="slider-header">
+              <span>Natural Sunlight Time of Day</span>
+              <span id="sun-time-val">2:30 PM</span>
+            </div>
+            <input id="sun-time-slider" class="studio-slider" type="range" min="8" max="20" step="0.5" value="14.5" />
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Center 3D Viewport -->
+    <main class="viewport-stage">
+      <canvas id="webgl-canvas"></canvas>
+      <div id="labels-container"></div>
+
+      <!-- Top HUD -->
+      <div class="viewport-hud-top">
+        <div class="hud-pill">
+          <div class="hud-stat">
+            <span class="hud-stat-label">Active State</span>
+            <span id="hud-state-label" class="hud-stat-val highlight">1963 As-Built Baseline</span>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <span class="hud-stat-label">Main Living Open Area</span>
+            <span id="hud-open-sqft" class="hud-stat-val">401 sq ft</span>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <span class="hud-stat-label">Walls Modified</span>
+            <span id="hud-walls-mod" class="hud-stat-val">0 walls</span>
+          </div>
+          <div class="hud-divider"></div>
+          <div class="hud-stat">
+            <span class="hud-stat-label">Est. Renovation Budget</span>
+            <span id="hud-est-cost" class="hud-stat-val">$0 CAD</span>
+          </div>
+        </div>
+
+        <div class="hud-pill" style="gap: 8px;">
+          <button id="toggle-labels-btn" class="action-btn active" type="button">Room Labels: ON</button>
+          <button id="toggle-sweeps-btn" class="action-btn active" type="button">Scan Nodes (24): ON</button>
+          <button id="first-person-btn" class="action-btn" type="button">Eye-Level Walk View</button>
+        </div>
+      </div>
+
+      <!-- Floating Wall / Opening Click Inspector -->
+      <div id="wall-inspector" class="wall-inspector-card">
+        <div class="inspector-title-row">
+          <span id="inspector-wall-name" class="inspector-title">Selected Wall</span>
+          <button id="inspector-close-btn" class="inspector-close" type="button" aria-label="Close wall inspector">&times;</button>
+        </div>
+        <div id="inspector-wall-meta" style="font-size: 11.5px; color: var(--text-secondary);">
+          Matterport Edge · Click an action below to modify this wall in 3D:
+        </div>
+        <div class="inspector-btn-grid">
+          <button id="wall-act-solid" class="inspector-action-btn active" type="button">Intact Wall</button>
+          <button id="wall-act-demolish" class="inspector-action-btn" type="button">Demolish Wall</button>
+          <button id="wall-act-half" class="inspector-action-btn" type="button">42" Half-Wall</button>
+          <button id="wall-act-opening" class="inspector-action-btn" type="button">Cut 6' Arch/Door</button>
+        </div>
+      </div>
+
+      <!-- 360 Panorama Mode Floating Banner -->
+      <div id="pano-hud-banner" class="pano-banner">
+        <div style="font-weight: 600; color: var(--accent-teal); font-size: 13px;" id="pano-banner-title">
+          360° Matterport Panorama
+        </div>
+        <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 3px;" id="pano-banner-sub">
+          Drag to look 360° around the real scanned room. Click cyan floor rings or sidebar rooms to move between scan positions.
+        </div>
+        <div style="margin-top: 8px; display: flex; gap: 6px;">
+          <button id="pano-overlay-toggle-btn" class="action-btn active" type="button" style="flex: 1; justify-content: center;">
+            3D Renovation Overlay: ON
+          </button>
+          <button id="pano-exit-btn" class="action-btn" type="button">
+            Exit to Dollhouse
+          </button>
+        </div>
+      </div>
+
+      <!-- 2D/3D Blueprint Canvas Overlay -->
+      <div id="blueprint-overlay" class="blueprint-overlay">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1100px; margin-bottom: 10px;">
+          <div>
+            <strong style="font-size: 14px;">Interactive Architectural Floorplan &amp; Matterport Wall Vector Overlay</strong>
+            <span style="font-size: 12px; color: var(--text-secondary); margin-left: 10px;">
+              Click any wall segment to toggle Demolition / Opening, or click any red scan node (S1–S26) to jump into 360° Panorama view.
+            </span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="bp-toggle-ref-btn" class="action-btn active" type="button">Show Original Floorplan Image</button>
+            <button id="bp-close-btn" class="action-btn" type="button">Back to 3D View</button>
+          </div>
+        </div>
+        <canvas id="blueprint-canvas" width="1200" height="690"></canvas>
+      </div>
+
+      <!-- Bottom Camera Bar -->
+      <div class="viewport-hud-bottom">
+        <div class="camera-bar" role="toolbar" aria-label="Camera Presets">
+          <button class="cam-btn active" data-cam="dollhouse" type="button">Dollhouse Orbit</button>
+          <button class="cam-btn" data-cam="topdown" type="button">Top-Down Plan</button>
+          <button class="cam-btn" data-cam="kitchen" type="button">Kitchen &amp; Peninsula</button>
+          <button class="cam-btn" data-cam="living" type="button">Living &amp; Fireplace</button>
+          <button class="cam-btn" data-cam="office" type="button">Office &amp; Vault</button>
+          <button class="cam-btn" data-cam="dining" type="button">Dining &amp; Hallway</button>
+          <button class="cam-btn" data-cam="bathroom" type="button">Bathroom</button>
+          <button class="cam-btn" data-cam="bedrooms" type="button">Bedrooms 1 &amp; 2</button>
+          <button class="cam-btn" data-cam="laundry" type="button">Laundry &amp; Carport</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar: Extracted Matterport Photos, Room Navigator & Structural/Budget Report -->
+    <aside class="right-sidebar" aria-label="Matterport Reference Photos and Room Navigator">
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Extracted Matterport Photos</span>
+          <span id="active-photo-tag" class="section-badge">Kitchen</span>
+        </div>
+        <div class="photo-preview-card">
+          <img id="main-ref-photo" src="./assets/photos/kitchen_main.jpg" alt="Matterport extracted interior view of 1346 Russell Road" />
+          <div class="photo-caption">
+            <span id="main-ref-caption">Kitchen &amp; Dining (Sweep S8)</span>
+            <button id="jump-photo-360-btn" class="action-btn" type="button" style="padding: 3px 8px; font-size: 11px;">
+              Open 360° Here
+            </button>
+          </div>
+        </div>
+        <div class="photo-thumb-strip">
+          <button class="photo-thumb-btn active" type="button" data-photo="./assets/photos/kitchen_main.jpg" data-caption="Kitchen &amp; Brick Oven (S8)" data-tag="Kitchen" data-sweep="8">
+            <img src="./assets/photos/kitchen_main.jpg" alt="Kitchen view 1" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/photos/kitchen_dining.jpg" data-caption="Turquoise Peninsula &amp; Dining (S7)" data-tag="Peninsula" data-sweep="7">
+            <img src="./assets/photos/kitchen_dining.jpg" alt="Kitchen view 2" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/photos/bedroom_west_1.jpg" data-caption="Bedroom 2 — 8'10&quot;×13'6&quot; (S20)" data-tag="Bedroom 2" data-sweep="20">
+            <img src="./assets/photos/bedroom_west_1.jpg" alt="Bedroom 2" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/photos/bedroom_west_2.jpg" data-caption="Bedroom 2 Closet &amp; Hall (S19)" data-tag="Hallway" data-sweep="19">
+            <img src="./assets/photos/bedroom_west_2.jpg" alt="Bedroom 2 closet" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/photos/bedroom_east.jpg" data-caption="Bedroom 1 — 12'1&quot;×10'1&quot; (S16)" data-tag="Bedroom 1" data-sweep="16">
+            <img src="./assets/photos/bedroom_east.jpg" alt="Bedroom 1" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/photos/laundry_room.jpg" data-caption="Laundry Room — 11'7&quot;×10' (S12)" data-tag="Laundry" data-sweep="12">
+            <img src="./assets/photos/laundry_room.jpg" alt="Laundry room" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/photos/exterior_carport.jpg" data-caption="Carport &amp; South Entry" data-tag="Exterior" data-sweep="1">
+            <img src="./assets/photos/exterior_carport.jpg" alt="Exterior &amp; Carport" />
+          </button>
+          <button class="photo-thumb-btn" type="button" data-photo="./assets/floorplan.png" data-caption="Measured Architectural Plan" data-tag="Floorplan" data-sweep="23">
+            <img src="./assets/floorplan.png" alt="Floorplan" />
+          </button>
+        </div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Rooms &amp; 360° Scan Nodes</span>
+          <span class="section-badge">Click to Focus</span>
+        </div>
+        <div id="room-navigator-list" class="room-list"></div>
+      </section>
+
+      <section class="panel-section">
+        <div class="section-header">
+          <span class="section-title">Structural &amp; Cost Estimator</span>
+          <span class="section-badge">BC / Sunshine Coast</span>
+        </div>
+        <div id="structural-notes-box" style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 10px; padding: 8px; background: var(--bg-base); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          All original 1963 partitions intact. Select a preset, prompt a renovation, or click any wall in 3D to evaluate structural spans and cost.
+        </div>
+        <div id="cost-breakdown-list" class="cost-list"></div>
+        <div class="cost-total-row">
+          <span>Estimated Total</span>
+          <span id="cost-total-value" class="cost-total-val">$0 CAD</span>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Load Extracted Matterport House Data -->
+  <script src="./assets/house_data.js"></script>
+
+  <!-- Main 3D Digital Twin & Renovation Engine -->
+  <script type="module">
+    import * as THREE from './assets/three.module.min.js';
+
+    const DATA = window.HOUSE_DATA;
+
+    // =========================================================================
+    // 1. COORDINATE TRANSFORMATION (Matterport [mpX, mpY, mpZ] <-> Three.js [X, Y, Z])
+    // =========================================================================
+    // Matterport house bounds:
+    //   mpX: 2.42 (South) .. 11.82 (North), center = 7.12
+    //   mpY: -9.82 (East) .. +8.57 (West),  center = -0.62
+    //   mpZ: -1.14 (Main Floor) .. +2.85 (Vaulted Ridge)
+    // Right-handed rigid transform (det = +1) matching floorplan image.png:
+    //   worldX = -(mpY - MP_Y0)   (West = -X left, East = +X right)
+    //   worldY = mpZ - MP_Z0      (Main floor = 0.0, Up = +Y)
+    //   worldZ = -(mpX - MP_X0)   (North = -Z top/back, South = +Z bottom/front)
+    const MP_X0 = 7.12;
+    const MP_Y0 = -0.62;
+    const MP_Z0 = -1.14;
+
+    function mpToWorld(mpX, mpY, mpZ = MP_Z0) {
+      return new THREE.Vector3(
+        -(mpY - MP_Y0),
+        mpZ - MP_Z0,
+        -(mpX - MP_X0)
+      );
+    }
+
+    function worldToMp(wx, wy, wz) {
+      return {
+        x: MP_X0 - wz,
+        y: MP_Y0 - wx,
+        z: MP_Z0 + wy,
+      };
+    }
+
+    // =========================================================================
+    // 2. APPLICATION & RENOVATION STATE
+    // =========================================================================
+    const defaultRenovationState = () => ({
+      removeHallCloset: false,
+      removeHangingCabs: false,
+      officeWallMode: 'pony',        // 'pony' | 'open' | 'glass' | 'full'
+      levelOfficeFloor: false,
+      officeBed2Mode: 'solid',       // 'solid' | 'french' | 'open'
+      kitchenLaundryMode: 'solid',   // 'solid' | 'door' | 'open'
+      southBifoldDoors: false,
+      kitchenStyle: 'original',      // 'original' | 'oak_island' | 'scandi_marble' | 'sage_shaker'
+      wallFinish: 'original',        // 'original' | 'alabaster' | 'limewash' | 'birch_modern'
+      floorFinish: 'original',       // 'original' | 'white_oak' | 'walnut_herringbone' | 'concrete'
+      fireplaceStyle: 'original',    // 'original' | 'stone_modern' | 'whitewash_brick' | 'removed'
+      bathStyle: 'original',         // 'original' | 'spa_modern'
+      customWallOverrides: {},       // edgeIndex -> 'solid' | 'demolished' | 'half' | 'opening'
+    });
+
+    let renoState = defaultRenovationState();
+    let savedBeforeCompareState = null;
+    let isComparingAsBuilt = false;
+
+    let currentViewMode = 'hybrid';  // 'hybrid' | 'arch' | 'pano' | 'blueprint'
+    let roofCutaway = true;
+    let showRoomLabels = true;
+    let showSweepNodes = true;
+    let scanOpacity = 0.75;
+    let sunHour = 14.5;
+    let selectedWallIndex = null;
+    let activeSweepIndex = 8;
+    let showPanoOverlay = true;
+    let showBlueprintRefImage = true;
+
+    // =========================================================================
+    // 3. PROCEDURAL PBR TEXTURE GENERATOR (Wood, Parquet, Tile, Quartz, Brick)
+    // =========================================================================
+    const texCache = {};
+    const textureLoader = new THREE.TextureLoader();
+
+    function makeProceduralTexture(key, drawFn, repeatX = 2, repeatY = 2) {
+      if (texCache[key]) return texCache[key];
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      drawFn(ctx, 512, 512);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(repeatX, repeatY);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      texCache[key] = tex;
+      return tex;
+    }
+
+    function getSurfaceMaterial(type) {
+      if (type === 'floor_parquet') {
+        const map = makeProceduralTexture('parquet', (ctx, w, h) => {
+          ctx.fillStyle = '#b98952';
+          ctx.fillRect(0, 0, w, h);
+          const step = 64;
+          for (let y = 0; y < h; y += step) {
+            for (let x = 0; x < w; x += step) {
+              const horiz = ((x / step + y / step) % 2) === 0;
+              for (let i = 0; i < 4; i++) {
+                ctx.fillStyle = ['#c49358', '#b18047', '#ca9b62', '#a8773f'][(i + x + y) % 4];
+                if (horiz) ctx.fillRect(x, y + i * 16, step - 1, 15);
+                else ctx.fillRect(x + i * 16, y, 15, step - 1);
+              }
+            }
+          }
+        }, 5, 5);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.42, metalness: 0.05 });
+      }
+
+      if (type === 'floor_white_oak') {
+        const map = makeProceduralTexture('white_oak', (ctx, w, h) => {
+          ctx.fillStyle = '#d8c3a5';
+          ctx.fillRect(0, 0, w, h);
+          for (let y = 0; y < h; y += 32) {
+            ctx.fillStyle = (y / 32) % 2 === 0 ? '#decab0' : '#cfb899';
+            ctx.fillRect(0, y, w, 31);
+            ctx.fillStyle = 'rgba(90,65,40,0.12)';
+            ctx.fillRect(0, y + 31, w, 1);
+            for (let g = 0; g < 18; g++) {
+              ctx.fillStyle = 'rgba(130,95,60,0.06)';
+              ctx.fillRect((g * 37) % w, y + (g % 28), 90, 2);
+            }
+          }
+        }, 4, 4);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.38, metalness: 0.04 });
+      }
+
+      if (type === 'floor_walnut') {
+        const map = makeProceduralTexture('walnut_floor', (ctx, w, h) => {
+          ctx.fillStyle = '#5c3c24';
+          ctx.fillRect(0, 0, w, h);
+          for (let y = 0; y < h; y += 32) {
+            ctx.fillStyle = (y / 32) % 2 === 0 ? '#67442a' : '#51341f';
+            ctx.fillRect(0, y, w, 31);
+            ctx.fillStyle = 'rgba(20,10,5,0.28)';
+            ctx.fillRect(0, y + 31, w, 1);
+          }
+        }, 4, 4);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.34, metalness: 0.06 });
+      }
+
+      if (type === 'floor_concrete') {
+        const map = makeProceduralTexture('concrete_floor', (ctx, w, h) => {
+          ctx.fillStyle = '#9ca09e';
+          ctx.fillRect(0, 0, w, h);
+          for (let i = 0; i < 600; i++) {
+            ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+            ctx.fillRect((i * 73) % w, (i * 131) % h, 24, 18);
+          }
+        }, 3, 3);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.28, metalness: 0.08 });
+      }
+
+      if (type === 'floor_vinyl_hex') {
+        const map = makeProceduralTexture('vinyl_hex', (ctx, w, h) => {
+          ctx.fillStyle = '#dcd5c4';
+          ctx.fillRect(0, 0, w, h);
+          ctx.strokeStyle = '#c8bfa9';
+          ctx.lineWidth = 2;
+          for (let y = 0; y < h; y += 48) {
+            for (let x = 0; x < w; x += 48) {
+              ctx.strokeRect(x + 4, y + 4, 40, 40);
+            }
+          }
+        }, 4, 4);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.45, metalness: 0.02 });
+      }
+
+      if (type === 'floor_carpet') {
+        const map = makeProceduralTexture('carpet_beige', (ctx, w, h) => {
+          ctx.fillStyle = '#c8beae';
+          ctx.fillRect(0, 0, w, h);
+          for (let i = 0; i < 1500; i++) {
+            ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(80,65,50,0.05)';
+            ctx.fillRect((i * 29) % w, (i * 53) % h, 4, 4);
+          }
+        }, 6, 6);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.88, metalness: 0.0 });
+      }
+
+      if (type === 'floor_mosaic') {
+        const map = makeProceduralTexture('mosaic_bath', (ctx, w, h) => {
+          ctx.fillStyle = '#d7d2c8';
+          ctx.fillRect(0, 0, w, h);
+          for (let y = 0; y < h; y += 16) {
+            for (let x = 0; x < w; x += 16) {
+              ctx.fillStyle = ['#c9c2b4', '#dfd9ce', '#8f999c', '#b7afa0'][(x + y) % 4];
+              ctx.fillRect(x + 1, y + 1, 13, 13);
+            }
+          }
+        }, 5, 5);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.32, metalness: 0.05 });
+      }
+
+      if (type === 'wall_panel_walnut') {
+        const map = makeProceduralTexture('panel_walnut', (ctx, w, h) => {
+          ctx.fillStyle = '#8b572e';
+          ctx.fillRect(0, 0, w, h);
+          for (let x = 0; x < w; x += 32) {
+            ctx.fillStyle = (x / 32) % 2 === 0 ? '#935d32' : '#825028';
+            ctx.fillRect(x, 0, 30, h);
+            ctx.fillStyle = '#4d2b12';
+            ctx.fillRect(x + 30, 0, 2, h);
+          }
+        }, 3, 1);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.46, metalness: 0.04 });
+      }
+
+      if (type === 'wall_panel_birch') {
+        const map = makeProceduralTexture('panel_birch', (ctx, w, h) => {
+          ctx.fillStyle = '#cfa978';
+          ctx.fillRect(0, 0, w, h);
+          for (let x = 0; x < w; x += 42) {
+            ctx.fillStyle = (x / 42) % 2 === 0 ? '#d5b080' : '#c69f6e';
+            ctx.fillRect(x, 0, 40, h);
+            ctx.fillStyle = 'rgba(90,60,30,0.22)';
+            ctx.fillRect(x + 40, 0, 2, h);
+          }
+        }, 3, 1);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.44, metalness: 0.03 });
+      }
+
+      if (type === 'wall_alabaster') {
+        return new THREE.MeshStandardMaterial({ color: 0xf3efe6, roughness: 0.72, metalness: 0.01 });
+      }
+
+      if (type === 'wall_limewash') {
+        const map = makeProceduralTexture('wall_limewash', (ctx, w, h) => {
+          ctx.fillStyle = '#d3dcd4';
+          ctx.fillRect(0, 0, w, h);
+          for (let i = 0; i < 300; i++) {
+            ctx.fillStyle = i % 2 === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(110,130,115,0.05)';
+            ctx.fillRect((i * 43) % w, (i * 89) % h, 60, 45);
+          }
+        }, 2, 1);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.78, metalness: 0.01 });
+      }
+
+      if (type === 'cedar_ceiling') {
+        const map = makeProceduralTexture('cedar_ceiling', (ctx, w, h) => {
+          ctx.fillStyle = '#b87638';
+          ctx.fillRect(0, 0, w, h);
+          for (let y = 0; y < h; y += 24) {
+            ctx.fillStyle = (y / 24) % 2 === 0 ? '#c27e3e' : '#ad6d31';
+            ctx.fillRect(0, y, w, 22);
+            ctx.fillStyle = '#693c14';
+            ctx.fillRect(0, y + 22, w, 2);
+          }
+        }, 4, 4);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.45, metalness: 0.04, side: THREE.DoubleSide });
+      }
+
+      if (type === 'brick_dark') {
+        const map = makeProceduralTexture('brick_dark', (ctx, w, h) => {
+          ctx.fillStyle = '#9c958d';
+          ctx.fillRect(0, 0, w, h);
+          const rows = 16, cols = 8;
+          const bh = h / rows, bw = w / cols;
+          for (let r = 0; r < rows; r++) {
+            const offset = (r % 2) * (bw / 2);
+            for (let c = -1; c <= cols; c++) {
+              ctx.fillStyle = ['#4a3e38', '#574942', '#3f3530', '#5e4f47'][(r + c + 10) % 4];
+              ctx.fillRect(c * bw + offset + 3, r * bh + 3, bw - 6, bh - 6);
+            }
+          }
+        }, 2, 2);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.78, metalness: 0.05 });
+      }
+
+      if (type === 'travertine_stone') {
+        const map = makeProceduralTexture('travertine', (ctx, w, h) => {
+          ctx.fillStyle = '#dfd8cc';
+          ctx.fillRect(0, 0, w, h);
+          for (let x = 0; x < w; x += 16) {
+            ctx.fillStyle = (x / 16) % 2 === 0 ? '#e6dfd4' : '#cfc6b8';
+            ctx.fillRect(x, 0, 12, h);
+          }
+        }, 2, 2);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.45, metalness: 0.05 });
+      }
+
+      if (type === 'quartz_calacatta') {
+        const map = makeProceduralTexture('calacatta', (ctx, w, h) => {
+          ctx.fillStyle = '#f6f5f2';
+          ctx.fillRect(0, 0, w, h);
+          ctx.strokeStyle = 'rgba(150, 145, 138, 0.32)';
+          ctx.lineWidth = 4;
+          for (let i = 0; i < 8; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, i * 70);
+            ctx.bezierCurveTo(w * 0.35, i * 70 + 40, w * 0.65, i * 70 - 30, w, i * 70 + 25);
+            ctx.stroke();
+          }
+        }, 2, 2);
+        return new THREE.MeshStandardMaterial({ map, roughness: 0.16, metalness: 0.08 });
+      }
+
+      if (type === 'turquoise_laminate') {
+        return new THREE.MeshStandardMaterial({ color: 0x30b7c4, roughness: 0.25, metalness: 0.05 });
+      }
+
+      return new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.6 });
+    }
+
+    // =========================================================================
+    // 4. THREE.JS SCENE, CAMERA, RENDERER & ORBIT/WALK CONTROLS
+    // =========================================================================
+    const canvas = document.getElementById('webgl-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0d1118);
+
+    const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 250);
+
+    // Custom smooth Orbit + First-Person Camera Controller
+    const camState = {
+      target: new THREE.Vector3(0, 0.9, 0),
+      spherical: { radius: 18.5, phi: 0.88, theta: 0.22 },
+      desiredTarget: new THREE.Vector3(0, 0.9, 0),
+      desiredSpherical: { radius: 18.5, phi: 0.88, theta: 0.22 },
+      isDragging: false,
+      isPanning: false,
+      lastX: 0,
+      lastY: 0,
+      downX: 0,
+      downY: 0,
+      firstPerson: false,
+    };
+
+    function updateCameraFromSpherical() {
+      // Smooth damping
+      camState.target.lerp(camState.desiredTarget, 0.14);
+      camState.spherical.radius += (camState.desiredSpherical.radius - camState.spherical.radius) * 0.14;
+      camState.spherical.phi += (camState.desiredSpherical.phi - camState.spherical.phi) * 0.14;
+      camState.spherical.theta += (camState.desiredSpherical.theta - camState.spherical.theta) * 0.14;
+
+      const r = camState.spherical.radius;
+      const phi = Math.max(0.08, Math.min(Math.PI * 0.49, camState.spherical.phi));
+      const theta = camState.spherical.theta;
+
+      camera.position.set(
+        camState.target.x + r * Math.sin(phi) * Math.sin(theta),
+        camState.target.y + r * Math.cos(phi),
+        camState.target.z + r * Math.sin(phi) * Math.cos(theta)
+      );
+      camera.lookAt(camState.target);
+    }
+
+    function flyToCameraPreset(presetName) {
+      document.querySelectorAll('.cam-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.cam === presetName);
+      });
+      camState.firstPerson = false;
+      document.getElementById('first-person-btn').classList.remove('active');
+
+      if (presetName === 'dollhouse') {
+        camState.desiredTarget.set(0.0, 0.6, 0.0);
+        camState.desiredSpherical = { radius: 18.5, phi: 0.86, theta: 0.20 };
+      } else if (presetName === 'topdown') {
+        camState.desiredTarget.set(0.0, 0.0, 0.0);
+        camState.desiredSpherical = { radius: 19.5, phi: 0.09, theta: 0.0 };
+      } else if (presetName === 'kitchen') {
+        const p = mpToWorld(5.6, -4.5, -0.1);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 6.2, phi: 1.05, theta: -0.55 };
+      } else if (presetName === 'living') {
+        const p = mpToWorld(5.4, 5.2, 0.0);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 7.4, phi: 1.08, theta: 0.45 };
+      } else if (presetName === 'office') {
+        const p = mpToWorld(9.4, 5.8, 0.2);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 6.8, phi: 1.04, theta: 0.65 };
+      } else if (presetName === 'dining') {
+        const p = mpToWorld(5.5, -0.8, 0.0);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 6.2, phi: 1.02, theta: 0.12 };
+      } else if (presetName === 'bathroom') {
+        const p = mpToWorld(10.1, -0.9, 0.0);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 4.8, phi: 0.78, theta: 0.15 };
+      } else if (presetName === 'bedrooms') {
+        const p = mpToWorld(9.8, -1.2, 0.0);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 8.5, phi: 0.82, theta: -0.25 };
+      } else if (presetName === 'laundry') {
+        const p = mpToWorld(9.2, -7.8, -0.1);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 7.5, phi: 0.92, theta: -0.65 };
+      }
+    }
+
+    // Lighting
+    const ambientLight = new THREE.HemisphereLight(0xfff6e8, 0x263244, 0.85);
+    scene.add(ambientLight);
+
+    const sunLight = new THREE.DirectionalLight(0xfff1dc, 1.65);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.set(2048, 2048);
+    sunLight.shadow.camera.near = 1;
+    sunLight.shadow.camera.far = 45;
+    const d = 14;
+    sunLight.shadow.camera.left = -d;
+    sunLight.shadow.camera.right = d;
+    sunLight.shadow.camera.top = d;
+    sunLight.shadow.camera.bottom = -d;
+    sunLight.shadow.bias = -0.0005;
+    scene.add(sunLight);
+
+    const interiorWarmLights = new THREE.Group();
+    scene.add(interiorWarmLights);
+
+    function updateSunLighting(hour) {
+      const progress = (hour - 6) / 14; // 6am to 8pm
+      const angle = (progress - 0.5) * Math.PI * 0.85;
+      const elev = Math.cos((progress - 0.5) * Math.PI) * 14 + 3.5;
+      sunLight.position.set(Math.sin(angle) * 18, elev, 11.5);
+      const isGolden = hour >= 17.5 || hour <= 9.0;
+      sunLight.color.setHex(isGolden ? 0xffb978 : 0xfff3e0);
+      sunLight.intensity = hour > 19 ? 0.45 : isGolden ? 1.4 : 1.7;
+      ambientLight.intensity = hour > 19 ? 0.5 : 0.88;
+    }
+    updateSunLighting(sunHour);
+
+    // =========================================================================
+    // 5. SCENE GROUPS (Matterport Scan, Architectural Twin, 360 Skybox, Sweep Nodes)
+    // =========================================================================
+    const scanMeshGroup = new THREE.Group();
+    const archTwinGroup = new THREE.Group();
+    const sweepNodesGroup = new THREE.Group();
+    const panoSkyboxGroup = new THREE.Group();
+    scene.add(scanMeshGroup);
+    scene.add(archTwinGroup);
+    scene.add(sweepNodesGroup);
+    scene.add(panoSkyboxGroup);
+
+    // Ground & Yard Context Plane (10.82 Acre Rural Sunshine Coast Setting)
+    const groundGeo = new THREE.PlaneGeometry(54, 38);
+    const groundMat = new THREE.MeshStandardMaterial({
+      color: 0x17201b,
+      roughness: 0.95,
+      metalness: 0.0,
+    });
+    const groundMesh = new THREE.Mesh(groundGeo, groundMat);
+    groundMesh.rotation.x = -Math.PI / 2;
+    groundMesh.position.y = -0.62;
+    groundMesh.receiveShadow = true;
+    scene.add(groundMesh);
+
+    // Subtle architectural scale grid around house
+    const gridHelper = new THREE.GridHelper(32, 32, 0x334155, 0x1e293b);
+    gridHelper.position.y = -0.60;
+    scene.add(gridHelper);
+
+    // =========================================================================
+    // 6. BUILD REAL MATTERPORT 3D PHOTOGRAMMETRY MESH WITH SURGICAL ZONE CLIPPING
+    // =========================================================================
+    const loadedDamTextures = {};
+    function getDamTexture(filename) {
+      if (!loadedDamTextures[filename]) {
+        const tex = textureLoader.load(`./assets/textures/${filename}`);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.flipY = true;
+        loadedDamTextures[filename] = tex;
+      }
+      return loadedDamTextures[filename];
+    }
+
+    function shouldClipScanZone(zone, state) {
+      if (roofCutaway && (zone === 'ceiling_vaulted' || zone === 'ceiling_flat')) {
+        return true;
+      }
+      if (zone === 'kitchen_peninsula' && (state.removeHangingCabs || state.kitchenStyle !== 'original')) {
+        return true;
+      }
+      if (zone === 'kitchen_perimeter' && state.kitchenStyle !== 'original') {
+        return true;
+      }
+      if (zone === 'hallway_closet' && state.removeHallCloset) {
+        return true;
+      }
+      if (zone === 'office_pony_wall' && state.officeWallMode !== 'pony') {
+        return true;
+      }
+      if (zone === 'wall_office_bed2' && state.officeBed2Mode !== 'solid') {
+        return true;
+      }
+      if (zone === 'wall_kitchen_laundry' && state.kitchenLaundryMode !== 'solid') {
+        return true;
+      }
+      if (zone === 'fireplace' && state.fireplaceStyle !== 'original') {
+        return true;
+      }
+      if (zone === 'bathroom' && state.bathStyle !== 'original') {
+        return true;
+      }
+      if (zone === 'floor' && state.floorFinish !== 'original') {
+        return true;
+      }
+      if (zone === 'walls_general' && state.wallFinish !== 'original') {
+        return true;
+      }
+      return false;
+    }
+
+    function buildMatterportScanMeshes(activeState) {
+      while (scanMeshGroup.children.length > 0) {
+        const c = scanMeshGroup.children.pop();
+        if (c.geometry) c.geometry.dispose();
+      }
+
+      if (currentViewMode !== 'hybrid') {
+        scanMeshGroup.visible = false;
+        return;
+      }
+      scanMeshGroup.visible = true;
+
+      for (const chunk of DATA.meshChunks) {
+        if (roofCutaway && !chunk.isIndoor && chunk.chunkId >= 31) {
+          // Skip high exterior roof chunks when roof cutaway is active
+          continue;
+        }
+
+        const filteredIndices = [];
+        const numTris = chunk.triZones.length;
+        for (let t = 0; t < numTris; t++) {
+          const zone = chunk.triZones[t];
+          if (!shouldClipScanZone(zone, activeState)) {
+            filteredIndices.push(
+              chunk.indices[3 * t],
+              chunk.indices[3 * t + 1],
+              chunk.indices[3 * t + 2]
+            );
+          }
+        }
+        if (filteredIndices.length === 0) continue;
+
+        const geo = new THREE.BufferGeometry();
+        const worldPos = new Float32Array(chunk.positions.length);
+        for (let i = 0; i < chunk.positions.length; i += 3) {
+          const wp = mpToWorld(chunk.positions[i], chunk.positions[i + 1], chunk.positions[i + 2]);
+          worldPos[i] = wp.x;
+          worldPos[i + 1] = wp.y;
+          worldPos[i + 2] = wp.z;
+        }
+
+        geo.setAttribute('position', new THREE.BufferAttribute(worldPos, 3));
+        geo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(chunk.uvs), 2));
+        geo.setIndex(filteredIndices);
+        geo.computeVertexNormals();
+
+        const mat = new THREE.MeshBasicMaterial({
+          map: getDamTexture(chunk.texture),
+          side: THREE.DoubleSide,
+          transparent: scanOpacity < 0.99,
+          opacity: scanOpacity,
+        });
+
+        const mesh = new THREE.Mesh(geo, mat);
+        scanMeshGroup.add(mesh);
+      }
+    }
+
+    // =========================================================================
+    // 7. BUILD HYPER-REALISTIC PBR 3D ARCHITECTURAL TWIN + RENOVATIONS
+    // =========================================================================
+    let clickableWallMeshes = [];
+
+    function getWallEffectiveState(wall, state) {
+      if (state.customWallOverrides[wall.index]) {
+        return state.customWallOverrides[wall.index];
+      }
+      if (wall.group === 'hallway_closet' && state.removeHallCloset) {
+        return 'demolished';
+      }
+      if (wall.group === 'fireplace' && state.fireplaceStyle === 'removed') {
+        return 'demolished';
+      }
+      if (wall.group === 'wall_office_bed2') {
+        if (state.officeBed2Mode === 'open') return 'demolished';
+        if (state.officeBed2Mode === 'french') return 'opening';
+      }
+      if (wall.group === 'wall_kitchen_laundry') {
+        if (state.kitchenLaundryMode === 'open') return 'demolished';
+        if (state.kitchenLaundryMode === 'door') return 'opening';
+      }
+      if (wall.group === 'storage_walls' && state.kitchenLaundryMode === 'open') {
+        return 'demolished';
+      }
+      return 'solid';
+    }
+
+    function createWallSegmentWithOpenings(x0, y0, x1, y1, thickness, baseZ, topZ, openings, mat, glassMat, trimMat, wallMeta) {
+      const group = new THREE.Group();
+      const p0 = mpToWorld(x0, y0, baseZ);
+      const p1 = mpToWorld(x1, y1, baseZ);
+      const dx = p1.x - p0.x;
+      const dz = p1.z - p0.z;
+      const length = Math.hypot(dx, dz);
+      if (length < 0.04) return group;
+
+      const angle = Math.atan2(dx, dz);
+      const totalHeight = topZ - baseZ;
+
+      group.position.set(p0.x, p0.y, p0.z);
+      group.rotation.y = angle;
+
+      const addBox = (zStart, zEnd, yStart, yEnd, material, isGlass = false) => {
+        const segLen = zEnd - zStart;
+        const segH = yEnd - yStart;
+        if (segLen <= 0.02 || segH <= 0.02) return;
+        const geo = new THREE.BoxGeometry(isGlass ? 0.03 : thickness, segH, segLen);
+        const m = new THREE.Mesh(geo, material);
+        m.position.set(0, yStart + segH / 2, zStart + segLen / 2);
+        if (!isGlass) {
+          m.castShadow = true;
+          m.receiveShadow = true;
+          if (wallMeta) {
+            m.userData.wallIndex = wallMeta.index;
+            clickableWallMeshes.push(m);
+          }
+        }
+        group.add(m);
+      };
+
+      if (!openings || openings.length === 0) {
+        addBox(0, length, 0, totalHeight, mat, false);
+        return group;
+      }
+
+      // Sort openings along wall
+      const sorted = [...openings].sort((a, b) => a.relativeCenter - b.relativeCenter);
+      let cursor = 0;
+
+      for (const op of sorted) {
+        const w = Math.min(length - 0.16, op.width);
+        const center = op.relativeCenter * length;
+        const s = Math.max(cursor, center - w / 2);
+        const e = Math.min(length, center + w / 2);
+
+        if (s > cursor + 0.02) {
+          addBox(cursor, s, 0, totalHeight, mat, false);
+        }
+
+        const isWindow = op.type === 'window';
+        const sillH = isWindow ? 0.85 : 0.0;
+        const headH = isWindow ? Math.min(totalHeight - 0.2, 2.08) : Math.min(totalHeight - 0.22, 2.06);
+
+        if (sillH > 0.02) {
+          addBox(s, e, 0, sillH, mat, false);
+        }
+        if (totalHeight > headH + 0.02) {
+          addBox(s, e, headH, totalHeight, mat, false);
+        }
+
+        // Frame & glazing
+        if (isWindow) {
+          addBox(s, e, sillH, headH, glassMat, true);
+          // Mullions & sill trim
+          addBox(s, e, sillH, sillH + 0.04, trimMat, false);
+          addBox(s, e, headH - 0.04, headH, trimMat, false);
+        } else {
+          // Door header trim
+          addBox(s, e, headH - 0.04, headH, trimMat, false);
+        }
+
+        cursor = e;
+      }
+
+      if (cursor < length - 0.02) {
+        addBox(cursor, length, 0, totalHeight, mat, false);
+      }
+
+      return group;
+    }
+
+    function buildArchitecturalTwin(activeState) {
+      while (archTwinGroup.children.length > 0) {
+        const c = archTwinGroup.children.pop();
+      }
+      while (interiorWarmLights.children.length > 0) {
+        interiorWarmLights.children.pop();
+      }
+      clickableWallMeshes = [];
+
+      // Determine materials based on renovation state
+      const wallMat =
+        activeState.wallFinish === 'alabaster' ? getSurfaceMaterial('wall_alabaster') :
+        activeState.wallFinish === 'limewash' ? getSurfaceMaterial('wall_limewash') :
+        activeState.wallFinish === 'birch_modern' ? getSurfaceMaterial('wall_panel_birch') :
+        getSurfaceMaterial('wall_panel_walnut');
+
+      const birchWallMat =
+        activeState.wallFinish === 'original' ? getSurfaceMaterial('wall_panel_birch') : wallMat;
+
+      const extWallMat = new THREE.MeshStandardMaterial({ color: 0xe2ddd2, roughness: 0.78 });
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xa8d8f0,
+        transparent: true,
+        opacity: 0.34,
+        roughness: 0.08,
+        transmission: 0.65,
+      });
+      const trimMat = new THREE.MeshStandardMaterial({
+        color: activeState.wallFinish === 'original' ? 0x5e3a1e : 0xf7f5f0,
+        roughness: 0.4,
+      });
+      const demolishedGhostMat = new THREE.MeshBasicMaterial({
+        color: 0xef4444,
+        transparent: true,
+        opacity: 0.18,
+        wireframe: true,
+      });
+
+      // 1. ROOM FLOORS
+      for (const rm of DATA.rooms) {
+        const pMin = mpToWorld(rm.xMin, rm.yMin, rm.floorZ);
+        const pMax = mpToWorld(rm.xMax, rm.yMax, rm.floorZ);
+        const wX = Math.abs(pMax.x - pMin.x);
+        const wZ = Math.abs(pMax.z - pMin.z);
+        const cx = (pMin.x + pMax.x) / 2;
+        const cz = (pMin.z + pMax.z) / 2;
+
+        let floorY = pMin.y;
+        if (rm.id === 'office' && activeState.levelOfficeFloor) {
+          floorY = 0.0;
+        }
+
+        let fMat;
+        if (rm.id === 'carport') {
+          fMat = getSurfaceMaterial('floor_concrete');
+        } else if (activeState.floorFinish === 'white_oak') {
+          fMat = getSurfaceMaterial('floor_white_oak');
+        } else if (activeState.floorFinish === 'walnut_herringbone') {
+          fMat = getSurfaceMaterial('floor_walnut');
+        } else if (activeState.floorFinish === 'concrete') {
+          fMat = getSurfaceMaterial('floor_concrete');
+        } else {
+          // 1963 Original room-specific floors
+          if (rm.id === 'living_room' || rm.id === 'dining_room') fMat = getSurfaceMaterial('floor_parquet');
+          else if (rm.id === 'kitchen' || rm.id === 'hallway') fMat = getSurfaceMaterial('floor_vinyl_hex');
+          else if (rm.id === 'bathroom') fMat = getSurfaceMaterial('floor_mosaic');
+          else if (rm.id === 'laundry') fMat = getSurfaceMaterial('floor_white_oak');
+          else fMat = getSurfaceMaterial('floor_carpet');
+        }
+
+        const slabH = rm.id === 'carport' ? 0.12 : 0.16;
+        const fGeo = new THREE.BoxGeometry(wX, slabH, wZ);
+        const fMesh = new THREE.Mesh(fGeo, fMat);
+        fMesh.position.set(cx, floorY - slabH / 2, cz);
+        fMesh.receiveShadow = true;
+        archTwinGroup.add(fMesh);
+      }
+
+      // 2. 68 MATTERPORT WALL EDGES + OPENINGS
+      for (const w of DATA.walls) {
+        const effState = getWallEffectiveState(w, activeState);
+        const mx = (w.x0 + w.x1) / 2;
+        const my = (w.y0 + w.y1) / 2;
+
+        // Determine wall height (vaulted gable on West Living/Office vs 2.44m flat ceiling)
+        let topMpZ = 1.30;
+        if (my > 1.80) {
+          // Under the vaulted Living/Office roof (ridge at x = 7.43, z = 2.82)
+          const distFromRidge = Math.abs(mx - 7.43);
+          topMpZ = Math.max(1.32, 2.75 - distFromRidge * 0.32);
+        }
+
+        let useMat = w.group === 'exterior_structural' ? extWallMat :
+                     (my > 0.2 ? wallMat : birchWallMat);
+        if (w.group === 'fireplace') {
+          useMat = activeState.fireplaceStyle === 'stone_modern' ? getSurfaceMaterial('travertine_stone') :
+                   activeState.fireplaceStyle === 'whitewash_brick' ? getSurfaceMaterial('wall_alabaster') :
+                   getSurfaceMaterial('brick_dark');
+          topMpZ = 2.65;
+        }
+
+        // Customize openings if renovated
+        let ops = [...(w.openings || [])];
+        if (effState === 'opening' && ops.length === 0) {
+          ops.push({ type: 'doorway', width: 1.65, relativeCenter: 0.5, height: 2.1, lowerElevation: -1.14 });
+        }
+        if (activeState.southBifoldDoors && (w.index === 19 || w.index === 41)) {
+          ops = [{ type: 'window', width: 2.8, relativeCenter: 0.5, height: 2.15, lowerElevation: -1.14 }];
+        }
+
+        if (effState === 'demolished') {
+          // Render subtle floor/ceiling footprint + structural LVL header beam if needed
+          const ghostSeg = createWallSegmentWithOpenings(w.x0, w.y0, w.x1, w.y1, w.thickness, -1.14, -1.10, [], demolishedGhostMat, glassMat, trimMat, w);
+          archTwinGroup.add(ghostSeg);
+          if (w.group === 'wall_office_bed2' || w.group === 'wall_kitchen_laundry') {
+            const beamSeg = createWallSegmentWithOpenings(w.x0, w.y0, w.x1, w.y1, w.thickness + 0.04, 1.05, 1.30, [], getSurfaceMaterial('cedar_ceiling'), glassMat, trimMat, w);
+            archTwinGroup.add(beamSeg);
+          }
+          continue;
+        }
+
+        const effectiveTopZ = effState === 'half' ? -0.05 : topMpZ;
+        const seg = createWallSegmentWithOpenings(w.x0, w.y0, w.x1, w.y1, w.thickness, -1.14, effectiveTopZ, ops, useMat, glassMat, trimMat, w);
+        if (selectedWallIndex === w.index) {
+          seg.traverse(obj => {
+            if (obj.isMesh) {
+              obj.material = obj.material.clone();
+              obj.material.emissive = new THREE.Color(0xd97706);
+              obj.material.emissiveIntensity = 0.35;
+            }
+          });
+        }
+        archTwinGroup.add(seg);
+      }
+
+      // 3. LIVING ROOM / OFFICE PARTITION (x = 7.43, y = 3.37 .. 8.55)
+      if (activeState.officeWallMode === 'pony') {
+        // Left & right 42" wood half-walls with wide center step-up opening
+        const ponyMat = getSurfaceMaterial('wall_panel_birch');
+        const capMat = getSurfaceMaterial('cedar_ceiling');
+        archTwinGroup.add(createWallSegmentWithOpenings(7.43, 3.37, 7.43, 5.15, 0.15, -1.14, -0.05, [], ponyMat, glassMat, trimMat, null));
+        archTwinGroup.add(createWallSegmentWithOpenings(7.43, 6.75, 7.43, 8.54, 0.15, -1.14, -0.05, [], ponyMat, glassMat, trimMat, null));
+        archTwinGroup.add(createWallSegmentWithOpenings(7.43, 3.37, 7.43, 5.15, 0.22, -0.05, 0.0, [], capMat, glassMat, trimMat, null));
+        archTwinGroup.add(createWallSegmentWithOpenings(7.43, 6.75, 7.43, 8.54, 0.22, -0.05, 0.0, [], capMat, glassMat, trimMat, null));
+      } else if (activeState.officeWallMode === 'glass') {
+        const steelMat = new THREE.MeshStandardMaterial({ color: 0x1e242b, roughness: 0.3, metalness: 0.8 });
+        const glassPart = createWallSegmentWithOpenings(
+          7.43, 3.37, 7.43, 8.54, 0.08, -0.96, 1.30,
+          [{ type: 'window', width: 4.6, relativeCenter: 0.5, height: 2.1, lowerElevation: -0.96 }],
+          steelMat, glassMat, steelMat, null
+        );
+        archTwinGroup.add(glassPart);
+      } else if (activeState.officeWallMode === 'full') {
+        const fullPart = createWallSegmentWithOpenings(
+          7.43, 3.37, 7.43, 8.54, 0.15, -0.96, 1.30,
+          [{ type: 'doorway', width: 1.5, relativeCenter: 0.5, height: 2.05, lowerElevation: -0.96 }],
+          wallMat, glassMat, trimMat, null
+        );
+        archTwinGroup.add(fullPart);
+      }
+
+      // 4. DIAGONAL HEARTH & FIREPLACE MANTEL (Living Room corner x: 6.44..7.44, y: 1.98..3.36)
+      if (activeState.fireplaceStyle !== 'removed') {
+        const fpPos = mpToWorld(6.65, 2.45, -1.14);
+        const hearthMat = activeState.fireplaceStyle === 'stone_modern'
+          ? getSurfaceMaterial('travertine_stone')
+          : new THREE.MeshStandardMaterial({ color: 0x2c2523, roughness: 0.35 });
+        const hearth = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.12, 1.55), hearthMat);
+        hearth.position.set(fpPos.x, fpPos.y + 0.06, fpPos.z);
+        hearth.rotation.y = Math.PI / 4;
+        archTwinGroup.add(hearth);
+
+        // Warm fire glow inside firebox
+        const fireGlow = new THREE.PointLight(0xff7b29, 1.8, 5.5);
+        fireGlow.position.set(fpPos.x - 0.1, fpPos.y + 0.55, fpPos.z + 0.1);
+        interiorWarmLights.add(fireGlow);
+      }
+
+      // 5. KITCHEN CABINETRY, APPLIANCES, PENINSULA OR WATERFALL ISLAND
+      buildKitchen3D(activeState);
+
+      // 6. BATHROOM VANITY, TUB/SHOWER & FIXTURES
+      buildBathroom3D(activeState);
+
+      // 7. LIVING, DINING, BEDROOM & LAUNDRY ARCHITECTURAL FURNISHINGS
+      buildFurnishings3D(activeState);
+
+      // 8. VAULTED CEDAR CATHEDRAL CEILING & ROOF (shown when Roof Cutaway is OFF)
+      if (!roofCutaway) {
+        buildRoofAndCeilings();
+      }
+    }
+
+    function addArchBox(mpXMin, mpXMax, mpYMin, mpYMax, mpZMin, mpZMax, material) {
+      const p0 = mpToWorld(mpXMin, mpYMin, mpZMin);
+      const p1 = mpToWorld(mpXMax, mpYMax, mpZMax);
+      const sx = Math.abs(p1.x - p0.x);
+      const sy = Math.abs(p1.y - p0.y);
+      const sz = Math.abs(p1.z - p0.z);
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), material);
+      mesh.position.set((p0.x + p1.x) / 2, (p0.y + p1.y) / 2, (p0.z + p1.z) / 2);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      archTwinGroup.add(mesh);
+      return mesh;
+    }
+
+    function buildKitchen3D(state) {
+      const stainlessMat = new THREE.MeshStandardMaterial({ color: 0xd4d8dc, roughness: 0.22, metalness: 0.85 });
+      const blackGlassMat = new THREE.MeshStandardMaterial({ color: 0x181a1d, roughness: 0.12, metalness: 0.5 });
+
+      if (state.kitchenStyle === 'original') {
+        const cabMat = getSurfaceMaterial('wall_panel_birch');
+        const counterMat = getSurfaceMaterial('turquoise_laminate');
+        const brickMat = getSurfaceMaterial('brick_dark');
+
+        // South Sink Run (x: 2.55..3.35, y: -5.90..-3.15)
+        addArchBox(2.55, 3.22, -5.92, -3.15, -1.14, -0.24, cabMat);
+        addArchBox(2.52, 3.26, -5.94, -3.12, -0.24, -0.19, counterMat);
+        // Stainless double sink under window
+        addArchBox(2.65, 3.12, -4.95, -3.95, -0.19, -0.17, stainlessMat);
+
+        // West Peninsula Arm with Gas Cooktop (x: 3.22..6.15, y: -3.75..-3.05)
+        addArchBox(3.22, 6.10, -3.72, -3.08, -1.14, -0.24, cabMat);
+        addArchBox(3.20, 6.14, -3.76, -3.02, -0.24, -0.19, counterMat);
+        // Gas cooktop on peninsula
+        addArchBox(4.25, 5.15, -3.65, -3.15, -0.19, -0.16, stainlessMat);
+
+        // North Return of U-Peninsula (x: 5.45..6.12, y: -4.85..-3.08)
+        addArchBox(5.48, 6.10, -4.82, -3.72, -1.14, -0.24, cabMat);
+        addArchBox(5.45, 6.14, -4.85, -3.04, -0.24, -0.19, counterMat);
+
+        // Suspended Chain-Hung Upper Display Cabinet (unless removed)
+        if (!state.removeHangingCabs) {
+          addArchBox(3.25, 6.08, -3.65, -3.15, 0.42, 1.02, cabMat);
+          // Chains to ceiling
+          const chainMat = new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8 });
+          addArchBox(5.20, 5.25, -3.60, -3.55, 1.02, 1.30, chainMat);
+          addArchBox(5.95, 6.00, -3.60, -3.55, 1.02, 1.30, chainMat);
+        }
+
+        // East Wall Charcoal Brick Column + Wall Oven + White Fridge
+        addArchBox(4.95, 5.85, -5.98, -5.38, -1.14, 1.30, brickMat);
+        addArchBox(5.05, 5.75, -5.39, -5.35, -0.35, 0.45, stainlessMat); // built-in oven
+        // White Fridge beside brick column
+        addArchBox(4.05, 4.90, -5.95, -5.22, -1.14, 0.62, new THREE.MeshStandardMaterial({ color: 0xf4f4f0, roughness: 0.3 }));
+      } else {
+        // Renovated Modern Open Kitchen + Waterfall Island
+        const isOak = state.kitchenStyle === 'oak_island';
+        const isScandi = state.kitchenStyle === 'scandi_marble';
+        const cabMat = isOak ? getSurfaceMaterial('floor_white_oak') :
+                       isScandi ? getSurfaceMaterial('wall_alabaster') :
+                       new THREE.MeshStandardMaterial({ color: 0x5d7062, roughness: 0.45 });
+        const stoneMat = isOak || isScandi
+          ? getSurfaceMaterial('quartz_calacatta')
+          : getSurfaceMaterial('floor_white_oak');
+
+        // South Sink Run + Backsplash
+        addArchBox(2.55, 3.22, -5.92, -3.15, -1.14, -0.24, cabMat);
+        addArchBox(2.52, 3.26, -5.94, -3.12, -0.24, -0.18, stoneMat);
+        addArchBox(2.65, 3.12, -4.85, -3.95, -0.18, -0.16, stainlessMat);
+
+        // East Wall Full-Height Pantry, Counter-Depth Panel Fridge & 36" Pro Range
+        addArchBox(3.30, 7.60, -5.95, -5.28, -1.14, -0.24, cabMat);
+        addArchBox(3.28, 6.20, -5.96, -5.25, -0.24, -0.18, stoneMat);
+        // Integrated Tall Refrigerator & Oven Tower at North end of East wall
+        addArchBox(6.20, 7.65, -5.95, -5.25, -1.14, 1.15, cabMat);
+        addArchBox(6.35, 7.50, -5.26, -5.22, -0.50, 0.85, stainlessMat);
+        // 36" Pro Range + Hood on East wall
+        addArchBox(4.35, 5.25, -5.92, -5.22, -1.14, -0.16, stainlessMat);
+        addArchBox(4.40, 5.20, -5.85, -5.28, -0.16, -0.14, blackGlassMat);
+        addArchBox(4.35, 5.25, -5.92, -5.35, 0.55, 1.30, stoneMat); // custom range hood
+
+        // Center 9'6" x 3'8" Waterfall Island (x: 4.10..6.95, y: -4.25..-3.12)
+        addArchBox(4.15, 6.90, -4.20, -3.35, -1.14, -0.24, cabMat);
+        // Waterfall top & sides
+        addArchBox(4.10, 6.95, -4.24, -3.08, -0.24, -0.17, stoneMat);
+        addArchBox(4.10, 4.16, -4.24, -3.08, -1.14, -0.24, stoneMat);
+        addArchBox(6.89, 6.95, -4.24, -3.08, -1.14, -0.24, stoneMat);
+
+        // 4 Counter Barstools along Dining side of Island (y = -2.95)
+        const stoolSeatMat = new THREE.MeshStandardMaterial({ color: 0x3b312b, roughness: 0.6 });
+        const brassMat = new THREE.MeshStandardMaterial({ color: 0xc89d54, roughness: 0.25, metalness: 0.85 });
+        for (let i = 0; i < 4; i++) {
+          const sx = 4.45 + i * 0.72;
+          addArchBox(sx - 0.16, sx + 0.16, -3.05, -2.75, -0.52, -0.46, stoolSeatMat);
+          addArchBox(sx - 0.04, sx + 0.04, -2.93, -2.87, -1.14, -0.52, brassMat);
+        }
+
+        // 3 Warm Brass Pendant Lights over Waterfall Island
+        for (let i = 0; i < 3; i++) {
+          const px = 4.55 + i * 0.95;
+          addArchBox(px - 0.08, px + 0.08, -3.72, -3.56, 0.62, 0.78, brassMat);
+        }
+      }
+
+      // Kitchen Warm Ceiling Point Light
+      const kLightPos = mpToWorld(5.4, -4.5, 1.05);
+      const kLight = new THREE.PointLight(0xfff1d6, 1.2, 8.5);
+      kLight.position.copy(kLightPos);
+      interiorWarmLights.add(kLight);
+    }
+
+    function buildBathroom3D(state) {
+      const whitePorcelain = new THREE.MeshStandardMaterial({ color: 0xf8f9fa, roughness: 0.14, metalness: 0.05 });
+      if (state.bathStyle === 'original') {
+        // 1963 Bathtub alcove on West wall (x: 10.17..11.72, y: -0.44..0.07)
+        addArchBox(10.18, 11.70, -0.42, 0.06, -1.14, -0.58, whitePorcelain);
+        // Black laminate vanity on West wall (x: 8.65..10.10, y: -0.44..0.02)
+        addArchBox(8.68, 10.08, -0.42, 0.02, -1.14, -0.30, getSurfaceMaterial('wall_panel_birch'));
+        addArchBox(8.66, 10.10, -0.43, 0.04, -0.30, -0.25, new THREE.MeshStandardMaterial({ color: 0x1f2326, roughness: 0.2 }));
+        // Round Turquoise Sink
+        addArchBox(9.15, 9.60, -0.36, -0.04, -0.25, -0.20, getSurfaceMaterial('turquoise_laminate'));
+        // Toilet under North window (x: 11.15..11.68, y: -1.45..-0.95)
+        addArchBox(11.15, 11.66, -1.42, -0.98, -1.14, -0.68, whitePorcelain);
+      } else {
+        // Spa Modern Bathroom: Walk-in frameless glass shower + floating white-oak double vanity
+        const glassShowerMat = new THREE.MeshPhysicalMaterial({ color: 0xd8f3fc, transparent: true, opacity: 0.32, roughness: 0.05 });
+        addArchBox(10.18, 11.72, -0.42, 0.06, -1.14, -1.04, getSurfaceMaterial('travertine_stone'));
+        addArchBox(10.18, 10.22, -0.42, 0.06, -1.04, 0.92, glassShowerMat);
+        // Floating White-Oak Vanity + Quartz top
+        addArchBox(8.68, 10.10, -0.42, 0.04, -0.82, -0.30, getSurfaceMaterial('floor_white_oak'));
+        addArchBox(8.66, 10.12, -0.43, 0.06, -0.30, -0.24, getSurfaceMaterial('quartz_calacatta'));
+        addArchBox(9.12, 9.66, -0.36, -0.02, -0.24, -0.18, whitePorcelain);
+        // Modern Wall-Hung Toilet
+        addArchBox(11.20, 11.68, -1.42, -0.98, -0.78, -0.38, whitePorcelain);
+      }
+    }
+
+    function buildFurnishings3D(state) {
+      const sofaMat = new THREE.MeshStandardMaterial({ color: 0x5a6572, roughness: 0.78 });
+      const rugMat = new THREE.MeshStandardMaterial({ color: 0xdedad0, roughness: 0.92 });
+      const woodTableMat = getSurfaceMaterial('floor_white_oak');
+      const bedSheetMat = new THREE.MeshStandardMaterial({ color: 0xf2efe9, roughness: 0.75 });
+      const applianceWhite = new THREE.MeshStandardMaterial({ color: 0xf3f4f6, roughness: 0.25 });
+
+      // Living Room Rug & Sofa facing View / Fireplace
+      addArchBox(4.0, 6.4, 3.6, 6.6, -1.13, -1.11, rugMat);
+      addArchBox(3.55, 4.45, 4.3, 6.3, -1.14, -0.42, sofaMat);
+      addArchBox(3.55, 3.82, 4.3, 6.3, -0.42, -0.10, sofaMat);
+
+      // Dining Room Table (x: 4.3..5.5, y: -1.8..-0.4)
+      addArchBox(4.35, 5.45, -1.85, -0.55, -0.40, -0.34, woodTableMat);
+      addArchBox(4.45, 4.55, -1.75, -1.65, -1.14, -0.40, woodTableMat);
+      addArchBox(5.35, 5.45, -1.75, -1.65, -1.14, -0.40, woodTableMat);
+      addArchBox(4.45, 4.55, -0.75, -0.65, -1.14, -0.40, woodTableMat);
+      addArchBox(5.35, 5.45, -0.75, -0.65, -1.14, -0.40, woodTableMat);
+
+      // Bedroom 2 Queen Bed (x: 8.6..10.6, y: 1.1..2.7)
+      addArchBox(8.6, 10.6, 1.2, 2.7, -1.14, -0.52, bedSheetMat);
+      addArchBox(8.55, 8.70, 1.2, 2.7, -0.52, 0.15, new THREE.MeshStandardMaterial({ color: 0xfaf8f5 }));
+
+      // Bedroom 1 Bed (x: 9.4..11.4, y: -4.6..-3.0)
+      addArchBox(9.4, 11.4, -4.6, -3.0, -1.14, -0.52, bedSheetMat);
+
+      // Office Desk (x: 9.2..11.2, y: 7.4..8.3)
+      const offFloor = state.levelOfficeFloor ? -1.14 : -0.96;
+      addArchBox(9.2, 11.1, 7.5, 8.3, offFloor + 0.72, offFloor + 0.78, woodTableMat);
+
+      // Laundry Washer & Dryer (x: 10.8..11.6, y: -8.6..-7.0)
+      addArchBox(10.85, 11.62, -8.55, -7.80, -1.09, -0.18, applianceWhite);
+      addArchBox(10.85, 11.62, -7.75, -7.00, -1.09, -0.18, applianceWhite);
+    }
+
+    function buildRoofAndCeilings() {
+      const cedarMat = getSurfaceMaterial('cedar_ceiling');
+      // Vaulted Cathedral Gable over Living Room & Office (y: 1.84..8.55, ridge at x = 7.43, z = 2.82)
+      const pRidgeW = mpToWorld(7.43, 8.55, 2.82);
+      const pRidgeE = mpToWorld(7.43, 1.84, 2.82);
+      const pSouthW = mpToWorld(3.19, 8.55, 1.30);
+      const pSouthE = mpToWorld(3.19, 1.84, 1.30);
+      const pNorthW = mpToWorld(11.61, 8.55, 1.30);
+      const pNorthE = mpToWorld(11.61, 1.84, 1.30);
+
+      const verts = new Float32Array([
+        // South slope
+        pSouthW.x, pSouthW.y, pSouthW.z,
+        pSouthE.x, pSouthE.y, pSouthE.z,
+        pRidgeE.x, pRidgeE.y, pRidgeE.z,
+        pSouthW.x, pSouthW.y, pSouthW.z,
+        pRidgeE.x, pRidgeE.y, pRidgeE.z,
+        pRidgeW.x, pRidgeW.y, pRidgeW.z,
+        // North slope
+        pRidgeW.x, pRidgeW.y, pRidgeW.z,
+        pRidgeE.x, pRidgeE.y, pRidgeE.z,
+        pNorthE.x, pNorthE.y, pNorthE.z,
+        pRidgeW.x, pRidgeW.y, pRidgeW.z,
+        pNorthE.x, pNorthE.y, pNorthE.z,
+        pNorthW.x, pNorthW.y, pNorthW.z,
+      ]);
+      const uvs = new Float32Array([
+        0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1,
+        0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1,
+      ]);
+      const vaultGeo = new THREE.BufferGeometry();
+      vaultGeo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
+      vaultGeo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+      vaultGeo.computeVertexNormals();
+      archTwinGroup.add(new THREE.Mesh(vaultGeo, cedarMat));
+
+      // Flat ceiling over Eastern Wing (y: -9.81..3.37, x: 2.48..11.81, z = 1.30)
+      addArchBox(2.48, 11.81, -9.81, 1.84, 1.30, 1.38, getSurfaceMaterial('wall_alabaster'));
+    }
+
+    // =========================================================================
+    // 8. 360° MATTERPORT PANORAMA CUBEMAP ENGINE & FLOOR RING HOTSPOTS
+    // =========================================================================
+    function buildSweepFloorRings() {
+      while (sweepNodesGroup.children.length > 0) {
+        sweepNodesGroup.children.pop();
+      }
+      if (!showSweepNodes && currentViewMode !== 'pano') return;
+
+      const ringGeo = new THREE.RingGeometry(0.18, 0.28, 32);
+      ringGeo.rotateX(-Math.PI / 2);
+
+      for (const sw of DATA.sweeps) {
+        const isCurrent = sw.index === activeSweepIndex;
+        const ringMat = new THREE.MeshBasicMaterial({
+          color: isCurrent ? 0xf59e0b : 0x22d3ee,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: isCurrent ? 0.95 : 0.72,
+        });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        const wp = mpToWorld(sw.x, sw.y, -1.11);
+        ring.position.copy(wp);
+        ring.userData.sweepIndex = sw.index;
+        sweepNodesGroup.add(ring);
+      }
+    }
+
+    function enterPanoramaSweep(sweepIndex) {
+      const sw = DATA.sweeps.find(s => s.index === sweepIndex) || DATA.sweeps[0];
+      if (!sw) return;
+      activeSweepIndex = sw.index;
+
+      // Update UI banner
+      document.getElementById('pano-banner-title').textContent = `360° Scan S${sw.index}: ${sw.room}`;
+
+      // Clear previous skybox
+      while (panoSkyboxGroup.children.length > 0) {
+        panoSkyboxGroup.children.pop();
+      }
+
+      if (currentViewMode !== 'pano') {
+        panoSkyboxGroup.visible = false;
+        return;
+      }
+      panoSkyboxGroup.visible = true;
+
+      // Position camera at exact Matterport sweep eye position
+      const eyeWorld = mpToWorld(sw.x, sw.y, -1.14 + 1.48);
+      camState.desiredTarget.copy(eyeWorld);
+      camState.target.copy(eyeWorld);
+      camState.desiredSpherical.radius = 0.01;
+      camState.spherical.radius = 0.01;
+      camState.desiredSpherical.phi = Math.PI / 2;
+      camState.spherical.phi = Math.PI / 2;
+
+      // Load 6 cubemap faces for this Matterport sweep
+      // Matterport skybox face order: 0: UP (+Z), 1: NORTH (+Y), 2: EAST (+X), 3: SOUTH (-Y), 4: WEST (-X), 5: DOWN (-Z)
+      // In Three.js BoxGeometry: [+X, -X, +Y, -Y, +Z, -Z]
+      const faceOrder = [3, 1, 0, 5, 4, 2];
+      const materials = faceOrder.map((mpFace) => {
+        const url = `./assets/panos/${sw.filePrefix}_face${mpFace}.jpg`;
+        const tex = textureLoader.load(url);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, depthWrite: false });
+      });
+
+      const skyGeo = new THREE.BoxGeometry(60, 60, 60);
+      const skyMesh = new THREE.Mesh(skyGeo, materials);
+      skyMesh.position.copy(eyeWorld);
+      skyMesh.renderOrder = -1;
+
+      // Apply Matterport pano quaternion orientation mapped to World space
+      const q = sw.rotation;
+      const euler = new THREE.Euler().setFromQuaternion(new THREE.Quaternion(q.x, q.y, q.z, q.w), 'ZYX');
+      skyMesh.rotation.y = -euler.z + Math.PI / 2;
+
+      panoSkyboxGroup.add(skyMesh);
+      buildSweepFloorRings();
+      renderRoomNavigator();
+    }
+
+    // =========================================================================
+    // 9. NATURAL LANGUAGE RENOVATION PROMPT ENGINE
+    // =========================================================================
+    function applyNaturalLanguagePrompt(rawText) {
+      const q = rawText.toLowerCase().trim();
+      if (!q) return;
+
+      const appliedActions = [];
+      isComparingAsBuilt = false;
+      document.getElementById('toggle-before-after-btn').classList.remove('active');
+
+      if (q.includes('reset') || q.includes('original') || q.includes('1963') || q.includes('as-built') || q.includes('as built')) {
+        renoState = defaultRenovationState();
+        appliedActions.push('Restored house to 1963 as-built layout & finishes');
+      } else {
+        if (q.includes('open concept') || q.includes('great room') || q.includes('open up the kitchen') || q.includes('open kitchen')) {
+          renoState.removeHallCloset = true;
+          renoState.removeHangingCabs = true;
+          if (renoState.kitchenStyle === 'original') renoState.kitchenStyle = 'oak_island';
+          appliedActions.push('Opened Kitchen, Dining & Hallway into a 655 sq ft Great Room');
+        }
+        if (q.includes('closet') && (q.includes('remove') || q.includes('open') || q.includes('demolish') || q.includes('knock'))) {
+          renoState.removeHallCloset = true;
+          appliedActions.push('Removed central Hallway closet wall');
+        }
+        if (q.includes('hanging') || q.includes('suspended') || q.includes('upper cabinet') || q.includes('peninsula')) {
+          renoState.removeHangingCabs = true;
+          appliedActions.push('Removed chain-hung kitchen upper cabinets');
+        }
+        if (q.includes('island') || q.includes('waterfall') || q.includes('quartz') || q.includes('kitchen')) {
+          if (q.includes('marble') || q.includes('scandi') || q.includes('white kitchen')) {
+            renoState.kitchenStyle = 'scandi_marble';
+            appliedActions.push('Installed Scandinavian matte-white & Carrara marble island kitchen');
+          } else if (q.includes('sage') || q.includes('shaker') || q.includes('farmhouse') || q.includes('butcher')) {
+            renoState.kitchenStyle = 'sage_shaker';
+            appliedActions.push('Installed Pacific Sage shaker & butcher-block island kitchen');
+          } else {
+            renoState.kitchenStyle = 'oak_island';
+            appliedActions.push('Installed Coast White Oak & Calacatta quartz waterfall island kitchen');
+          }
+          renoState.removeHangingCabs = true;
+        }
+        if (q.includes('pony') || q.includes('half wall') || q.includes('half-wall') || (q.includes('office') && (q.includes('living') || q.includes('open') || q.includes('remove') || q.includes('glass')))) {
+          if (q.includes('glass')) {
+            renoState.officeWallMode = 'glass';
+            appliedActions.push('Converted Living/Office partition to architectural steel & glass wall');
+          } else if (q.includes('full wall') || q.includes('close')) {
+            renoState.officeWallMode = 'full';
+            appliedActions.push('Enclosed Office with full acoustic wall & door');
+          } else {
+            renoState.officeWallMode = 'open';
+            appliedActions.push('Removed Living Room / Office pony wall');
+          }
+        }
+        if (q.includes('step') || q.includes('level')) {
+          renoState.levelOfficeFloor = true;
+          appliedActions.push('Leveled the +18 cm Office step-up floor flush with Living Room');
+        }
+        if (q.includes('primary suite') || q.includes('master') || (q.includes('bedroom') && q.includes('office')) || q.includes('french door')) {
+          renoState.officeBed2Mode = q.includes('wide') || q.includes('remove') ? 'open' : 'french';
+          appliedActions.push('Opened Office to Bedroom 2 with double doors for a Primary Suite');
+        }
+        if (q.includes('laundry') || q.includes('pantry') || q.includes('storage') || q.includes('mudroom')) {
+          renoState.kitchenLaundryMode = q.includes('door') ? 'door' : 'open';
+          appliedActions.push('Opened Kitchen & 5\'×5\'10" Storage wall into Laundry Butler\'s Pantry');
+        }
+        if (q.includes('bifold') || q.includes('bi-fold') || q.includes('patio') || q.includes('sliding') || q.includes('folding') || q.includes('window')) {
+          renoState.southBifoldDoors = true;
+          appliedActions.push('Expanded south Living & Dining windows into folding glass patio doors');
+        }
+        if (q.includes('white wall') || q.includes('alabaster') || q.includes('drywall') || q.includes('paint') || q.includes('bright')) {
+          renoState.wallFinish = 'alabaster';
+          appliedActions.push('Refinished wood paneling in Warm Alabaster painted drywall');
+        } else if (q.includes('limewash') || q.includes('sage wall')) {
+          renoState.wallFinish = 'limewash';
+          appliedActions.push('Applied Sunshine Coast Sage Limewash wall finish');
+        }
+        if (q.includes('oak floor') || q.includes('hardwood') || q.includes('wide plank') || q.includes('wide-plank') || q.includes('wood floor')) {
+          renoState.floorFinish = 'white_oak';
+          appliedActions.push('Installed continuous 7" wide-plank European White Oak flooring');
+        } else if (q.includes('walnut') || q.includes('herringbone')) {
+          renoState.floorFinish = 'walnut_herringbone';
+          appliedActions.push('Installed dark walnut herringbone hardwood flooring');
+        } else if (q.includes('concrete')) {
+          renoState.floorFinish = 'concrete';
+          appliedActions.push('Installed polished architectural concrete flooring');
+        }
+        if (q.includes('fireplace') || q.includes('chimney') || q.includes('hearth')) {
+          if (q.includes('remove') || q.includes('demolish')) {
+            renoState.fireplaceStyle = 'removed';
+            appliedActions.push('Removed diagonal brick fireplace to open Living Room corner');
+          } else if (q.includes('whitewash')) {
+            renoState.fireplaceStyle = 'whitewash_brick';
+            appliedActions.push('Refinished fireplace in whitewashed brick & cedar mantel');
+          } else {
+            renoState.fireplaceStyle = 'stone_modern';
+            appliedActions.push('Upgraded fireplace to fluted travertine & linear glass firebox');
+          }
+        }
+        if (q.includes('bath') || q.includes('shower') || q.includes('vanity') || q.includes('spa')) {
+          renoState.bathStyle = 'spa_modern';
+          appliedActions.push('Renovated Bathroom with walk-in glass rain shower & floating oak vanity');
+        }
+
+        // Fallback if generic "modernize" or "renovate everything"
+        if (appliedActions.length === 0) {
+          renoState.removeHallCloset = true;
+          renoState.removeHangingCabs = true;
+          renoState.kitchenStyle = 'oak_island';
+          renoState.wallFinish = 'alabaster';
+          renoState.floorFinish = 'white_oak';
+          renoState.fireplaceStyle = 'stone_modern';
+          renoState.bathStyle = 'spa_modern';
+          appliedActions.push('Applied comprehensive modern open-concept & finish upgrade');
+        }
+      }
+
+      syncControlsFromState();
+      refreshAllViews();
+
+      const fb = document.getElementById('prompt-feedback-box');
+      fb.textContent = '✓ ' + appliedActions.join(' · ');
+      fb.classList.add('visible');
+    }
+
+    // =========================================================================
+    // 10. UI SYNCHRONIZATION, COST & STRUCTURAL CALCULATOR, AND 2D BLUEPRINT
+    // =========================================================================
+    function getActiveDisplayState() {
+      return isComparingAsBuilt ? defaultRenovationState() : renoState;
+    }
+
+    function syncControlsFromState() {
+      document.getElementById('chk-remove-hall-closet').checked = renoState.removeHallCloset;
+      document.getElementById('chk-remove-hanging-cabs').checked = renoState.removeHangingCabs;
+      document.getElementById('sel-office-wall').value = renoState.officeWallMode;
+      document.getElementById('chk-level-office-floor').checked = renoState.levelOfficeFloor;
+      document.getElementById('sel-office-bed2').value = renoState.officeBed2Mode;
+      document.getElementById('sel-kitchen-laundry').value = renoState.kitchenLaundryMode;
+      document.getElementById('chk-south-bifold').checked = renoState.southBifoldDoors;
+      document.getElementById('sel-kitchen-style').value = renoState.kitchenStyle;
+      document.getElementById('sel-wall-finish').value = renoState.wallFinish;
+      document.getElementById('sel-floor-finish').value = renoState.floorFinish;
+      document.getElementById('sel-fireplace-style').value = renoState.fireplaceStyle;
+      document.getElementById('sel-bath-style').value = renoState.bathStyle;
+    }
+
+    function updateMetricsAndCostReport(state) {
+      const items = [];
+      const notes = [];
+      let wallsModified = 0;
+      let openSqft = 292 + 109; // Living + Dining baseline (401 sq ft)
+
+      if (state.removeHangingCabs || state.kitchenStyle !== 'original') {
+        openSqft += 184;
+      }
+      if (state.removeHallCloset) {
+        wallsModified += 4;
+        openSqft += 70;
+        items.push({ label: 'Demolish Hallway Closet & Patch Framing', cost: 4800 });
+        notes.push('Central Hallway Closet (E13/E18/E43/E66) is non-structural partition framing; removal creates direct sightline across Dining, Kitchen & Hallway.');
+      }
+      if (state.officeWallMode !== 'pony') {
+        wallsModified += 1;
+        if (state.officeWallMode === 'open') {
+          openSqft += 180;
+          items.push({ label: 'Remove Living/Office Pony Wall & Trim', cost: 2400 });
+        } else if (state.officeWallMode === 'glass') {
+          items.push({ label: 'Custom Blackened Steel & Glass Office Partition', cost: 9200 });
+        } else {
+          items.push({ label: 'Frame Full Acoustic Office Wall + Door', cost: 4500 });
+        }
+      }
+      if (state.levelOfficeFloor) {
+        items.push({ label: 'Reframe & Level Office Subfloor (+18 cm)', cost: 6800 });
+      }
+      if (state.officeBed2Mode !== 'solid') {
+        wallsModified += 1;
+        items.push({
+          label: state.officeBed2Mode === 'open' ? 'LVL Structural Beam & 9\' Opening (Office↔Bed 2)' : '5\' Double French Doors + Header (Office↔Bed 2)',
+          cost: state.officeBed2Mode === 'open' ? 8400 : 5200
+        });
+        notes.push('Wall E49 runs along the center ridge at x = 7.43m; widening requires a flush 3.5"×11.875" Parallam PSL header beam.');
+      }
+      if (state.kitchenLaundryMode !== 'solid') {
+        wallsModified += 2;
+        items.push({
+          label: state.kitchenLaundryMode === 'open' ? 'Open Butler Pantry & Laundry Reconfiguration' : 'New Cased Doorway into Storage/Pantry',
+          cost: state.kitchenLaundryMode === 'open' ? 11500 : 3900
+        });
+      }
+      if (state.southBifoldDoors) {
+        wallsModified += 2;
+        items.push({ label: '16\' Aluminum Bi-Fold Patio Glass Doors + Header', cost: 18500 });
+      }
+      if (state.kitchenStyle !== 'original') {
+        items.push({
+          label: state.kitchenStyle === 'oak_island'
+            ? 'White Oak Cabinetry, 9\'6" Quartz Waterfall Island & Appliances'
+            : state.kitchenStyle === 'scandi_marble'
+            ? 'Scandinavian Matte White Kitchen & Carrara Marble Island'
+            : 'Pacific Sage Shaker Kitchen & Butcher Block Island',
+          cost: 42000
+        });
+      } else if (state.removeHangingCabs) {
+        items.push({ label: 'Remove Suspended Chain Cabinets & Ceiling Patch', cost: 1600 });
+      }
+      if (state.wallFinish !== 'original') {
+        items.push({ label: 'Whole-House Skim Coat / Drywall & Architectural Paint', cost: 12400 });
+      }
+      if (state.floorFinish !== 'original') {
+        items.push({ label: '1,279 sq ft Continuous Flooring & Baseboards', cost: 16800 });
+      }
+      if (state.fireplaceStyle !== 'original') {
+        items.push({
+          label: state.fireplaceStyle === 'removed'
+            ? 'Fireplace & Chimney Demolition + Roof/Floor Infill'
+            : state.fireplaceStyle === 'stone_modern'
+            ? 'Fluted Travertine Surround & Linear Gas Fireplace'
+            : 'Whitewash Brick & Custom Cedar Mantel',
+          cost: state.fireplaceStyle === 'removed' ? 9500 : 11200
+        });
+      }
+      if (state.bathStyle !== 'original') {
+        items.push({ label: 'Spa Bathroom (Walk-In Glass Shower + Floating Oak Vanity)', cost: 21500 });
+      }
+
+      const customCount = Object.values(state.customWallOverrides).filter(v => v !== 'solid').length;
+      if (customCount > 0) {
+        wallsModified += customCount;
+        items.push({ label: `Custom 3D Wall Modifications (${customCount} segments)`, cost: customCount * 3200 });
+      }
+
+      const totalCost = items.reduce((acc, it) => acc + it.cost, 0);
+
+      document.getElementById('hud-state-label').textContent =
+        isComparingAsBuilt ? 'Comparing: 1963 As-Built' :
+        totalCost === 0 ? '1963 As-Built Baseline' : 'Renovated 3D Preview';
+      document.getElementById('hud-open-sqft').textContent = `${openSqft} sq ft`;
+      document.getElementById('hud-walls-mod').textContent = `${wallsModified} walls`;
+      document.getElementById('hud-est-cost').textContent = `$${totalCost.toLocaleString()} CAD`;
+      document.getElementById('cost-total-value').textContent = `$${totalCost.toLocaleString()} CAD`;
+
+      const costListEl = document.getElementById('cost-breakdown-list');
+      if (items.length === 0) {
+        costListEl.innerHTML = `<div style="font-size: 11.5px; color: var(--text-muted); padding: 4px 0;">No active renovations selected ($0 CAD).</div>`;
+      } else {
+        costListEl.innerHTML = items.map(it => `
+          <div class="cost-item">
+            <span>${it.label}</span>
+            <span class="cost-item-price">$${it.cost.toLocaleString()}</span>
+          </div>
+        `).join('');
+      }
+
+      const notesEl = document.getElementById('structural-notes-box');
+      notesEl.textContent = notes.length > 0
+        ? notes.join(' ')
+        : totalCost === 0
+        ? 'All original 1963 partitions intact. Select a preset, prompt a renovation, or click any wall in 3D to evaluate structural spans and cost.'
+        : 'Renovation active in 3D viewport. Click "Compare: As-Built vs. Renovated" in the top bar at any time to toggle before/after.';
+    }
+
+    // 2D Blueprint Canvas Renderer
+    const bpCanvas = document.getElementById('blueprint-canvas');
+    const bpCtx = bpCanvas.getContext('2d');
+    const floorplanImg = new Image();
+    floorplanImg.src = './assets/floorplan.png';
+    floorplanImg.onload = () => {
+      if (currentViewMode === 'blueprint') drawBlueprintCanvas();
+    };
+
+    function mpToBlueprintPx(mpX, mpY) {
+      // Maps Matterport (mpX in [2.42, 11.82], mpY in [-9.82, 8.57]) onto 1200x690 canvas
+      const u = (8.95 - mpY) / 19.15 * 1100 + 50;
+      const v = (12.15 - mpX) / 10.15 * 590 + 50;
+      return { x: u, y: v };
+    }
+
+    function drawBlueprintCanvas() {
+      const w = bpCanvas.width, h = bpCanvas.height;
+      bpCtx.fillStyle = '#0c1118';
+      bpCtx.fillRect(0, 0, w, h);
+
+      // Subtle architectural blueprint grid
+      bpCtx.strokeStyle = 'rgba(100, 150, 210, 0.08)';
+      bpCtx.lineWidth = 1;
+      for (let x = 0; x < w; x += 30) {
+        bpCtx.beginPath(); bpCtx.moveTo(x, 0); bpCtx.lineTo(x, h); bpCtx.stroke();
+      }
+      for (let y = 0; y < h; y += 30) {
+        bpCtx.beginPath(); bpCtx.moveTo(0, y); bpCtx.lineTo(w, y); bpCtx.stroke();
+      }
+
+      if (showBlueprintRefImage && floorplanImg.complete) {
+        bpCtx.save();
+        bpCtx.globalAlpha = 0.22;
+        bpCtx.filter = 'invert(1) hue-rotate(180deg)';
+        bpCtx.drawImage(floorplanImg, 32, 22, w - 64, h - 44);
+        bpCtx.restore();
+      }
+
+      const state = getActiveDisplayState();
+
+      // Draw room zones & labels
+      for (const rm of DATA.rooms) {
+        const p0 = mpToBlueprintPx(rm.xMax, rm.yMax);
+        const p1 = mpToBlueprintPx(rm.xMin, rm.yMin);
+        const rx = Math.min(p0.x, p1.x);
+        const ry = Math.min(p0.y, p1.y);
+        const rw = Math.abs(p1.x - p0.x);
+        const rh = Math.abs(p1.y - p0.y);
+
+        bpCtx.fillStyle = rm.id === 'kitchen' && state.kitchenStyle !== 'original'
+          ? 'rgba(245, 158, 11, 0.12)'
+          : 'rgba(56, 189, 248, 0.05)';
+        bpCtx.fillRect(rx, ry, rw, rh);
+
+        bpCtx.fillStyle = '#f8fafc';
+        bpCtx.font = '600 13px "DM Sans", sans-serif';
+        bpCtx.textAlign = 'center';
+        bpCtx.fillText(rm.name.toUpperCase(), rx + rw / 2, ry + rh / 2 - 4);
+        bpCtx.fillStyle = '#f59e0b';
+        bpCtx.font = '500 11px "JetBrains Mono", monospace';
+        bpCtx.fillText(`${rm.dimensions} (${rm.sqft} sq ft)`, rx + rw / 2, ry + rh / 2 + 13);
+      }
+
+      // Draw Waterfall Island in Blueprint if renovated
+      if (state.kitchenStyle !== 'original') {
+        const ip0 = mpToBlueprintPx(6.95, -3.08);
+        const ip1 = mpToBlueprintPx(4.10, -4.24);
+        bpCtx.fillStyle = 'rgba(245, 158, 11, 0.28)';
+        bpCtx.strokeStyle = '#f59e0b';
+        bpCtx.lineWidth = 2;
+        bpCtx.fillRect(ip0.x, ip0.y, ip1.x - ip0.x, ip1.y - ip0.y);
+        bpCtx.strokeRect(ip0.x, ip0.y, ip1.x - ip0.x, ip1.y - ip0.y);
+        bpCtx.fillStyle = '#fde68a';
+        bpCtx.font = '600 10px "JetBrains Mono", monospace';
+        bpCtx.fillText('9\'6" WATERFALL ISLAND', (ip0.x + ip1.x) / 2, (ip0.y + ip1.y) / 2 + 4);
+      }
+
+      // Draw all 68 Matterport wall edges
+      for (const wall of DATA.walls) {
+        const p0 = mpToBlueprintPx(wall.x0, wall.y0);
+        const p1 = mpToBlueprintPx(wall.x1, wall.y1);
+        const eff = getWallEffectiveState(wall, state);
+
+        bpCtx.save();
+        if (eff === 'demolished') {
+          bpCtx.strokeStyle = '#ef4444';
+          bpCtx.setLineDash([6, 5]);
+          bpCtx.lineWidth = 3;
+        } else if (eff === 'opening' || (wall.openings && wall.openings.length > 0)) {
+          bpCtx.strokeStyle = '#38bdf8';
+          bpCtx.lineWidth = 5;
+        } else if (eff === 'half') {
+          bpCtx.strokeStyle = '#f59e0b';
+          bpCtx.lineWidth = 4;
+        } else {
+          bpCtx.strokeStyle = '#e2e8f0';
+          bpCtx.lineWidth = 5;
+        }
+        bpCtx.beginPath();
+        bpCtx.moveTo(p0.x, p0.y);
+        bpCtx.lineTo(p1.x, p1.y);
+        bpCtx.stroke();
+        bpCtx.restore();
+      }
+
+      // Draw 24 Sweep Panorama Nodes
+      for (const sw of DATA.sweeps) {
+        const sp = mpToBlueprintPx(sw.x, sw.y);
+        bpCtx.beginPath();
+        bpCtx.arc(sp.x, sp.y, sw.index === activeSweepIndex ? 9 : 7, 0, Math.PI * 2);
+        bpCtx.fillStyle = sw.index === activeSweepIndex ? '#f59e0b' : '#22d3ee';
+        bpCtx.fill();
+        bpCtx.strokeStyle = '#0f172a';
+        bpCtx.lineWidth = 2;
+        bpCtx.stroke();
+        bpCtx.fillStyle = '#0f172a';
+        bpCtx.font = '700 9px "JetBrains Mono", monospace';
+        bpCtx.textAlign = 'center';
+        bpCtx.fillText(`${sw.index}`, sp.x, sp.y + 3);
+      }
+    }
+
+    // =========================================================================
+    // 11. 3D FLOATING HTML ROOM LABELS & SIDEBAR ROOM NAVIGATOR
+    // =========================================================================
+    const labelsContainer = document.getElementById('labels-container');
+    const roomLabelEls = [];
+
+    function init3DRoomLabels() {
+      labelsContainer.innerHTML = '';
+      roomLabelEls.length = 0;
+      for (const rm of DATA.rooms) {
+        const el = document.createElement('div');
+        el.className = 'room-label-3d';
+        el.innerHTML = `<span class="lbl-name">${rm.name}</span><span class="lbl-dim">${rm.dimensions}</span>`;
+        el.addEventListener('click', () => {
+          focusRoom(rm);
+        });
+        labelsContainer.appendChild(el);
+        roomLabelEls.push({ room: rm, el });
+      }
+    }
+
+    function update3DRoomLabelPositions() {
+      if (!showRoomLabels || currentViewMode === 'pano' || currentViewMode === 'blueprint') {
+        labelsContainer.style.display = 'none';
+        return;
+      }
+      labelsContainer.style.display = 'block';
+      const rect = canvas.getBoundingClientRect();
+
+      for (const item of roomLabelEls) {
+        const rm = item.room;
+        const cx = (rm.xMin + rm.xMax) / 2;
+        const cy = (rm.yMin + rm.yMax) / 2;
+        const wp = mpToWorld(cx, cy, -0.35);
+        wp.project(camera);
+
+        if (wp.z > 1.0) {
+          item.el.style.display = 'none';
+          continue;
+        }
+        const sx = (wp.x * 0.5 + 0.5) * rect.width;
+        const sy = (-wp.y * 0.5 + 0.5) * rect.height;
+        item.el.style.display = 'block';
+        item.el.style.left = `${sx}px`;
+        item.el.style.top = `${sy}px`;
+      }
+    }
+
+    function focusRoom(rm) {
+      const cx = (rm.xMin + rm.xMax) / 2;
+      const cy = (rm.yMin + rm.yMax) / 2;
+      if (currentViewMode === 'pano') {
+        enterPanoramaSweep(rm.sweepIndex);
+      } else {
+        const wp = mpToWorld(cx, cy, 0.0);
+        camState.desiredTarget.copy(wp);
+        camState.desiredSpherical.radius = 6.5;
+        camState.desiredSpherical.phi = 0.96;
+        activeSweepIndex = rm.sweepIndex;
+        buildSweepFloorRings();
+      }
+      renderRoomNavigator();
+    }
+
+    function renderRoomNavigator() {
+      const listEl = document.getElementById('room-navigator-list');
+      listEl.innerHTML = DATA.rooms.map(rm => `
+        <div class="room-item ${rm.sweepIndex === activeSweepIndex ? 'active' : ''}" data-room-id="${rm.id}">
+          <div class="room-item-top">
+            <span>${rm.name}</span>
+            <span class="room-dims">${rm.dimensions} · ${rm.sqft} ft²</span>
+          </div>
+          <div class="room-item-sub">${rm.features}</div>
+        </div>
+      `).join('');
+
+      listEl.querySelectorAll('.room-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const rm = DATA.rooms.find(r => r.id === el.dataset.roomId);
+          if (rm) focusRoom(rm);
+        });
+      });
+    }
+
+    // =========================================================================
+    // 12. REFRESH ALL VIEWS & EVENT LISTENERS
+    // =========================================================================
+    function refreshAllViews() {
+      const state = getActiveDisplayState();
+      buildMatterportScanMeshes(state);
+      buildArchitecturalTwin(state);
+      buildSweepFloorRings();
+      updateMetricsAndCostReport(state);
+
+      document.getElementById('blueprint-overlay').classList.toggle('visible', currentViewMode === 'blueprint');
+      document.getElementById('pano-hud-banner').classList.toggle('visible', currentViewMode === 'pano');
+
+      if (currentViewMode === 'pano') {
+        archTwinGroup.visible = showPanoOverlay;
+        scanMeshGroup.visible = false;
+        enterPanoramaSweep(activeSweepIndex);
+      } else {
+        panoSkyboxGroup.visible = false;
+        archTwinGroup.visible = true;
+      }
+
+      if (currentViewMode === 'blueprint') {
+        drawBlueprintCanvas();
+      }
+    }
+
+    // Mode Switching
+    function setViewMode(mode) {
+      const prevMode = currentViewMode;
+      currentViewMode = mode;
+      document.getElementById('mode-hybrid-btn').classList.toggle('active', mode === 'hybrid');
+      document.getElementById('mode-arch-btn').classList.toggle('active', mode === 'arch');
+      document.getElementById('mode-pano-btn').classList.toggle('active', mode === 'pano');
+      document.getElementById('mode-blueprint-btn').classList.toggle('active', mode === 'blueprint');
+
+      if (prevMode === 'pano' && mode !== 'pano') {
+        flyToCameraPreset('dollhouse');
+      }
+      refreshAllViews();
+    }
+
+    document.getElementById('mode-hybrid-btn').addEventListener('click', () => setViewMode('hybrid'));
+    document.getElementById('mode-arch-btn').addEventListener('click', () => setViewMode('arch'));
+    document.getElementById('mode-pano-btn').addEventListener('click', () => setViewMode('pano'));
+    document.getElementById('mode-blueprint-btn').addEventListener('click', () => setViewMode('blueprint'));
+
+    // Header Actions
+    document.getElementById('toggle-before-after-btn').addEventListener('click', (e) => {
+      isComparingAsBuilt = !isComparingAsBuilt;
+      e.currentTarget.classList.toggle('active', isComparingAsBuilt);
+      e.currentTarget.textContent = isComparingAsBuilt
+        ? 'Viewing: 1963 As-Built (Click for Renovated)'
+        : 'Compare: As-Built vs. Renovated';
+      refreshAllViews();
+    });
+
+    document.getElementById('toggle-roof-btn').addEventListener('click', (e) => {
+      roofCutaway = !roofCutaway;
+      e.currentTarget.classList.toggle('active', roofCutaway);
+      e.currentTarget.textContent = `Roof Cutaway: ${roofCutaway ? 'ON' : 'OFF'}`;
+      refreshAllViews();
+    });
+
+    document.getElementById('reset-renovations-btn').addEventListener('click', () => {
+      renoState = defaultRenovationState();
+      isComparingAsBuilt = false;
+      document.getElementById('toggle-before-after-btn').classList.remove('active');
+      document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+      syncControlsFromState();
+      refreshAllViews();
+    });
+
+    // Prompt Form
+    document.getElementById('renovation-prompt-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('renovation-prompt-input');
+      applyNaturalLanguagePrompt(input.value);
+    });
+
+    // Preset Buttons
+    const presets = {
+      'preset-open-greatroom': () => {
+        renoState.removeHallCloset = true;
+        renoState.removeHangingCabs = true;
+        renoState.kitchenStyle = 'oak_island';
+        flyToCameraPreset('kitchen');
+      },
+      'preset-office-loft': () => {
+        renoState.officeWallMode = 'open';
+        renoState.levelOfficeFloor = true;
+        flyToCameraPreset('office');
+      },
+      'preset-primary-suite': () => {
+        renoState.officeBed2Mode = 'french';
+        renoState.bathStyle = 'spa_modern';
+        flyToCameraPreset('bedrooms');
+      },
+      'preset-butler-pantry': () => {
+        renoState.kitchenLaundryMode = 'open';
+        renoState.kitchenStyle = 'oak_island';
+        flyToCameraPreset('laundry');
+      },
+      'preset-full-modern': () => {
+        renoState.removeHallCloset = true;
+        renoState.removeHangingCabs = true;
+        renoState.officeWallMode = 'open';
+        renoState.levelOfficeFloor = true;
+        renoState.officeBed2Mode = 'french';
+        renoState.kitchenLaundryMode = 'open';
+        renoState.southBifoldDoors = true;
+        renoState.kitchenStyle = 'oak_island';
+        renoState.wallFinish = 'alabaster';
+        renoState.floorFinish = 'white_oak';
+        renoState.fireplaceStyle = 'stone_modern';
+        renoState.bathStyle = 'spa_modern';
+        flyToCameraPreset('dollhouse');
+      },
+    };
+
+    Object.entries(presets).forEach(([id, fn]) => {
+      document.getElementById(id).addEventListener('click', (e) => {
+        document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        isComparingAsBuilt = false;
+        document.getElementById('toggle-before-after-btn').classList.remove('active');
+        fn();
+        syncControlsFromState();
+        refreshAllViews();
+      });
+    });
+
+    // Left Sidebar Granular Controls
+    document.getElementById('chk-remove-hall-closet').addEventListener('change', e => {
+      renoState.removeHallCloset = e.target.checked;
+      refreshAllViews();
+    });
+    document.getElementById('chk-remove-hanging-cabs').addEventListener('change', e => {
+      renoState.removeHangingCabs = e.target.checked;
+      refreshAllViews();
+    });
+    document.getElementById('sel-office-wall').addEventListener('change', e => {
+      renoState.officeWallMode = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('chk-level-office-floor').addEventListener('change', e => {
+      renoState.levelOfficeFloor = e.target.checked;
+      refreshAllViews();
+    });
+    document.getElementById('sel-office-bed2').addEventListener('change', e => {
+      renoState.officeBed2Mode = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('sel-kitchen-laundry').addEventListener('change', e => {
+      renoState.kitchenLaundryMode = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('chk-south-bifold').addEventListener('change', e => {
+      renoState.southBifoldDoors = e.target.checked;
+      refreshAllViews();
+    });
+    document.getElementById('sel-kitchen-style').addEventListener('change', e => {
+      renoState.kitchenStyle = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('sel-wall-finish').addEventListener('change', e => {
+      renoState.wallFinish = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('sel-floor-finish').addEventListener('change', e => {
+      renoState.floorFinish = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('sel-fireplace-style').addEventListener('change', e => {
+      renoState.fireplaceStyle = e.target.value;
+      refreshAllViews();
+    });
+    document.getElementById('sel-bath-style').addEventListener('change', e => {
+      renoState.bathStyle = e.target.value;
+      refreshAllViews();
+    });
+
+    document.getElementById('scan-opacity-slider').addEventListener('input', e => {
+      scanOpacity = Number(e.target.value) / 100;
+      document.getElementById('scan-opacity-val').textContent = `${e.target.value}%`;
+      buildMatterportScanMeshes(getActiveDisplayState());
+    });
+
+    document.getElementById('sun-time-slider').addEventListener('input', e => {
+      sunHour = Number(e.target.value);
+      const hr = Math.floor(sunHour);
+      const min = sunHour % 1 ? '30' : '00';
+      const ampm = hr >= 12 ? 'PM' : 'AM';
+      const hr12 = hr > 12 ? hr - 12 : hr;
+      document.getElementById('sun-time-val').textContent = `${hr12}:${min} ${ampm}`;
+      updateSunLighting(sunHour);
+    });
+
+    // Viewport HUD Toggles
+    document.getElementById('toggle-labels-btn').addEventListener('click', e => {
+      showRoomLabels = !showRoomLabels;
+      e.currentTarget.classList.toggle('active', showRoomLabels);
+      e.currentTarget.textContent = `Room Labels: ${showRoomLabels ? 'ON' : 'OFF'}`;
+    });
+
+    document.getElementById('toggle-sweeps-btn').addEventListener('click', e => {
+      showSweepNodes = !showSweepNodes;
+      e.currentTarget.classList.toggle('active', showSweepNodes);
+      e.currentTarget.textContent = `Scan Nodes (24): ${showSweepNodes ? 'ON' : 'OFF'}`;
+      buildSweepFloorRings();
+    });
+
+    document.getElementById('first-person-btn').addEventListener('click', e => {
+      camState.firstPerson = !camState.firstPerson;
+      e.currentTarget.classList.toggle('active', camState.firstPerson);
+      if (camState.firstPerson) {
+        roofCutaway = false;
+        document.getElementById('toggle-roof-btn').classList.remove('active');
+        document.getElementById('toggle-roof-btn').textContent = 'Roof Cutaway: OFF';
+        const p = mpToWorld(5.8, -0.5, -1.14 + 1.5);
+        camState.desiredTarget.copy(p);
+        camState.desiredSpherical = { radius: 0.25, phi: 1.52, theta: -0.6 };
+        refreshAllViews();
+      } else {
+        flyToCameraPreset('dollhouse');
+      }
+    });
+
+    // Camera Preset Bar
+    document.querySelectorAll('.cam-btn').forEach(btn => {
+      btn.addEventListener('click', () => flyToCameraPreset(btn.dataset.cam));
+    });
+
+    // Panorama HUD Controls
+    document.getElementById('pano-overlay-toggle-btn').addEventListener('click', e => {
+      showPanoOverlay = !showPanoOverlay;
+      e.currentTarget.classList.toggle('active', showPanoOverlay);
+      e.currentTarget.textContent = `3D Renovation Overlay: ${showPanoOverlay ? 'ON' : 'OFF'}`;
+      archTwinGroup.visible = showPanoOverlay;
+    });
+    document.getElementById('pano-exit-btn').addEventListener('click', () => setViewMode('hybrid'));
+
+    // Blueprint Overlay Controls
+    document.getElementById('bp-toggle-ref-btn').addEventListener('click', e => {
+      showBlueprintRefImage = !showBlueprintRefImage;
+      e.currentTarget.classList.toggle('active', showBlueprintRefImage);
+      drawBlueprintCanvas();
+    });
+    document.getElementById('bp-close-btn').addEventListener('click', () => setViewMode('hybrid'));
+
+    bpCanvas.addEventListener('click', (e) => {
+      const rect = bpCanvas.getBoundingClientRect();
+      const scaleX = bpCanvas.width / rect.width;
+      const scaleY = bpCanvas.height / rect.height;
+      const cx = (e.clientX - rect.left) * scaleX;
+      const cy = (e.clientY - rect.top) * scaleY;
+
+      // 1. Check if clicked a sweep node
+      for (const sw of DATA.sweeps) {
+        const sp = mpToBlueprintPx(sw.x, sw.y);
+        if (Math.hypot(cx - sp.x, cy - sp.y) < 12) {
+          activeSweepIndex = sw.index;
+          setViewMode('pano');
+          return;
+        }
+      }
+
+      // 2. Check if clicked near a wall segment
+      let bestWall = null, bestDist = 14;
+      for (const wall of DATA.walls) {
+        const p0 = mpToBlueprintPx(wall.x0, wall.y0);
+        const p1 = mpToBlueprintPx(wall.x1, wall.y1);
+        const l2 = (p1.x - p0.x) ** 2 + (p1.y - p0.y) ** 2;
+        if (l2 === 0) continue;
+        const t = Math.max(0, Math.min(1, ((cx - p0.x) * (p1.x - p0.x) + (cy - p0.y) * (p1.y - p0.y)) / l2));
+        const projX = p0.x + t * (p1.x - p0.x);
+        const projY = p0.y + t * (p1.y - p0.y);
+        const dist = Math.hypot(cx - projX, cy - projY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestWall = wall;
+        }
+      }
+      if (bestWall) {
+        const curr = getWallEffectiveState(bestWall, renoState);
+        const next = curr === 'solid' ? 'demolished' : curr === 'demolished' ? 'opening' : 'solid';
+        renoState.customWallOverrides[bestWall.index] = next;
+        refreshAllViews();
+      }
+    });
+
+    // Photo Thumbnails
+    document.querySelectorAll('.photo-thumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.photo-thumb-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('main-ref-photo').src = btn.dataset.photo;
+        document.getElementById('main-ref-caption').textContent = btn.dataset.caption;
+        document.getElementById('active-photo-tag').textContent = btn.dataset.tag;
+        activeSweepIndex = Number(btn.dataset.sweep);
+      });
+    });
+
+    document.getElementById('jump-photo-360-btn').addEventListener('click', () => {
+      setViewMode('pano');
+    });
+
+    // =========================================================================
+    // 13. 3D VIEWPORT POINTER & RAYCASTING INTERACTION (Click Walls / Sweep Rings)
+    // =========================================================================
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+
+    canvas.addEventListener('pointerdown', (e) => {
+      camState.isDragging = true;
+      camState.isPanning = e.button === 2 || e.shiftKey;
+      camState.lastX = e.clientX;
+      camState.lastY = e.clientY;
+      camState.downX = e.clientX;
+      camState.downY = e.clientY;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!camState.isDragging) return;
+      const dx = e.clientX - camState.lastX;
+      const dy = e.clientY - camState.lastY;
+      camState.lastX = e.clientX;
+      camState.lastY = e.clientY;
+
+      if (camState.isPanning && currentViewMode !== 'pano') {
+        const panSpeed = 0.015;
+        const right = new THREE.Vector3();
+        camera.getWorldDirection(right);
+        right.cross(camera.up).normalize();
+        camState.desiredTarget.addScaledVector(right, -dx * panSpeed);
+        camState.desiredTarget.z -= dy * panSpeed;
+      } else {
+        const rotSpeed = currentViewMode === 'pano' ? -0.004 : -0.0065;
+        camState.desiredSpherical.theta += dx * rotSpeed;
+        camState.desiredSpherical.phi = Math.max(0.08, Math.min(Math.PI * 0.49, camState.desiredSpherical.phi - dy * 0.0055));
+      }
+    });
+
+    window.addEventListener('pointerup', (e) => {
+      if (!camState.isDragging) return;
+      camState.isDragging = false;
+      const moved = Math.hypot(e.clientX - camState.downX, e.clientY - camState.downY);
+      if (moved < 5 && e.target === canvas) {
+        handleCanvasClick(e);
+      }
+    });
+
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      if (currentViewMode === 'pano') return;
+      camState.desiredSpherical.radius = Math.max(1.5, Math.min(34, camState.desiredSpherical.radius + e.deltaY * 0.012));
+    }, { passive: false });
+
+    function handleCanvasClick(e) {
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+
+      // 1. Check Sweep Panorama Floor Rings first
+      if (sweepNodesGroup.children.length > 0) {
+        const hits = raycaster.intersectObjects(sweepNodesGroup.children, false);
+        if (hits.length > 0 && hits[0].object.userData.sweepIndex !== undefined) {
+          activeSweepIndex = hits[0].object.userData.sweepIndex;
+          setViewMode('pano');
+          return;
+        }
+      }
+
+      // 2. Check Clickable 3D Walls
+      const wallHits = raycaster.intersectObjects(clickableWallMeshes, false);
+      if (wallHits.length > 0) {
+        const wIdx = wallHits[0].object.userData.wallIndex;
+        if (wIdx !== undefined) {
+          openWallInspector(wIdx);
+        }
+      }
+    }
+
+    function openWallInspector(wallIndex) {
+      selectedWallIndex = wallIndex;
+      const wall = DATA.walls[wallIndex];
+      if (!wall) return;
+
+      const card = document.getElementById('wall-inspector');
+      card.classList.add('visible');
+      document.getElementById('inspector-wall-name').textContent = `Wall E${wall.index}: ${wall.label}`;
+      const lenM = Math.hypot(wall.x1 - wall.x0, wall.y1 - wall.y0);
+      const lenFt = (lenM * 3.28084).toFixed(1);
+      document.getElementById('inspector-wall-meta').textContent =
+        `Length: ${lenFt} ft (${lenM.toFixed(2)}m) · Thickness: ${(wall.thickness * 100).toFixed(0)} cm`;
+
+      const eff = getWallEffectiveState(wall, renoState);
+      document.getElementById('wall-act-solid').classList.toggle('active', eff === 'solid');
+      document.getElementById('wall-act-demolish').classList.toggle('active', eff === 'demolished');
+      document.getElementById('wall-act-half').classList.toggle('active', eff === 'half');
+      document.getElementById('wall-act-opening').classList.toggle('active', eff === 'opening');
+
+      buildArchitecturalTwin(getActiveDisplayState());
+    }
+
+    document.getElementById('inspector-close-btn').addEventListener('click', () => {
+      selectedWallIndex = null;
+      document.getElementById('wall-inspector').classList.remove('visible');
+      buildArchitecturalTwin(getActiveDisplayState());
+    });
+
+    ['solid', 'demolished', 'half', 'opening'].forEach(mode => {
+      const btnId = mode === 'demolished' ? 'wall-act-demolish' : `wall-act-${mode}`;
+      document.getElementById(btnId).addEventListener('click', () => {
+        if (selectedWallIndex === null) return;
+        renoState.customWallOverrides[selectedWallIndex] = mode;
+        openWallInspector(selectedWallIndex);
+        refreshAllViews();
+      });
+    });
+
+    // =========================================================================
+    // 14. RESIZE & RENDER LOOP
+    // =========================================================================
+    function handleResize() {
+      const stage = canvas.parentElement;
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', handleResize);
+
+    // Initialize everything
+    handleResize();
+    init3DRoomLabels();
+    renderRoomNavigator();
+    syncControlsFromState();
+    refreshAllViews();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      updateCameraFromSpherical();
+      update3DRoomLabelPositions();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>

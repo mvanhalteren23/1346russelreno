@@ -1,0 +1,155 @@
+{
+  "data" : {
+    "model" : {
+      "id" : "rfwtuskak8Q",
+      "rooms" : [ {
+        "id" : "wbpb7dkfuwnikd1kq2a9hz70a",
+        "meshId" : 14,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "b4qtykzcazp4iumkamm7y7h2b",
+        "meshId" : 12,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "a5f9age4zzxewres6iqux2emc",
+        "meshId" : 9,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "ediidma5zg15dufx3n0qyq21a",
+        "meshId" : 13,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "2qdmc5i9byxi79ry1pxdkqzea",
+        "meshId" : 8,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "m8npxsuk79xy21dd09x9wtped",
+        "meshId" : 11,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "19ab05tns5h6y4qm42esqqpea",
+        "meshId" : 10,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : null,
+        "tags" : [ ]
+      }, {
+        "id" : "613htqkzf66zz7hf7n8kzszed",
+        "meshId" : 2,
+        "floor" : {
+          "id" : "tsmq1wak12rhgn0mawksxcwcd",
+          "meshId" : 0
+        },
+        "dimensions" : {
+          "height" : null,
+          "width" : 19.369201078491212,
+          "depth" : 39.27277580539703,
+          "areaFloor" : 59672.57034580078
+        },
+        "tags" : [ "outdoor_other" ]
+      }, {
+        "id" : "cdz3fkt38kae7tapstpt0eaeb",
+        "meshId" : 3,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : {
+          "height" : null,
+          "width" : 60.33779322349548,
+          "depth" : 12.654479499320983,
+          "areaFloor" : 165785.8821253906
+        },
+        "tags" : [ "outdoor_other" ]
+      }, {
+        "id" : "xy2x8mpaaqknp7q2c3nnbw1ma",
+        "meshId" : 4,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : {
+          "height" : null,
+          "width" : 27.611722728385924,
+          "depth" : 14.635975747871399,
+          "areaFloor" : 986.8666292465209
+        },
+        "tags" : [ "kitchen" ]
+      }, {
+        "id" : "tt6gm2a0463x9wmnx7rn6gugc",
+        "meshId" : 5,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : {
+          "height" : null,
+          "width" : 10.219790818252564,
+          "depth" : 10.851138567295074,
+          "areaFloor" : 121.5255084411621
+        },
+        "tags" : [ "bedroom" ]
+      }, {
+        "id" : "h26t7ky77ew74yb0pg8qqf5rd",
+        "meshId" : 6,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : {
+          "height" : null,
+          "width" : 11.757884032621384,
+          "depth" : null,
+          "areaFloor" : 115.40515812034606
+        },
+        "tags" : [ "laundry" ]
+      }, {
+        "id" : "3m54yff1z7crxaywd8if9rb0d",
+        "meshId" : 7,
+        "floor" : {
+          "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+          "meshId" : 1
+        },
+        "dimensions" : {
+          "height" : null,
+          "width" : 9.429227481164933,
+          "depth" : null,
+          "areaFloor" : 137.0976436058998
+        },
+        "tags" : [ "bedroom" ]
+      } ]
+    }
+  }
+}

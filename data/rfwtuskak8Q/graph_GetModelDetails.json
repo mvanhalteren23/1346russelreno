@@ -1,0 +1,121 @@
+{
+  "data" : {
+    "model" : {
+      "id" : "rfwtuskak8Q",
+      "name" : "1346 Russell Rd",
+      "visibility" : "public",
+      "discoverable" : true,
+      "state" : "active",
+      "image" : {
+        "id" : "WKiCPrwXHwJ",
+        "label" : "Kitchen",
+        "classification" : "Kitchen",
+        "category" : "snapshot",
+        "height" : 4320,
+        "width" : 7680,
+        "created" : "2026-05-01T14:51:57Z",
+        "modified" : "2026-05-01T14:52:11Z",
+        "status" : "available",
+        "filename" : "Kitchen.jpg",
+        "format" : "image",
+        "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-977ce8accf6d629865e0219ad866a3060758274d-1794648424-1",
+        "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+        "type" : "photo2D",
+        "origin" : "vision",
+        "validUntil" : "2026-11-14T09:27:04Z",
+        "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-977ce8accf6d629865e0219ad866a3060758274d-1794648424-1&width=200&height=140&fit=crop&disable=upscale",
+        "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-977ce8accf6d629865e0219ad866a3060758274d-1794648424-1&width=1920&height=1080&fit=crop&disable=upscale",
+        "snapshotLocation" : {
+          "viewMode" : "panorama",
+          "position" : {
+            "x" : 7.53173828125,
+            "y" : -4.878737926483154,
+            "z" : 0.34146052598953247
+          },
+          "rotation" : {
+            "x" : 0.6500760941713821,
+            "y" : 0.36643930910741307,
+            "z" : -0.32687739156920415,
+            "w" : -0.579891680042901
+          },
+          "zoom" : 1.0,
+          "floorVisibility" : [ ],
+          "anchor" : {
+            "id" : "cmn296qpm30261cwwps40yx3c",
+            "pano" : {
+              "id" : "cmn296qpm30261cwwps40yx3c",
+              "placement" : "auto"
+            }
+          }
+        }
+      },
+      "publication" : {
+        "address" : "1346 Russell Road, Gibsons BC V0N 1V2, CA",
+        "published" : true,
+        "lastPublished" : null,
+        "presentedBy" : "MacKenzie Real Estate Team",
+        "summary" : "Gibsons acreage",
+        "description" : "Set along a quiet rural road in Gibsons, this rare 10.82 acre property offers a unique blend of fertile land, natural beauty, and peaceful surroundings. With quality agricultural soil and a year-round creek running through the property, complete with water rights, this is an exceptional opportunity on the Sunshine Coast. The land features a mix of open meadows and mature trees, creating a park-like setting that feels both private and expansive. Surrounded by established farms and rural properties, the area reflects a strong connection to agriculture and the land. The existing 1,279 sq ft rancher is currently tenanted, offering immediate rental income or future flexibility for a new owner. Spacious detached shop creates a multitude of opportunities- storage, workshop, studio, and much more!",
+        "externalUrl" : "https://www.kenanmackenzie.com/",
+        "contact" : {
+          "name" : "Sarah",
+          "email" : "sarah@kenanmackenzie.com",
+          "phoneNumber" : "778-989-1841"
+        }
+      },
+      "options" : {
+        "urlBrandingEnabled" : true,
+        "socialSharingEnabled" : true,
+        "vrEnabled" : true
+      },
+      "assets" : {
+        "meshes" : [ {
+          "id" : "meshes/r7m9u8mhz5x2yh5ua6e4hxzba",
+          "status" : "available",
+          "filename" : "eb9d0e89e20144eab2598553bedda84a_50k.dam",
+          "format" : "dam",
+          "resolution" : "50k",
+          "url" : "https://cdn-2.matterport.com/models/fe99fc8f47a44afcb9689604fc0b42da/assets/eb9d0e89e20144eab2598553bedda84a_50k.dam?t=2-dc40bad419b09ac8461b00454a3b44281c2e9a3c-1794648424-1",
+          "validUntil" : "2026-11-14T09:27:04Z"
+        } ],
+        "textures" : [ {
+          "id" : "50k-high",
+          "status" : "available",
+          "format" : "jpg",
+          "resolution" : "50k",
+          "quality" : "high",
+          "urlTemplate" : "https://cdn-2.matterport.com/models/fe99fc8f47a44afcb9689604fc0b42da/assets/~/eb9d0e89e20144eab2598553bedda84a_50k_texture_jpg_high/eb9d0e89e20144eab2598553bedda84a_50k_<texture>.jpg?t=2-db742f35695276ed02a089a4cfb25812869e7ccf-1794648424-0&k=models%2Ffe99fc8f47a44afcb9689604fc0b42da%2Fassets",
+          "validUntil" : "2026-11-14T09:27:04Z"
+        }, {
+          "id" : "50k-low",
+          "status" : "available",
+          "format" : "jpg",
+          "resolution" : "50k",
+          "quality" : "low",
+          "urlTemplate" : "https://cdn-2.matterport.com/models/fe99fc8f47a44afcb9689604fc0b42da/assets/~/eb9d0e89e20144eab2598553bedda84a_50k_texture_jpg_low/eb9d0e89e20144eab2598553bedda84a_50k_<texture>.jpg?t=2-db742f35695276ed02a089a4cfb25812869e7ccf-1794648424-0&k=models%2Ffe99fc8f47a44afcb9689604fc0b42da%2Fassets",
+          "validUntil" : "2026-11-14T09:27:04Z"
+        } ],
+        "tilesets" : [ {
+          "status" : "available",
+          "tilesetVersion" : "1.2.0",
+          "url" : "https://cdn-2.matterport.com/models/fe99fc8f47a44afcb9689604fc0b42da/assets/mesh_tiles/~/tileset.json?t=2-ba66760b00f7dd0d1a6427217296dfb61d149385-1794648424-1&k=models%2Ffe99fc8f47a44afcb9689604fc0b42da%2Fassets%2Fmesh_tiles",
+          "urlTemplate" : "https://cdn-2.matterport.com/models/fe99fc8f47a44afcb9689604fc0b42da/assets/mesh_tiles/~/<file>?t=2-ba66760b00f7dd0d1a6427217296dfb61d149385-1794648424-1&k=models%2Ffe99fc8f47a44afcb9689604fc0b42da%2Fassets%2Fmesh_tiles",
+          "validUntil" : "2026-11-14T09:27:04Z",
+          "tilesetDepth" : 4,
+          "tilesetPreset" : "medium2"
+        } ]
+      },
+      "lod" : {
+        "options" : [ "max" ]
+      },
+      "overlayLayers" : [ ],
+      "baseView" : {
+        "model" : {
+          "id" : "rfwtuskak8Q"
+        }
+      },
+      "defurnishViews" : [ ],
+      "legacyBaseView" : null
+    }
+  }
+}

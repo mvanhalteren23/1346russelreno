@@ -1,0 +1,1139 @@
+{
+  "data" : {
+    "model" : {
+      "id" : "rfwtuskak8Q",
+      "assets" : {
+        "photos" : [ {
+          "id" : "fWAgGEY9Bbo",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:51:58Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/fWAgGEY9Bbo/fWAgGEY9Bbo-Balcony.jpg?t=2-e440045a161e0d1430bf01fd832d5acafb78fa51-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/fWAgGEY9Bbo/fWAgGEY9Bbo-Balcony.jpg?t=2-e440045a161e0d1430bf01fd832d5acafb78fa51-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/fWAgGEY9Bbo/fWAgGEY9Bbo-Balcony.jpg?t=2-e440045a161e0d1430bf01fd832d5acafb78fa51-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 82.00641632080078,
+              "y" : 105.37313842773438,
+              "z" : 2.7093777656555176
+            },
+            "rotation" : {
+              "x" : 0.5151346794196526,
+              "y" : 0.5151346938830171,
+              "z" : -0.48439268262524654,
+              "w" : -0.48439268262524643
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "6qwrn20yp325fmtgqddugcz4a",
+              "pano" : {
+                "id" : "6qwrn20yp325fmtgqddugcz4a",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "qi5WpL1prUk",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:01Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/qi5WpL1prUk/qi5WpL1prUk-Balcony.jpg?t=2-392b588fdadd557de2dd94ca4415448175d78378-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/qi5WpL1prUk/qi5WpL1prUk-Balcony.jpg?t=2-392b588fdadd557de2dd94ca4415448175d78378-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/qi5WpL1prUk/qi5WpL1prUk-Balcony.jpg?t=2-392b588fdadd557de2dd94ca4415448175d78378-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 73.12078857421875,
+              "y" : -1.146248459815979,
+              "z" : 1.4486079216003418
+            },
+            "rotation" : {
+              "x" : 2.7396921586444033E-18,
+              "y" : 0.7291240759172869,
+              "z" : -0.6843815417458446,
+              "w" : 2.739689365386638E-18
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "8dnk7uenwefwqy7ek9rqsez1b",
+              "pano" : {
+                "id" : "8dnk7uenwefwqy7ek9rqsez1b",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "u4jQB9yWAzS",
+          "label" : "Staircase",
+          "classification" : "Staircase",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:07Z",
+          "status" : "available",
+          "filename" : "Staircase.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/u4jQB9yWAzS/u4jQB9yWAzS-Staircase.jpg?t=2-945faf9342afadb12232ff499e5fc1fcdfcee3bb-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/u4jQB9yWAzS/u4jQB9yWAzS-Staircase.jpg?t=2-945faf9342afadb12232ff499e5fc1fcdfcee3bb-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/u4jQB9yWAzS/u4jQB9yWAzS-Staircase.jpg?t=2-945faf9342afadb12232ff499e5fc1fcdfcee3bb-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 53.20124816894531,
+              "y" : 98.1465072631836,
+              "z" : 1.3715171813964844
+            },
+            "rotation" : {
+              "x" : 0.41632598398276666,
+              "y" : 0.5983654377230848,
+              "z" : -0.5619326712569762,
+              "w" : -0.39097713172322857
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "3zfxxpy0gd4wp0aydnbwfs1tb",
+              "pano" : {
+                "id" : "3zfxxpy0gd4wp0aydnbwfs1tb",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "AejYSdnbtXz",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:00Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/AejYSdnbtXz/AejYSdnbtXz-Balcony.jpg?t=2-ac597ae1ad604f17574c926fbc1630cd961626b1-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/AejYSdnbtXz/AejYSdnbtXz-Balcony.jpg?t=2-ac597ae1ad604f17574c926fbc1630cd961626b1-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/AejYSdnbtXz/AejYSdnbtXz-Balcony.jpg?t=2-ac597ae1ad604f17574c926fbc1630cd961626b1-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 73.12078857421875,
+              "y" : -1.146248459815979,
+              "z" : 1.4486079216003418
+            },
+            "rotation" : {
+              "x" : 0.5154568802691765,
+              "y" : 0.5154566634543211,
+              "z" : -0.48404977412533534,
+              "w" : -0.48404977412533534
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "8dnk7uenwefwqy7ek9rqsez1b",
+              "pano" : {
+                "id" : "8dnk7uenwefwqy7ek9rqsez1b",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "Ha3VWvp5PeS",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:51:59Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Ha3VWvp5PeS/Ha3VWvp5PeS-Balcony.jpg?t=2-c8ad44bf0343e05b5eb8dea0aa7606ae43db2b4d-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Ha3VWvp5PeS/Ha3VWvp5PeS-Balcony.jpg?t=2-c8ad44bf0343e05b5eb8dea0aa7606ae43db2b4d-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Ha3VWvp5PeS/Ha3VWvp5PeS-Balcony.jpg?t=2-c8ad44bf0343e05b5eb8dea0aa7606ae43db2b4d-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 12.97414493560791,
+              "y" : 102.75318908691406,
+              "z" : -0.08709514141082764
+            },
+            "rotation" : {
+              "x" : 0.4526755375632321,
+              "y" : 0.5711203823324555,
+              "z" : -0.5366426193174547,
+              "w" : -0.4253481459167696
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "uc76sxgnny6hm6kxm2hcmhphc",
+              "pano" : {
+                "id" : "uc76sxgnny6hm6kxm2hcmhphc",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "MWaZyfCZDVx",
+          "label" : "Dollhouse View",
+          "classification" : "Dollhouse View",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:51:57Z",
+          "status" : "available",
+          "filename" : "Dollhouse-View.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/MWaZyfCZDVx/MWaZyfCZDVx-Dollhouse_View.jpg?t=2-c41e546b3a8e5bf070df3f5dd32d45f6838b4f3d-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/MWaZyfCZDVx/MWaZyfCZDVx-Dollhouse_View.jpg?t=2-c41e546b3a8e5bf070df3f5dd32d45f6838b4f3d-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/MWaZyfCZDVx/MWaZyfCZDVx-Dollhouse_View.jpg?t=2-c41e546b3a8e5bf070df3f5dd32d45f6838b4f3d-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "dollhouse",
+            "position" : {
+              "x" : 247.04562377929688,
+              "y" : -161.9711151123047,
+              "z" : 189.19497680664062
+            },
+            "rotation" : {
+              "x" : 0.8242953477313331,
+              "y" : 0.32892679493016697,
+              "z" : -0.17078565255290998,
+              "w" : -0.4279913510677172
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : null
+          }
+        }, {
+          "id" : "NSSv2dnAa8L",
+          "label" : "Garage",
+          "classification" : "Garage",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:04Z",
+          "status" : "available",
+          "filename" : "Garage.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/NSSv2dnAa8L/NSSv2dnAa8L-Garage.jpg?t=2-60b8892da6d7a251b943e0d2d5128d116a6c8101-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/NSSv2dnAa8L/NSSv2dnAa8L-Garage.jpg?t=2-60b8892da6d7a251b943e0d2d5128d116a6c8101-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/NSSv2dnAa8L/NSSv2dnAa8L-Garage.jpg?t=2-60b8892da6d7a251b943e0d2d5128d116a6c8101-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -40.16512680053711,
+              "y" : 3.6505258083343506,
+              "z" : -1.6130404472351074
+            },
+            "rotation" : {
+              "x" : 0.7168704626576674,
+              "y" : 0.13220039479249876,
+              "z" : -0.12414816165042973,
+              "w" : -0.673206536140522
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "knkq59gm56xxi7bsehiucek1d",
+              "pano" : {
+                "id" : "knkq59gm56xxi7bsehiucek1d",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "QCfW7jshfAV",
+          "label" : "Bedroom",
+          "classification" : "Bedroom",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:09Z",
+          "status" : "available",
+          "filename" : "Bedroom.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/QCfW7jshfAV/QCfW7jshfAV-Bedroom.jpg?t=2-0c70e0c4a5038f32478a3ddc07841751c26d4089-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/QCfW7jshfAV/QCfW7jshfAV-Bedroom.jpg?t=2-0c70e0c4a5038f32478a3ddc07841751c26d4089-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/QCfW7jshfAV/QCfW7jshfAV-Bedroom.jpg?t=2-0c70e0c4a5038f32478a3ddc07841751c26d4089-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 10.254149436950684,
+              "y" : -3.9495294094085693,
+              "z" : 0.33682161569595337
+            },
+            "rotation" : {
+              "x" : 0.7581850689443453,
+              "y" : -5.2924984609992365E-17,
+              "z" : 3.342634766361065E-17,
+              "w" : -0.6520393857030543
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "n1eaindq3qn6uy8izk33gm67b",
+              "pano" : {
+                "id" : "n1eaindq3qn6uy8izk33gm67b",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "UWmUw4qsBVp",
+          "label" : "Garage",
+          "classification" : "Garage",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:06Z",
+          "status" : "available",
+          "filename" : "Garage.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/UWmUw4qsBVp/UWmUw4qsBVp-Garage.jpg?t=2-8136646361d653af8795934be4dc7824af3df104-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/UWmUw4qsBVp/UWmUw4qsBVp-Garage.jpg?t=2-8136646361d653af8795934be4dc7824af3df104-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/UWmUw4qsBVp/UWmUw4qsBVp-Garage.jpg?t=2-8136646361d653af8795934be4dc7824af3df104-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -81.49376678466797,
+              "y" : 6.175126552581787,
+              "z" : -2.758466958999634
+            },
+            "rotation" : {
+              "x" : 0.7126379950221275,
+              "y" : -0.15368016280166508,
+              "z" : 0.14429345451254827,
+              "w" : -0.6691105653326206
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "05ekbfenkb2tpcnsr87nbwwfc",
+              "pano" : {
+                "id" : "05ekbfenkb2tpcnsr87nbwwfc",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "WKiCPrwXHwJ",
+          "label" : "Kitchen",
+          "classification" : "Kitchen",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:11Z",
+          "status" : "available",
+          "filename" : "Kitchen.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-60d47469d5e84411c3eca3d57218e5831f44df57-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-60d47469d5e84411c3eca3d57218e5831f44df57-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-60d47469d5e84411c3eca3d57218e5831f44df57-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 7.53173828125,
+              "y" : -4.878737926483154,
+              "z" : 0.34146052598953247
+            },
+            "rotation" : {
+              "x" : 0.6500760941713821,
+              "y" : 0.36643930910741307,
+              "z" : -0.32687739156920415,
+              "w" : -0.579891680042901
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "cmn296qpm30261cwwps40yx3c",
+              "pano" : {
+                "id" : "cmn296qpm30261cwwps40yx3c",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "9GGrTrvD272",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:02Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9GGrTrvD272/9GGrTrvD272-Balcony.jpg?t=2-172b19a44198f11a8cb4fd39cff355eebcb1c317-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9GGrTrvD272/9GGrTrvD272-Balcony.jpg?t=2-172b19a44198f11a8cb4fd39cff355eebcb1c317-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9GGrTrvD272/9GGrTrvD272-Balcony.jpg?t=2-172b19a44198f11a8cb4fd39cff355eebcb1c317-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 155.20140075683594,
+              "y" : 9.433585166931152,
+              "z" : 4.981175422668457
+            },
+            "rotation" : {
+              "x" : 0.6834350837765976,
+              "y" : 0.2541032664427349,
+              "z" : -0.23849588629007454,
+              "w" : -0.6414574798915244
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "rkeaeawhb6x5a18hw3hk1fmyb",
+              "pano" : {
+                "id" : "rkeaeawhb6x5a18hw3hk1fmyb",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "fnYyW5LKs1B",
+          "label" : "Garage",
+          "classification" : "Garage",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:05Z",
+          "status" : "available",
+          "filename" : "Garage.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/fnYyW5LKs1B/fnYyW5LKs1B-Garage.jpg?t=2-064119b5958f478c2d8c6f0e56f07813d9a34c0c-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/fnYyW5LKs1B/fnYyW5LKs1B-Garage.jpg?t=2-064119b5958f478c2d8c6f0e56f07813d9a34c0c-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/fnYyW5LKs1B/fnYyW5LKs1B-Garage.jpg?t=2-064119b5958f478c2d8c6f0e56f07813d9a34c0c-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -13.02409553527832,
+              "y" : 0.40749257802963257,
+              "z" : -0.8221502900123596
+            },
+            "rotation" : {
+              "x" : 0.7030903489793444,
+              "y" : 0.1921495188117793,
+              "z" : -0.18049033929070937,
+              "w" : -0.6604284446317604
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "kxizkrz6sr966pw7puwgrzgna",
+              "pano" : {
+                "id" : "kxizkrz6sr966pw7puwgrzgna",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "AXoWdBdbtdW",
+          "label" : "Staircase",
+          "classification" : "Staircase",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:08Z",
+          "status" : "available",
+          "filename" : "Staircase.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/AXoWdBdbtdW/AXoWdBdbtdW-Staircase.jpg?t=2-daa83e04b1ce3fb117e3342dc592c21d4f34e4e5-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/AXoWdBdbtdW/AXoWdBdbtdW-Staircase.jpg?t=2-daa83e04b1ce3fb117e3342dc592c21d4f34e4e5-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/AXoWdBdbtdW/AXoWdBdbtdW-Staircase.jpg?t=2-daa83e04b1ce3fb117e3342dc592c21d4f34e4e5-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -60.9067497253418,
+              "y" : 5.283502101898193,
+              "z" : -2.111406087875366
+            },
+            "rotation" : {
+              "x" : 0.5865966014470647,
+              "y" : 0.4325063978045466,
+              "z" : -0.4063445981050202,
+              "w" : -0.5511140663392236
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "ru7fncfseq8q14m3dszrf3bbc",
+              "pano" : {
+                "id" : "ru7fncfseq8q14m3dszrf3bbc",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "LXChvrmoHU4",
+          "label" : "Bedroom",
+          "classification" : "Bedroom",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:10Z",
+          "status" : "available",
+          "filename" : "Bedroom.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/LXChvrmoHU4/LXChvrmoHU4-Bedroom.jpg?t=2-4df033c3d4647a87b101ba3978cd720947634a1a-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/LXChvrmoHU4/LXChvrmoHU4-Bedroom.jpg?t=2-4df033c3d4647a87b101ba3978cd720947634a1a-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/LXChvrmoHU4/LXChvrmoHU4-Bedroom.jpg?t=2-4df033c3d4647a87b101ba3978cd720947634a1a-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 11.288360595703125,
+              "y" : 1.8654100894927979,
+              "z" : 0.3584163188934326
+            },
+            "rotation" : {
+              "x" : 0.42935091490739724,
+              "y" : 0.6165923375577577,
+              "z" : -0.5415458487729666,
+              "w" : -0.37709390387252045
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "yicrgmsz2r84add89r787ag2a",
+              "pano" : {
+                "id" : "yicrgmsz2r84add89r787ag2a",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "MH45i2J9N9W",
+          "label" : "Garage",
+          "classification" : "Garage",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:07Z",
+          "status" : "available",
+          "filename" : "Garage.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/MH45i2J9N9W/MH45i2J9N9W-Garage.jpg?t=2-82f669762c5118e07c8f175df20e75c6f2e48fe0-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/MH45i2J9N9W/MH45i2J9N9W-Garage.jpg?t=2-82f669762c5118e07c8f175df20e75c6f2e48fe0-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/MH45i2J9N9W/MH45i2J9N9W-Garage.jpg?t=2-82f669762c5118e07c8f175df20e75c6f2e48fe0-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -91.6435317993164,
+              "y" : 5.976089954376221,
+              "z" : -3.0906450748443604
+            },
+            "rotation" : {
+              "x" : 0.5154593664068559,
+              "y" : 0.5154593519526021,
+              "z" : -0.4840471503957414,
+              "w" : -0.48404715039574137
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "97knmw32fhh3yiqern471y8ta",
+              "pano" : {
+                "id" : "97knmw32fhh3yiqern471y8ta",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "Q1rofVJxh4n",
+          "label" : "Bedroom",
+          "classification" : "Bedroom",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:11Z",
+          "status" : "available",
+          "filename" : "Bedroom.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Q1rofVJxh4n/Q1rofVJxh4n-Bedroom.jpg?t=2-ce362017cf6b0945287cae5da36758e367081349-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Q1rofVJxh4n/Q1rofVJxh4n-Bedroom.jpg?t=2-ce362017cf6b0945287cae5da36758e367081349-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Q1rofVJxh4n/Q1rofVJxh4n-Bedroom.jpg?t=2-ce362017cf6b0945287cae5da36758e367081349-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 116.10953521728516,
+              "y" : 126.9157485961914,
+              "z" : 4.126804828643799
+            },
+            "rotation" : {
+              "x" : 0.6057121279925797,
+              "y" : 0.4055006342459846,
+              "z" : -0.3808495343824222,
+              "w" : -0.5688899605616999
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "5uhae8m1baibfa0q1sidzt1nb",
+              "pano" : {
+                "id" : "5uhae8m1baibfa0q1sidzt1nb",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "3r8GgGFDmzP",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:01Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/3r8GgGFDmzP/3r8GgGFDmzP-Balcony.jpg?t=2-47b2b8680c62ee4decd63c500ab9e664b3779caa-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/3r8GgGFDmzP/3r8GgGFDmzP-Balcony.jpg?t=2-47b2b8680c62ee4decd63c500ab9e664b3779caa-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/3r8GgGFDmzP/3r8GgGFDmzP-Balcony.jpg?t=2-47b2b8680c62ee4decd63c500ab9e664b3779caa-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -66.31301879882812,
+              "y" : 119.2199935913086,
+              "z" : -3.3566205501556396
+            },
+            "rotation" : {
+              "x" : 0.515540650722241,
+              "y" : -0.5155405206544658,
+              "z" : 0.48396057069849474,
+              "w" : -0.4839605706984948
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "qn03xwdap9uhfietxc1w3ig3d",
+              "pano" : {
+                "id" : "qn03xwdap9uhfietxc1w3ig3d",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "ewSAudfFUn5",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:03Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/ewSAudfFUn5/ewSAudfFUn5-Balcony.jpg?t=2-1b632cbc552c8dc2bbc75242224bc36f06f248ac-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/ewSAudfFUn5/ewSAudfFUn5-Balcony.jpg?t=2-1b632cbc552c8dc2bbc75242224bc36f06f248ac-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/ewSAudfFUn5/ewSAudfFUn5-Balcony.jpg?t=2-1b632cbc552c8dc2bbc75242224bc36f06f248ac-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -46.37534713745117,
+              "y" : 116.00896453857422,
+              "z" : -2.665377140045166
+            },
+            "rotation" : {
+              "x" : 0.6295373131712597,
+              "y" : 0.3681972780906044,
+              "z" : -0.3454193331924073,
+              "w" : -0.5905921050881696
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "hu49mx8m6f3epkwd872nqr0ya",
+              "pano" : {
+                "id" : "hu49mx8m6f3epkwd872nqr0ya",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "zAkaEnVrTBc",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:02Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/zAkaEnVrTBc/zAkaEnVrTBc-Balcony.jpg?t=2-150e63d6836e801550d46c09140d453c1c5a0062-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/zAkaEnVrTBc/zAkaEnVrTBc-Balcony.jpg?t=2-150e63d6836e801550d46c09140d453c1c5a0062-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/zAkaEnVrTBc/zAkaEnVrTBc-Balcony.jpg?t=2-150e63d6836e801550d46c09140d453c1c5a0062-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 120.63327026367188,
+              "y" : 49.77843475341797,
+              "z" : 3.491611957550049
+            },
+            "rotation" : {
+              "x" : 0.5155444082220483,
+              "y" : 0.515544422673918,
+              "z" : -0.48395658093486343,
+              "w" : -0.4839565809348634
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "e4ck71zr4qg381hy15aerbrda",
+              "pano" : {
+                "id" : "e4ck71zr4qg381hy15aerbrda",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "Lg5NY8xKtBc",
+          "label" : "Garage",
+          "classification" : "Garage",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:05Z",
+          "status" : "available",
+          "filename" : "Garage.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Lg5NY8xKtBc/Lg5NY8xKtBc-Garage.jpg?t=2-525fed9eaae11fc7b2e2c942659cc815268c8662-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Lg5NY8xKtBc/Lg5NY8xKtBc-Garage.jpg?t=2-525fed9eaae11fc7b2e2c942659cc815268c8662-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/Lg5NY8xKtBc/Lg5NY8xKtBc-Garage.jpg?t=2-525fed9eaae11fc7b2e2c942659cc815268c8662-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 0.3594459295272827,
+              "y" : -8.390704154968262,
+              "z" : -0.4356936812400818
+            },
+            "rotation" : {
+              "x" : 2.6663571182690908E-18,
+              "y" : 0.7285440147943122,
+              "z" : -0.684998968605591,
+              "w" : 2.666363765170633E-18
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "b30ibhytaciddwcshxn9szenb",
+              "pano" : {
+                "id" : "b30ibhytaciddwcshxn9szenb",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "N2SFAdZScnL",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:51:58Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/N2SFAdZScnL/N2SFAdZScnL-Balcony.jpg?t=2-b192ff1817a37f043390e71bdff8bdfdb7332b82-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/N2SFAdZScnL/N2SFAdZScnL-Balcony.jpg?t=2-b192ff1817a37f043390e71bdff8bdfdb7332b82-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/N2SFAdZScnL/N2SFAdZScnL-Balcony.jpg?t=2-b192ff1817a37f043390e71bdff8bdfdb7332b82-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 142.05935668945312,
+              "y" : 57.71982955932617,
+              "z" : 4.626893997192383
+            },
+            "rotation" : {
+              "x" : 0.5152310687256206,
+              "y" : 0.5152310687256209,
+              "z" : -0.4842901469745204,
+              "w" : -0.48429014697452033
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "akncs2hy43szpaeqeuc0emgga",
+              "pano" : {
+                "id" : "akncs2hy43szpaeqeuc0emgga",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "SsQgsDSVUJ5",
+          "label" : "Staircase",
+          "classification" : "Staircase",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:09Z",
+          "status" : "available",
+          "filename" : "Staircase.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/SsQgsDSVUJ5/SsQgsDSVUJ5-Staircase.jpg?t=2-1075a3f37fb76da0d83dc0ce25e5fbf74cbb2fed-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/SsQgsDSVUJ5/SsQgsDSVUJ5-Staircase.jpg?t=2-1075a3f37fb76da0d83dc0ce25e5fbf74cbb2fed-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/SsQgsDSVUJ5/SsQgsDSVUJ5-Staircase.jpg?t=2-1075a3f37fb76da0d83dc0ce25e5fbf74cbb2fed-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 137.1096649169922,
+              "y" : 88.86627197265625,
+              "z" : 4.640942573547363
+            },
+            "rotation" : {
+              "x" : 0.5150990549212529,
+              "y" : 0.5150988813488763,
+              "z" : -0.48443055169431376,
+              "w" : -0.48443055169431376
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "q6a2umsisayhpnapu32b2xwzc",
+              "pano" : {
+                "id" : "q6a2umsisayhpnapu32b2xwzc",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "1owfD3Pvtra",
+          "label" : "Laundry",
+          "classification" : "Laundry",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:09Z",
+          "status" : "available",
+          "filename" : "Laundry.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/1owfD3Pvtra/1owfD3Pvtra-Laundry.jpg?t=2-1438367ce01c75eba0d9bf95ace7aac4a5f88f39-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/1owfD3Pvtra/1owfD3Pvtra-Laundry.jpg?t=2-1438367ce01c75eba0d9bf95ace7aac4a5f88f39-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/1owfD3Pvtra/1owfD3Pvtra-Laundry.jpg?t=2-1438367ce01c75eba0d9bf95ace7aac4a5f88f39-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 10.814379692077637,
+              "y" : -7.948046684265137,
+              "z" : 0.35786172747612
+            },
+            "rotation" : {
+              "x" : 0.09410096574316125,
+              "y" : 0.7617438972430249,
+              "z" : -0.6361721800579426,
+              "w" : -0.07858864219036742
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "pqyspy95cngn4ig10epq1hxda",
+              "pano" : {
+                "id" : "pqyspy95cngn4ig10epq1hxda",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "9wRD7Bx6bKA",
+          "label" : "Kitchen",
+          "classification" : "Kitchen",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:11Z",
+          "status" : "available",
+          "filename" : "Kitchen.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9wRD7Bx6bKA/9wRD7Bx6bKA-Kitchen.jpg?t=2-a28170607450cc51b157f4b4a9321a43960cc558-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9wRD7Bx6bKA/9wRD7Bx6bKA-Kitchen.jpg?t=2-a28170607450cc51b157f4b4a9321a43960cc558-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9wRD7Bx6bKA/9wRD7Bx6bKA-Kitchen.jpg?t=2-a28170607450cc51b157f4b4a9321a43960cc558-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 3.976827621459961,
+              "y" : -4.50282621383667,
+              "z" : 0.3418940603733063
+            },
+            "rotation" : {
+              "x" : 0.7046579181357544,
+              "y" : -0.293710312669308,
+              "z" : 0.24849861679525923,
+              "w" : -0.5961878189801797
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "1naxdbgm8xukik39a7285rgfb",
+              "pano" : {
+                "id" : "1naxdbgm8xukik39a7285rgfb",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "QFNYHh7VjHo",
+          "label" : "Garage",
+          "classification" : "Garage",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:04Z",
+          "status" : "available",
+          "filename" : "Garage.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/QFNYHh7VjHo/QFNYHh7VjHo-Garage.jpg?t=2-56db9f17e30d722222c7cc3e58711cb205fc1b89-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/QFNYHh7VjHo/QFNYHh7VjHo-Garage.jpg?t=2-56db9f17e30d722222c7cc3e58711cb205fc1b89-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/QFNYHh7VjHo/QFNYHh7VjHo-Garage.jpg?t=2-56db9f17e30d722222c7cc3e58711cb205fc1b89-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : -40.065189361572266,
+              "y" : 7.92590856552124,
+              "z" : -1.7435219287872314
+            },
+            "rotation" : {
+              "x" : -0.22932699061896314,
+              "y" : 0.6919740942070871,
+              "z" : -0.649775935926522,
+              "w" : 0.21534211490155328
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "7a75ew0ndusepyfmsgknc498c",
+              "pano" : {
+                "id" : "7a75ew0ndusepyfmsgknc498c",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "17f7vTnmRnw",
+          "label" : "Bedroom",
+          "classification" : "Bedroom",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:10Z",
+          "status" : "available",
+          "filename" : "Bedroom.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/17f7vTnmRnw/17f7vTnmRnw-Bedroom.jpg?t=2-ef10ae455b26c2095e64b147ae20a8656cc4a793-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/17f7vTnmRnw/17f7vTnmRnw-Bedroom.jpg?t=2-ef10ae455b26c2095e64b147ae20a8656cc4a793-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/17f7vTnmRnw/17f7vTnmRnw-Bedroom.jpg?t=2-ef10ae455b26c2095e64b147ae20a8656cc4a793-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 8.146637916564941,
+              "y" : 0.5703640580177307,
+              "z" : 0.3426060378551483
+            },
+            "rotation" : {
+              "x" : 0.695004427093018,
+              "y" : -0.27512429346599526,
+              "z" : 0.24450342772505104,
+              "w" : -0.6176516413139168
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "68se7ay0hzgn1q279a7c3azaa",
+              "pano" : {
+                "id" : "68se7ay0hzgn1q279a7c3azaa",
+                "placement" : "auto"
+              }
+            }
+          }
+        }, {
+          "id" : "9N4g5HEeCwt",
+          "label" : "Balcony",
+          "classification" : "balcony",
+          "category" : "snapshot",
+          "height" : 4320,
+          "width" : 7680,
+          "created" : "2026-05-01T14:51:57Z",
+          "modified" : "2026-05-01T14:52:03Z",
+          "status" : "available",
+          "filename" : "Balcony.jpg",
+          "format" : "image",
+          "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9N4g5HEeCwt/9N4g5HEeCwt-Balcony.jpg?t=2-5067b65ec20304364493c9870fc8422bda6dde9a-1794648427-1",
+          "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+          "type" : "photo2D",
+          "origin" : "vision",
+          "validUntil":"2099-01-01T09:27:07Z",
+          "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9N4g5HEeCwt/9N4g5HEeCwt-Balcony.jpg?t=2-5067b65ec20304364493c9870fc8422bda6dde9a-1794648427-1&width=200&height=140&fit=crop&disable=upscale",
+          "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/9N4g5HEeCwt/9N4g5HEeCwt-Balcony.jpg?t=2-5067b65ec20304364493c9870fc8422bda6dde9a-1794648427-1&width=1920&height=1080&fit=crop&disable=upscale",
+          "snapshotLocation" : {
+            "viewMode" : "panorama",
+            "position" : {
+              "x" : 73.12078857421875,
+              "y" : -1.146248459815979,
+              "z" : 1.4486079216003418
+            },
+            "rotation" : {
+              "x" : 0.7292636171102066,
+              "y" : -4.741186680641983E-17,
+              "z" : 3.9139830646820515E-17,
+              "w" : -0.684232811678361
+            },
+            "zoom" : 1.0,
+            "floorVisibility" : [ ],
+            "anchor" : {
+              "id" : "8dnk7uenwefwqy7ek9rqsez1b",
+              "pano" : {
+                "id" : "8dnk7uenwefwqy7ek9rqsez1b",
+                "placement" : "auto"
+              }
+            }
+          }
+        } ]
+      },
+      "defurnishedViews" : [ ]
+    }
+  }
+}
