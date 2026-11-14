@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1346 Russell Road, Gibsons, BC — 3D GIS Terrain &amp; AG Site Planner (PID 012-421-847)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+      background: #0b1118; color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      font-size: 13px;
+    }
+    #app-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    #webgl-canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+    #webgl-canvas:active { cursor: grabbing; }
+    .glass-panel {
+      background: rgba(13, 20, 30, 0.84);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+    .btn-tool {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
+      background: rgba(30, 41, 59, 0.85); color: #e2e8f0;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      cursor: pointer; transition: all 0.15s ease;
+    }
+    .btn-tool:hover { background: rgba(51, 65, 85, 0.95); border-color: rgba(148, 163, 184, 0.45); }
+    .btn-tool.active {
+      background: rgba(16, 185, 129, 0.22); color: #34d399;
+      border-color: rgba(16, 185, 129, 0.65); box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+    }
+    .btn-spawn {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 7px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;
+      background: rgba(30, 41, 59, 0.75); color: #f1f5f9;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      cursor: pointer; transition: all 0.15s ease; text-align: left;
+    }
+    .btn-spawn:hover {
+      background: rgba(51, 65, 85, 0.9); border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
+    }
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 5px; background: rgba(51, 65, 85, 0.9);
+      border-radius: 4px; outline: none; accent-color: #10b981;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #10b981; cursor: pointer; border: 2px solid #0f172a;
+    }
+    .label-3d {
+      position: absolute; pointer-events: none; transform: translate(-50%, -100%);
+      padding: 3px 7px; border-radius: 5px; font-size: 11px; font-weight: 600;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      white-space: nowrap; background: rgba(15, 23, 42, 0.88); color: #f8fafc;
+      border: 1px solid rgba(148, 163, 184, 0.35); box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    .crosshair {
+      position: absolute; top: 50%; left: 50%; width: 16px; height: 16px;
+      transform: translate(-50%, -50%); pointer-events: none; opacity: 0.65;
+    }
+    .crosshair::before, .crosshair::after { content: ''; position: absolute; background: #34d399; }
+    .crosshair::before { top: 7px; left: 2px; width: 12px; height: 2px; }
+    .crosshair::after { left: 7px; top: 2px; height: 12px; width: 2px; }
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.3); border-radius: 4px; }
+  </style>
+  <!-- Built-in WebGL Three.js-Compatible Fallback (if CDN is blocked by sandbox CSP) -->
+  <script>
+    if (typeof window.THREE === 'undefined') {
+      (function() {
+        const DoubleSide = 2, RepeatWrapping = 1000, PCFSoftShadowMap = 2;
+        const MathUtils = {
+          clamp: (v, min, max) => Math.max(min, Math.min(max, v)),
+          lerp: (x, y, t) => (1 - t) * x + t * y,
+          degToRad: (d) => d * Math.PI / 180,
+          radToDeg: (r) => r * 180 / Math.PI
+        };
+        class Color {
+          constructor(c) { this.r = 1; this.g = 1; this.b = 1; if (c !== undefined) this.set(c); }
+          set(c) {
+            if (typeof c === 'number') return this.setHex(c);
+            if (typeof c === 'string' && c.startsWith('#')) return this.setHex(parseInt(c.slice(1), 16));
+            if (c && c.r !== undefined) { this.r = c.r; this.g = c.g; this.b = c.b; }
+            return this;
+          }
+          setHex(hex) {
+            hex = Math.floor(hex);
+            this.r = ((hex >> 16) & 255) / 255;
+            this.g = ((hex >> 8) & 255) / 255;
+            this.b = (hex & 255) / 255;
+            return this;
+          }
+          clone() { return new Color().set(this); }
+        }
+        class Vector2 {
+          constructor(x = 0, y = 0) { this.x = x; this.y = y; }
+          set(x, y) { this.x = x; this.y = y; return this; }
+        }
+        class Vector3 {
+          constructor(x = 0, y = 0, z = 0) { this.x = x; this.y = y; this.z = z; }
+          set(x, y, z) { this.x = x; this.y = y; this.z = z; return this; }
+          copy(v) { this.x = v.x; this.y = v.y; this.z = v.z; return this; }
+          clone() { return new Vector3(this.x, this.y, this.z); }
+          add(v) { this.x += v.x; this.y += v.y; this.z += v.z; return this; }
+          sub(v) { this.x -= v.x; this.y -= v.y; this.z -= v.z; return this; }
+          multiplyScalar(s) { this.x *= s; this.y *= s; this.z *= s; return this; }
+          length() { return Math.hypot(this.x, this.y, this.z); }
+          distanceTo(v) { return Math.hypot(this.x - v.x, this.y - v.y, this.z - v.z); }
+          normalize() { const l = this.length() || 1; return this.multiplyScalar(1 / l); }
+          dot(v) { return this.x * v.x + this.y * v.y + this.z * v.z; }
+          crossVectors(a, b) {
+            const ax = a.x, ay = a.y, az = a.z, bx = b.x, by = b.y, bz = b.z;
+            this.x = ay * bz - az * by; this.y = az * bx - ax * bz; this.z = ax * by - ay * bx;
+            return this;
+          }
+          applyMatrix4(m) {
+            const x = this.x, y = this.y, z = this.z, e = m.elements;
+            const w = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15] || 1);
+            this.x = (e[0] * x + e[4] * y + e[8] * z + e[12]) * w;
+            this.y = (e[1] * x + e[5] * y + e[9] * z + e[13]) * w;
+            this.z = (e[2] * x + e[6] * y + e[10] * z + e[14]) * w;
+            return this;
+          }
+          project(camera) {
+            camera.updateMatrixWorld();
+            return this.applyMatrix4(camera.matrixWorldInverse).applyMatrix4(camera.projectionMatrix);
+          }
+        }
+        class Euler {
+          constructor(x = 0, y = 0, z = 0, order = 'XYZ') { this.x = x; this.y = y; this.z = z; this.order = order; }
+        }
+        class Matrix4 {
+          constructor() { this.elements = new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]); }
+          copy(m) { this.elements.set(m.elements); return this; }
+          multiplyMatrices(a, b) {
+            const ae = a.elements, be = b.elements, te = this.elements;
+            const a11 = ae[0], a12 = ae[4], a13 = ae[8], a14 = ae[12], a21 = ae[1], a22 = ae[5], a23 = ae[9], a24 = ae[13];
+            const a31 = ae[2], a32 = ae[6], a33 = ae[10], a34 = ae[14], a41 = ae[3], a42 = ae[7], a43 = ae[11], a44 = ae[15];
+            const b11 = be[0], b12 = be[4], b13 = be[8], b14 = be[12], b21 = be[1], b22 = be[5], b23 = be[9], b24 = be[13];
+            const b31 = be[2], b32 = be[6], b33 = be[10], b34 = be[14], b41 = be[3], b42 = be[7], b43 = be[11], b44 = be[15];
+            te[0] = a11*b11 + a12*b21 + a13*b31 + a14*b41; te[4] = a11*b12 + a12*b22 + a13*b32 + a14*b42;
+            te[8] = a11*b13 + a12*b23 + a13*b33 + a14*b43; te[12] = a11*b14 + a12*b24 + a13*b34 + a14*b44;
+            te[1] = a21*b11 + a22*b21 + a23*b31 + a24*b41; te[5] = a21*b12 + a22*b22 + a23*b32 + a24*b42;
+            te[9] = a21*b13 + a22*b23 + a23*b33 + a24*b43; te[13] = a21*b14 + a22*b24 + a23*b34 + a24*b44;
+            te[2] = a31*b11 + a32*b21 + a33*b31 + a34*b41; te[6] = a31*b12 + a32*b22 + a33*b32 + a34*b42;
+            te[10] = a31*b13 + a32*b23 + a33*b33 + a34*b43; te[14] = a31*b14 + a32*b24 + a33*b34 + a34*b44;
+            te[3] = a41*b11 + a42*b21 + a43*b31 + a44*b41; te[7] = a41*b12 + a42*b22 + a43*b32 + a44*b42;
+            te[11] = a41*b13 + a42*b23 + a43*b33 + a44*b43; te[15] = a41*b14 + a42*b24 + a43*b34 + a44*b44;
+            return this;
+          }
+          makePerspective(fov, aspect, near, far) {
+            const f = 1.0 / Math.tan((fov * Math.PI / 180) / 2), nf = 1 / (near - far), e = this.elements;
+            e[0] = f / aspect; e[4] = 0; e[8] = 0; e[12] = 0;
+            e[1] = 0; e[5] = f; e[9] = 0; e[13] = 0;
+            e[2] = 0; e[6] = 0; e[10] = (far + near) * nf; e[14] = (2 * far * near) * nf;
+            e[3] = 0; e[7] = 0; e[11] = -1; e[15] = 0;
+            return this;
+          }
+          makeViewLookAt(eye, target, up) {
+            const z = new Vector3().copy(eye).sub(target);
+            if (z.length() === 0) z.z = 1; else z.normalize();
+            const x = new Vector3().crossVectors(up, z);
+            if (x.length() === 0) { z.x += 0.0001; x.crossVectors(up, z); }
+            x.normalize();
+            const y = new Vector3().crossVectors(z, x).normalize();
+            const e = this.elements;
+            e[0] = x.x; e[4] = x.y; e[8] = x.z; e[12] = -x.dot(eye);
+            e[1] = y.x; e[5] = y.y; e[9] = y.z; e[13] = -y.dot(eye);
+            e[2] = z.x; e[6] = z.y; e[10] = z.z; e[14] = -z.dot(eye);
+            e[3] = 0; e[7] = 0; e[11] = 0; e[15] = 1;
+            return this;
+          }
+          composeTR(pos, rot, scale) {
+            const cx = Math.cos(rot.x), sx = Math.sin(rot.x), cy = Math.cos(rot.y), sy = Math.sin(rot.y), cz = Math.cos(rot.z), sz = Math.sin(rot.z);
+            const e = this.elements, a = cx * cz, b = cx * sz, c = sx * cz, d = sx * sz;
+            e[0] = cy * cz * scale.x; e[1] = cy * sz * scale.x; e[2] = -sy * scale.x; e[3] = 0;
+            e[4] = (c * sy - b) * scale.y; e[5] = (d * sy + a) * scale.y; e[6] = sx * cy * scale.y; e[7] = 0;
+            e[8] = (a * sy + d) * scale.z; e[9] = (b * sy - c) * scale.z; e[10] = cx * cy * scale.z; e[11] = 0;
+            e[12] = pos.x; e[13] = pos.y; e[14] = pos.z; e[15] = 1;
+            return this;
+          }
+        }
+        class Object3D {
+          constructor() {
+            this.position = new Vector3(); this.rotation = new Euler(); this.scale = new Vector3(1, 1, 1);
+            this.up = new Vector3(0, 1, 0); this.children = []; this.parent = null; this.visible = true;
+            this.userData = {}; this.matrix = new Matrix4(); this.matrixWorld = new Matrix4(); this._lookTarget = null;
+          }
+          add(...objs) {
+            for (const o of objs) { if (!o) continue; if (o.parent) o.parent.remove(o); o.parent = this; this.children.push(o); }
+            return this;
+          }
+          remove(...objs) {
+            for (const o of objs) { const i = this.children.indexOf(o); if (i !== -1) { o.parent = null; this.children.splice(i, 1); } }
+            return this;
+          }
+          traverse(cb) { cb(this); for (const c of this.children) c.traverse(cb); }
+          updateMatrixWorld() {
+            this.matrix.composeTR(this.position, this.rotation, this.scale);
+            if (this.parent) this.matrixWorld.multiplyMatrices(this.parent.matrixWorld, this.matrix);
+            else this.matrixWorld.copy(this.matrix);
+            for (const c of this.children) c.updateMatrixWorld();
+          }
+        }
+        class Group extends Object3D {}
+        class Scene extends Object3D { constructor() { super(); this.background = new Color(0x87ceeb); this.fog = null; } }
+        class FogExp2 { constructor(color, density = 0.00025) { this.color = new Color(color); this.density = density; } }
+        class PerspectiveCamera extends Object3D {
+          constructor(fov = 60, aspect = 1, near = 0.1, far = 5000) {
+            super(); this.fov = fov; this.aspect = aspect; this.near = near; this.far = far;
+            this.projectionMatrix = new Matrix4(); this.matrixWorldInverse = new Matrix4();
+            this.updateProjectionMatrix();
+          }
+          updateProjectionMatrix() { this.projectionMatrix.makePerspective(this.fov, this.aspect, this.near, this.far); }
+          lookAt(x, y, z) {
+            const t = (x instanceof Vector3) ? x : new Vector3(x, y, z);
+            this._lookTarget = t.clone();
+          }
+          updateMatrixWorld() {
+            if (this._lookTarget) {
+              this.matrixWorldInverse.makeViewLookAt(this.position, this._lookTarget, this.up);
+              this._lookTarget = null;
+            } else {
+              const cy = Math.cos(this.rotation.y), sy = Math.sin(this.rotation.y);
+              const cx = Math.cos(this.rotation.x), sx = Math.sin(this.rotation.x);
+              const dir = new Vector3(-sy * cx, sx, -cy * cx);
+              this.matrixWorldInverse.makeViewLookAt(this.position, new Vector3().copy(this.position).add(dir), this.up);
+            }
+          }
+        }
+        class Float32BufferAttribute {
+          constructor(array, itemSize) {
+            this.array = (array instanceof Float32Array) ? array : new Float32Array(array);
+            this.itemSize = itemSize; this.count = this.array.length / itemSize; this.needsUpdate = true;
+          }
+          getX(i) { return this.array[i * this.itemSize]; }
+          getY(i) { return this.array[i * this.itemSize + 1]; }
+          getZ(i) { return this.array[i * this.itemSize + 2]; }
+          setY(i, y) { this.array[i * this.itemSize + 1] = y; }
+        }
+        class BufferGeometry {
+          constructor() { this.attributes = {}; this.index = null; this._glBuffers = null; }
+          setAttribute(name, attr) { this.attributes[name] = attr; return this; }
+          setIndex(idx) { this.index = Array.isArray(idx) ? { array: new Uint32Array(idx), count: idx.length } : idx; return this; }
+          setFromPoints(pts) {
+            const arr = new Float32Array(pts.length * 3);
+            for (let i = 0; i < pts.length; i++) { arr[i*3] = pts[i].x; arr[i*3+1] = pts[i].y; arr[i*3+2] = pts[i].z; }
+            return this.setAttribute('position', new Float32BufferAttribute(arr, 3));
+          }
+          translate(dx, dy, dz) {
+            const p = this.attributes.position;
+            if (p) { for (let i = 0; i < p.count; i++) { p.array[i*3] += dx; p.array[i*3+1] += dy; p.array[i*3+2] += dz; } p.needsUpdate = true; }
+            return this;
+          }
+          rotateX(angle) {
+            const c = Math.cos(angle), s = Math.sin(angle);
+            for (const k of ['position', 'normal']) {
+              const a = this.attributes[k]; if (!a) continue;
+              for (let i = 0; i < a.count; i++) {
+                const y = a.array[i*3+1], z = a.array[i*3+2];
+                a.array[i*3+1] = y * c - z * s; a.array[i*3+2] = y * s + z * c;
+              }
+              a.needsUpdate = true;
+            }
+            return this;
+          }
+          computeVertexNormals() {
+            const pos = this.attributes.position; if (!pos) return;
+            const norm = new Float32Array(pos.array.length);
+            const pA = new Vector3(), pB = new Vector3(), pC = new Vector3(), cb = new Vector3(), ab = new Vector3();
+            if (this.index) {
+              const idx = this.index.array;
+              for (let i = 0; i < idx.length; i += 3) {
+                const vA = idx[i]*3, vB = idx[i+1]*3, vC = idx[i+2]*3;
+                pA.set(pos.array[vA], pos.array[vA+1], pos.array[vA+2]);
+                pB.set(pos.array[vB], pos.array[vB+1], pos.array[vB+2]);
+                pC.set(pos.array[vC], pos.array[vC+1], pos.array[vC+2]);
+                cb.copy(pC).sub(pB); ab.copy(pA).sub(pB); cb.crossVectors(cb, ab);
+                norm[vA] += cb.x; norm[vA+1] += cb.y; norm[vA+2] += cb.z;
+                norm[vB] += cb.x; norm[vB+1] += cb.y; norm[vB+2] += cb.z;
+                norm[vC] += cb.x; norm[vC+1] += cb.y; norm[vC+2] += cb.z;
+              }
+            }
+            for (let i = 0; i < norm.length; i += 3) {
+              const l = Math.hypot(norm[i], norm[i+1], norm[i+2]) || 1;
+              norm[i] /= l; norm[i+1] /= l; norm[i+2] /= l;
+            }
+            this.setAttribute('normal', new Float32BufferAttribute(norm, 3));
+          }
+        }
+        class PlaneGeometry extends BufferGeometry {
+          constructor(width = 1, height = 1, widthSegments = 1, heightSegments = 1) {
+            super();
+            const widthHalf = width / 2, heightHalf = height / 2;
+            const gridX = Math.floor(widthSegments), gridY = Math.floor(heightSegments);
+            const gridX1 = gridX + 1, gridY1 = gridY + 1;
+            const segmentWidth = width / gridX, segmentHeight = height / gridY;
+            const vertices = [], normals = [], uvs = [], indices = [];
+            for (let iy = 0; iy < gridY1; iy++) {
+              const y = iy * segmentHeight - heightHalf;
+              for (let ix = 0; ix < gridX1; ix++) {
+                vertices.push(ix * segmentWidth - widthHalf, -y, 0);
+                normals.push(0, 0, 1); uvs.push(ix / gridX, 1 - (iy / gridY));
+              }
+            }
+            for (let iy = 0; iy < gridY; iy++) {
+              for (let ix = 0; ix < gridX; ix++) {
+                const a = ix + gridX1 * iy, b = ix + gridX1 * (iy + 1), c = (ix + 1) + gridX1 * (iy + 1), d = (ix + 1) + gridX1 * iy;
+                indices.push(a, b, d, b, c, d);
+              }
+            }
+            this.setIndex(indices);
+            this.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+            this.setAttribute('normal', new Float32BufferAttribute(normals, 3));
+            this.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
+          }
+        }
+        class BoxGeometry extends BufferGeometry {
+          constructor(w = 1, h = 1, d = 1) {
+            super(); this._dims = { w, h, d };
+            const hw = w / 2, hh = h / 2, hd = d / 2;
+            const faces = [
+              { n: [ 0, 0, 1], v: [[-hw,-hh, hd],[ hw,-hh, hd],[ hw, hh, hd],[-hw, hh, hd]] },
+              { n: [ 0, 0,-1], v: [[ hw,-hh,-hd],[-hw,-hh,-hd],[-hw, hh,-hd],[ hw, hh,-hd]] },
+              { n: [ 0, 1, 0], v: [[-hw, hh, hd],[ hw, hh, hd],[ hw, hh,-hd],[-hw, hh,-hd]] },
+              { n: [ 0,-1, 0], v: [[-hw,-hh,-hd],[ hw,-hh,-hd],[ hw,-hh, hd],[-hw,-hh, hd]] },
+              { n: [ 1, 0, 0], v: [[ hw,-hh, hd],[ hw,-hh,-hd],[ hw, hh,-hd],[ hw, hh, hd]] },
+              { n: [-1, 0, 0], v: [[-hw,-hh,-hd],[-hw,-hh, hd],[-hw, hh, hd],[-hw, hh,-hd]] }
+            ];
+            const pos = [], norm = [], uv = [], idx = []; let c = 0;
+            for (const f of faces) {
+              for (let i = 0; i < 4; i++) { pos.push(...f.v[i]); norm.push(...f.n); }
+              uv.push(0,0, 1,0, 1,1, 0,1); idx.push(c, c+1, c+2, c, c+2, c+3); c += 4;
+            }
+            this.setIndex(idx);
+            this.setAttribute('position', new Float32BufferAttribute(pos, 3));
+            this.setAttribute('normal', new Float32BufferAttribute(norm, 3));
+            this.setAttribute('uv', new Float32BufferAttribute(uv, 2));
+          }
+        }
+        class CylinderGeometry extends BufferGeometry {
+          constructor(rTop = 1, rBot = 1, height = 1, segs = 10) {
+            super();
+            const hh = height / 2, pos = [], norm = [], uv = [], idx = [];
+            for (let y = 0; y <= 1; y++) {
+              const py = y * height - hh, r = y === 0 ? rBot : rTop;
+              for (let x = 0; x <= segs; x++) {
+                const u = x / segs, th = u * Math.PI * 2, sx = Math.sin(th), cz = Math.cos(th);
+                pos.push(r * sx, py, r * cz); norm.push(sx, (rBot - rTop) / height, cz); uv.push(u, y);
+              }
+            }
+            for (let x = 0; x < segs; x++) {
+              const a = x, b = x + segs + 1, c = x + segs + 2, d = x + 1;
+              idx.push(a, b, d, b, c, d);
+            }
+            this.setIndex(idx);
+            this.setAttribute('position', new Float32BufferAttribute(pos, 3));
+            this.setAttribute('normal', new Float32BufferAttribute(norm, 3));
+            this.setAttribute('uv', new Float32BufferAttribute(uv, 2));
+          }
+        }
+        class ConeGeometry extends CylinderGeometry {
+          constructor(radius = 1, height = 1, segs = 10) { super(0, radius, height, segs); }
+        }
+        class SphereGeometry extends BufferGeometry {
+          constructor(radius = 1, wSeg = 10, hSeg = 8) {
+            super();
+            const pos = [], norm = [], uv = [], idx = [];
+            for (let iy = 0; iy <= hSeg; iy++) {
+              const v = iy / hSeg, phi = v * Math.PI;
+              for (let ix = 0; ix <= wSeg; ix++) {
+                const u = ix / wSeg, th = u * Math.PI * 2;
+                const x = -radius * Math.cos(th) * Math.sin(phi), y = radius * Math.cos(phi), z = radius * Math.sin(th) * Math.sin(phi);
+                pos.push(x, y, z); norm.push(x/radius, y/radius, z/radius); uv.push(u, 1 - v);
+              }
+            }
+            for (let iy = 0; iy < hSeg; iy++) {
+              for (let ix = 0; ix < wSeg; ix++) {
+                const a = iy * (wSeg + 1) + ix, b = a + wSeg + 1;
+                idx.push(a, b, a + 1, b, b + 1, a + 1);
+              }
+            }
+            this.setIndex(idx);
+            this.setAttribute('position', new Float32BufferAttribute(pos, 3));
+            this.setAttribute('normal', new Float32BufferAttribute(norm, 3));
+            this.setAttribute('uv', new Float32BufferAttribute(uv, 2));
+          }
+        }
+        class EdgesGeometry extends BufferGeometry {
+          constructor(geom) {
+            super();
+            if (geom && geom._dims) {
+              const hw = geom._dims.w / 2, hh = geom._dims.h / 2, hd = geom._dims.d / 2;
+              const c = [[-hw,0,-hd],[hw,0,-hd],[hw,hh*2,-hd],[-hw,hh*2,-hd],[-hw,0,hd],[hw,0,hd],[hw,hh*2,hd],[-hw,hh*2,hd]];
+              const edges = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+              const pts = []; for (const [a, b] of edges) pts.push(...c[a], ...c[b]);
+              this.setAttribute('position', new Float32BufferAttribute(pts, 3));
+            }
+          }
+        }
+        class CanvasTexture {
+          constructor(canvas) { this.image = canvas; this.needsUpdate = true; this._glTex = null; }
+        }
+        class Material {
+          constructor(opts = {}) {
+            this.color = new Color(opts.color !== undefined ? opts.color : 0xffffff);
+            this.emissive = new Color(opts.emissive !== undefined ? opts.emissive : 0x000000);
+            this.map = opts.map || null; this.transparent = !!opts.transparent;
+            this.opacity = opts.opacity !== undefined ? opts.opacity : 1.0;
+          }
+        }
+        class MeshStandardMaterial extends Material {}
+        class MeshBasicMaterial extends Material { constructor(opts = {}) { super(opts); this.isBasic = true; } }
+        class LineBasicMaterial extends Material { constructor(opts = {}) { super(opts); this.isBasic = true; } }
+        class Mesh extends Object3D { constructor(g, m) { super(); this.geometry = g; this.material = m; this.isMesh = true; } }
+        class LineSegments extends Object3D { constructor(g, m) { super(); this.geometry = g; this.material = m; this.isLineSegments = true; } }
+        class Line extends Object3D { constructor(g, m) { super(); this.geometry = g; this.material = m; this.isLine = true; } }
+        class HemisphereLight extends Object3D {
+          constructor(skyColor = 0xffffff, groundColor = 0x444444, intensity = 1) {
+            super(); this.color = new Color(skyColor); this.intensity = intensity; this.isHemisphereLight = true;
+          }
+        }
+        class DirectionalLight extends Object3D {
+          constructor(color = 0xffffff, intensity = 1) {
+            super(); this.color = new Color(color); this.intensity = intensity;
+            this.shadow = { mapSize: { width: 2048, height: 2048 }, camera: {}, bias: 0 };
+            this.isDirectionalLight = true;
+          }
+        }
+        class Raycaster {
+          constructor() { this.rayOrigin = new Vector3(); this.rayDir = new Vector3(); }
+          setFromCamera(coords, camera) {
+            camera.updateMatrixWorld();
+            this.rayOrigin.copy(camera.position);
+            const tanHalf = Math.tan((camera.fov * Math.PI / 180) / 2);
+            const vx = coords.x * tanHalf * camera.aspect, vy = coords.y * tanHalf, vz = -1;
+            const e = camera.matrixWorldInverse.elements;
+            this.rayDir.set(e[0]*vx + e[1]*vy + e[2]*vz, e[4]*vx + e[5]*vy + e[6]*vz, e[8]*vx + e[9]*vy + e[10]*vz).normalize();
+          }
+          intersectObjects(objs, recursive = false) {
+            const hits = [], list = [];
+            const collect = (arr) => { for (const o of arr) { if (!o || !o.visible) continue; list.push(o); if (recursive && o.children) collect(o.children); } };
+            collect(objs);
+            for (const o of list) {
+              if (!o.isMesh || !o.geometry) continue;
+              o.updateMatrixWorld();
+              if (o.userData && o.userData.isTerrain && window.__getTerrainHeightAt) {
+                for (let t = 5; t < 2200; t += 4) {
+                  const px = this.rayOrigin.x + this.rayDir.x * t, py = this.rayOrigin.y + this.rayDir.y * t, pz = this.rayOrigin.z + this.rayDir.z * t;
+                  const h = window.__getTerrainHeightAt(px, pz);
+                  if (py <= h) { hits.push({ distance: t, point: new Vector3(px, h, pz), object: o }); break; }
+                }
+              } else if (o.geometry._dims) {
+                const { w, h, d } = o.geometry._dims;
+                const cx = o.matrixWorld.elements[12], cy = o.matrixWorld.elements[13], cz = o.matrixWorld.elements[14];
+                const r = Math.max(w, h, d) * 0.65;
+                const ocX = this.rayOrigin.x - cx, ocY = this.rayOrigin.y - (cy + h * 0.5), ocZ = this.rayOrigin.z - cz;
+                const b = ocX * this.rayDir.x + ocY * this.rayDir.y + ocZ * this.rayDir.z;
+                const c = ocX*ocX + ocY*ocY + ocZ*ocZ - r*r;
+                if (b*b - c >= 0) {
+                  const dist = -b - Math.sqrt(b*b - c);
+                  if (dist > 0) hits.push({ distance: dist, point: new Vector3(this.rayOrigin.x + this.rayDir.x * dist, this.rayOrigin.y + this.rayDir.y * dist, this.rayOrigin.z + this.rayDir.z * dist), object: o });
+                }
+              }
+            }
+            return hits.sort((a, b) => a.distance - b.distance);
+          }
+        }
+        class WebGLRenderer {
+          constructor(opts = {}) {
+            this.domElement = opts.canvas || document.createElement('canvas');
+            this.gl = this.domElement.getContext('webgl', { antialias: true });
+            this.gl.getExtension('OES_element_index_uint');
+            this.shadowMap = { enabled: true, type: PCFSoftShadowMap };
+            this._pixelRatio = 1;
+            this._initShaders();
+          }
+          setPixelRatio(pr) { this._pixelRatio = pr || 1; }
+          setSize(w, h) {
+            this.domElement.width = w * this._pixelRatio; this.domElement.height = h * this._pixelRatio;
+            this.domElement.style.width = w + 'px'; this.domElement.style.height = h + 'px';
+            this.gl.viewport(0, 0, this.domElement.width, this.domElement.height);
+          }
+          _initShaders() {
+            const gl = this.gl;
+            const vs = `attribute vec3 aPosition; attribute vec3 aNormal; attribute vec2 aUv; uniform mat4 uModel, uView, uProj; varying vec3 vWorldPos, vNormal; varying vec2 vUv; void main() { vec4 wp = uModel * vec4(aPosition, 1.0); vWorldPos = wp.xyz; vNormal = normalize(mat3(uModel[0].xyz, uModel[1].xyz, uModel[2].xyz) * aNormal); vUv = aUv; gl_Position = uProj * uView * wp; }`;
+            const fs = `precision highp float; varying vec3 vWorldPos, vNormal; varying vec2 vUv; uniform vec3 uColor, uEmissive, uSunDir, uSunColor, uAmbientColor, uCamPos, uFogColor; uniform float uOpacity, uSunIntensity, uFogDensity; uniform int uHasMap, uIsBasic; uniform sampler2D uMap; void main() { vec4 texCol = uHasMap == 1 ? texture2D(uMap, vUv) : vec4(1.0); vec3 base = uColor * texCol.rgb + uEmissive; vec3 col = base; if (uIsBasic == 0) { vec3 N = normalize(vNormal); float ndl = max(dot(N, uSunDir), 0.0); float hemi = 0.5 + 0.5 * N.y; col = base * (uAmbientColor * mix(0.55, 1.05, hemi) + uSunColor * uSunIntensity * ndl); } float dist = length(vWorldPos - uCamPos); float fog = clamp(1.0 - exp(-uFogDensity * uFogDensity * dist * dist), 0.0, 0.85); gl_FragColor = vec4(mix(col, uFogColor, fog), uOpacity * texCol.a); }`;
+            const compile = (t, s) => { const sh = gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); return sh; };
+            const p = gl.createProgram();
+            gl.attachShader(p, compile(gl.VERTEX_SHADER, vs)); gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs));
+            gl.linkProgram(p); this.prog = p;
+            this.locs = {};
+            ['aPosition','aNormal','aUv'].forEach(k => this.locs[k] = gl.getAttribLocation(p, k));
+            ['uModel','uView','uProj','uColor','uEmissive','uOpacity','uHasMap','uMap','uIsBasic','uSunDir','uSunColor','uSunIntensity','uAmbientColor','uCamPos','uFogColor','uFogDensity'].forEach(k => this.locs[k] = gl.getUniformLocation(p, k));
+          }
+          _uploadGeometry(g) {
+            const gl = this.gl; if (!g._glBuffers) g._glBuffers = {}; const gb = g._glBuffers;
+            for (const [k, name] of [['pos','position'],['norm','normal'],['uv','uv']]) {
+              const a = g.attributes[name];
+              if (a && (!gb[k] || a.needsUpdate)) {
+                if (!gb[k]) gb[k] = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, gb[k]); gl.bufferData(gl.ARRAY_BUFFER, a.array, gl.STATIC_DRAW); a.needsUpdate = false;
+              }
+            }
+            if (g.index && !gb.idx) {
+              gb.idx = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gb.idx); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, g.index.array, gl.STATIC_DRAW);
+            }
+            return gb;
+          }
+          _uploadTexture(t) {
+            const gl = this.gl;
+            if (!t.image || (t.image instanceof HTMLImageElement && !t.image.complete)) return null;
+            if (!t._glTex || t.needsUpdate) {
+              if (!t._glTex) t._glTex = gl.createTexture();
+              gl.bindTexture(gl.TEXTURE_2D, t._glTex);
+              gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, t.flipY ? 1 : 0);
+              gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, t.image);
+              gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
+              gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+              gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+              t.needsUpdate = false;
+            }
+            return t._glTex;
+          }
+          render(scene, camera) {
+            const gl = this.gl; scene.updateMatrixWorld(); camera.updateMatrixWorld();
+            const bg = scene.background; gl.clearColor(bg.r, bg.g, bg.b, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); gl.enable(gl.DEPTH_TEST); gl.useProgram(this.prog);
+            let sunDir = new Vector3(0.4, 0.8, 0.3).normalize(), sunCol = new Color(0xffffff), sunInt = 1.0, ambCol = new Color(0x8899aa);
+            const opaque = [], trans = [];
+            scene.traverse(o => {
+              if (!o.visible) return;
+              if (o.isDirectionalLight) { sunDir.copy(o.position).normalize(); sunCol.copy(o.color); sunInt = o.intensity; }
+              else if (o.isHemisphereLight) ambCol.copy(o.color);
+              else if (o.isMesh || o.isLineSegments || o.isLine) (o.material && o.material.transparent ? trans : opaque).push(o);
+            });
+            gl.uniformMatrix4fv(this.locs.uView, false, camera.matrixWorldInverse.elements);
+            gl.uniformMatrix4fv(this.locs.uProj, false, camera.projectionMatrix.elements);
+            gl.uniform3f(this.locs.uSunDir, sunDir.x, sunDir.y, sunDir.z);
+            gl.uniform3f(this.locs.uSunColor, sunCol.r, sunCol.g, sunCol.b);
+            gl.uniform1f(this.locs.uSunIntensity, sunInt);
+            gl.uniform3f(this.locs.uAmbientColor, ambCol.r * 0.65, ambCol.g * 0.65, ambCol.b * 0.65);
+            gl.uniform3f(this.locs.uCamPos, camera.position.x, camera.position.y, camera.position.z);
+            const fc = scene.fog ? scene.fog.color : bg;
+            gl.uniform3f(this.locs.uFogColor, fc.r, fc.g, fc.b);
+            gl.uniform1f(this.locs.uFogDensity, scene.fog ? scene.fog.density : 0.00025);
+            const draw = (arr, isT) => {
+              if (isT) { gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false); }
+              else { gl.disable(gl.BLEND); gl.depthMask(true); }
+              for (const o of arr) {
+                const g = o.geometry, m = o.material; if (!g || !m || !g.attributes.position) continue;
+                const gb = this._uploadGeometry(g);
+                gl.uniformMatrix4fv(this.locs.uModel, false, o.matrixWorld.elements);
+                gl.uniform3f(this.locs.uColor, m.color.r, m.color.g, m.color.b);
+                gl.uniform3f(this.locs.uEmissive, m.emissive.r, m.emissive.g, m.emissive.b);
+                gl.uniform1f(this.locs.uOpacity, m.opacity);
+                gl.uniform1i(this.locs.uIsBasic, (m.isBasic || o.isLineSegments || o.isLine) ? 1 : 0);
+                const glTex = m.map ? this._uploadTexture(m.map) : null;
+                if (glTex) { gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, glTex); gl.uniform1i(this.locs.uMap, 0); gl.uniform1i(this.locs.uHasMap, 1); }
+                else gl.uniform1i(this.locs.uHasMap, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, gb.pos); gl.enableVertexAttribArray(this.locs.aPosition); gl.vertexAttribPointer(this.locs.aPosition, 3, gl.FLOAT, false, 0, 0);
+                if (gb.norm && this.locs.aNormal >= 0) { gl.bindBuffer(gl.ARRAY_BUFFER, gb.norm); gl.enableVertexAttribArray(this.locs.aNormal); gl.vertexAttribPointer(this.locs.aNormal, 3, gl.FLOAT, false, 0, 0); }
+                else if (this.locs.aNormal >= 0) { gl.disableVertexAttribArray(this.locs.aNormal); gl.vertexAttrib3f(this.locs.aNormal, 0, 1, 0); }
+                if (gb.uv && this.locs.aUv >= 0) { gl.bindBuffer(gl.ARRAY_BUFFER, gb.uv); gl.enableVertexAttribArray(this.locs.aUv); gl.vertexAttribPointer(this.locs.aUv, 2, gl.FLOAT, false, 0, 0); }
+                else if (this.locs.aUv >= 0) { gl.disableVertexAttribArray(this.locs.aUv); gl.vertexAttrib2f(this.locs.aUv, 0, 0); }
+                if (o.isLineSegments) gl.drawArrays(gl.LINES, 0, g.attributes.position.count);
+                else if (o.isLine) gl.drawArrays(gl.LINE_STRIP, 0, g.attributes.position.count);
+                else if (gb.idx) { gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gb.idx); gl.drawElements(gl.TRIANGLES, g.index.count, gl.UNSIGNED_INT, 0); }
+                else gl.drawArrays(gl.TRIANGLES, 0, g.attributes.position.count);
+              }
+              gl.depthMask(true);
+            };
+            draw(opaque, false); draw(trans, true);
+          }
+        }
+        class TextureLoader {
+          load(url, onLoad) {
+            const tex = { image: null, needsUpdate: false, flipY: true };
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => { tex.image = img; tex.needsUpdate = true; if (onLoad) onLoad(tex); };
+            img.src = url;
+            return tex;
+          }
+        }
+        window.THREE = {
+          DoubleSide, RepeatWrapping, PCFSoftShadowMap, MathUtils, Color, Vector2, Vector3, Euler, Matrix4,
+          Object3D, Group, Scene, FogExp2, PerspectiveCamera, Float32BufferAttribute, BufferGeometry,
+          PlaneGeometry, BoxGeometry, CylinderGeometry, ConeGeometry, SphereGeometry, EdgesGeometry,
+          CanvasTexture, TextureLoader, Material, MeshStandardMaterial, MeshBasicMaterial, LineBasicMaterial,
+          Mesh, LineSegments, Line, HemisphereLight, DirectionalLight, Raycaster, WebGLRenderer
+        };
+      })();
+    }
+  </script>
+</head>
+<body>
+  <div id="app-container">
+    <canvas id="webgl-canvas"></canvas>
+    <div id="labels-container" class="pointer-events-none absolute inset-0 overflow-hidden"></div>
+    <div id="fp-crosshair" class="crosshair" style="display: none;"></div>
+
+    <!-- TOP-LEFT: Property GIS Header & Telemetry Readout -->
+    <div class="glass-panel absolute top-3 left-3 p-3.5 w-80 z-20 flex flex-col gap-2.5">
+      <div class="flex items-start justify-between border-b border-slate-700/70 pb-2">
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">SCRD GIS • AG Zoned</span>
+          </div>
+          <h1 class="text-sm font-bold text-white leading-tight mt-0.5">1346 Russell Road, Gibsons, BC</h1>
+          <p class="text-[11px] text-slate-400 font-mono">PID: 012-421-847 • MLS® R3119342</p>
+        </div>
+        <span class="px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono text-[11px] font-semibold">
+          10.83 Ac
+        </span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-1.5 text-center bg-slate-900/65 p-2 rounded-lg border border-slate-800">
+        <div>
+          <div class="text-[10px] text-slate-400 uppercase">Frontage</div>
+          <div class="text-xs font-bold font-mono text-white">561.0 ft</div>
+          <div class="text-[10px] text-slate-500 font-mono">171.0 m</div>
+        </div>
+        <div class="border-x border-slate-800">
+          <div class="text-[10px] text-slate-400 uppercase">Depth</div>
+          <div class="text-xs font-bold font-mono text-white">806.0 ft</div>
+          <div class="text-[10px] text-slate-500 font-mono">245.7 m</div>
+        </div>
+        <div>
+          <div class="text-[10px] text-slate-400 uppercase">Area</div>
+          <div class="text-xs font-bold font-mono text-white">471,755 ft²</div>
+          <div class="text-[10px] text-slate-500 font-mono">4.38 ha</div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/80 rounded-lg p-2.5 border border-slate-700/60 space-y-1.5">
+        <div class="flex items-center justify-between text-[11px]">
+          <span class="text-slate-400 font-semibold uppercase tracking-wider">Live Ground Telemetry</span>
+          <span id="hud-zone-badge" class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            Open Meadow
+          </span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 pt-0.5">
+          <div class="bg-slate-950/60 px-2 py-1.5 rounded border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Elevation (ASL)</div>
+            <div id="hud-elevation" class="text-xs font-mono font-bold text-sky-300">324.5 ft <span class="text-slate-400 font-normal">(98.9 m)</span></div>
+          </div>
+          <div class="bg-slate-950/60 px-2 py-1.5 rounded border border-slate-800/80">
+            <div class="text-[10px] text-slate-400">Ground Slope</div>
+            <div id="hud-slope" class="text-xs font-mono font-bold text-amber-300">3.2% <span class="text-slate-400 font-normal">(1.8° SW)</span></div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] font-mono text-slate-300 pt-0.5">
+          <span>Parcel X/Z: <strong id="hud-coords" class="text-white">+42' E, +185' S</strong></span>
+          <span>Eye: <strong id="hud-eye" class="text-emerald-400">1.75m (5'9")</strong></span>
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <div class="flex gap-1.5">
+          <button id="btn-mode-fp" class="btn-tool flex-1" onclick="setCameraMode('fp')">
+            <span>🚶</span> Walk POV (1.75m)
+          </button>
+          <button id="btn-mode-orbit" class="btn-tool flex-1 active" onclick="setCameraMode('orbit')">
+            <span>🦅</span> Bird's-Eye [V]
+          </button>
+          <button id="btn-fullscreen" class="btn-tool px-2.5" onclick="toggleFullScreen()" title="Toggle Full Screen [F]">
+            <span>⛶</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-4 gap-1">
+          <button class="btn-tool text-[11px] py-1 px-1.5" onclick="jumpToPreset('overview')">Overview</button>
+          <button class="btn-tool text-[11px] py-1 px-1.5" onclick="jumpToPreset('homestead')">Rancher</button>
+          <button class="btn-tool text-[11px] py-1 px-1.5" onclick="jumpToPreset('inside')" title="Walk Inside 1,279 sq ft Floor Plan">Inside 🏠</button>
+          <button class="btn-tool text-[11px] py-1 px-1.5" onclick="jumpToPreset('creek')">Creek</button>
+        </div>
+        <div class="flex gap-1.5 pt-0.5">
+          <button id="btn-dollhouse" class="btn-tool flex-1 text-[11px] py-1" onclick="toggleDollhouseRoof()">
+            🏠 Dollhouse [R]
+          </button>
+          <button class="btn-tool text-[11px] py-1 px-2" onclick="openModalTab('photos')" title="Explore 27 Extracted Matterport 3D Photos, Floor Plan & 360° Tour">
+            📸 27 Photos &amp; Plan
+          </button>
+        </div>
+        <a href="1346russelproperty.zip" download="1346russelproperty.zip" class="btn-tool text-[11px] py-1 px-2 text-center block mt-0.5 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/20" title="Download full 222-file GitHub/Vercel repository archive (26 MB)">
+          📦 Download GitHub / Vercel Repo (.zip)
+        </a>
+      </div>
+    </div>
+
+    <!-- FLOOR PLAN, 27 EXTRACTED MATTERPORT PHOTOS & LIVE 360 TOUR MODAL -->
+    <div id="floorplan-modal" class="glass-panel absolute inset-x-4 top-8 bottom-8 max-w-5xl mx-auto p-4 z-30 hidden flex-col gap-3">
+      <div class="flex flex-wrap items-center justify-between border-b border-slate-700 pb-2.5 gap-2">
+        <div>
+          <h2 class="text-sm font-bold text-white">1346 Russell Road — Extracted Matterport 3D (`rfwtuskak8Q`) &amp; Architectural Floor Plan</h2>
+          <p class="text-[11px] text-slate-400 font-mono">308,351-Triangle 3D Scan • 179 Sweeps • 27 Georeferenced Photos • 1,279 sq ft 1963 Rancher</p>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button id="tab-btn-photos" class="btn-tool active text-xs" onclick="switchModalTab('photos')">📸 27 Property Photos</button>
+          <button id="tab-btn-floorplan" class="btn-tool text-xs" onclick="switchModalTab('floorplan')">📐 2D Floor Plan</button>
+          <button id="tab-btn-tour360" class="btn-tool text-xs" onclick="switchModalTab('tour360')">🌐 Live 360° Tour</button>
+          <button class="btn-tool text-xs ml-2" onclick="toggleFloorplanModal()">✕ Close</button>
+        </div>
+      </div>
+
+      <!-- TAB 1: 27 Extracted Georeferenced Matterport Photos -->
+      <div id="modal-tab-photos" class="flex-1 overflow-hidden flex flex-col md:flex-row gap-3">
+        <div class="flex-1 bg-slate-950 rounded-lg overflow-hidden relative flex flex-col border border-slate-700/80">
+          <img id="modal-main-photo" src="mp_assets/snapshots/snap_09_WKiCPrwXHwJ.jpg" alt="Property Snapshot" class="w-full flex-1 object-contain bg-black" />
+          <div class="p-2.5 bg-slate-900/95 border-t border-slate-800 flex items-center justify-between">
+            <div>
+              <div id="modal-photo-title" class="text-xs font-bold text-white">1963 Rancher Retro Kitchen &amp; Dining</div>
+              <div id="modal-photo-coords" class="text-[11px] font-mono text-emerald-400">Parcel Pos: +80' E, +247' S • Matterport ID: WKiCPrwXHwJ</div>
+            </div>
+            <button id="modal-teleport-btn" class="btn-tool active text-xs" onclick="teleportToActivePhoto()">
+              🚶 Teleport Here in 3D
+            </button>
+          </div>
+        </div>
+        <div id="modal-photo-grid" class="w-full md:w-72 custom-scroll overflow-y-auto grid grid-cols-2 gap-1.5 pr-1 content-start">
+        </div>
+      </div>
+
+      <!-- TAB 2: 2D Architectural Floor Plan -->
+      <div id="modal-tab-floorplan" class="flex-1 bg-white rounded-lg overflow-hidden hidden items-center justify-center p-2 relative">
+        <img src="floorplan.png" alt="1346 Russell Road Floor Plan" class="max-w-full max-h-full object-contain" />
+        <button class="btn-tool active text-xs absolute bottom-3 right-3 shadow-lg" onclick="toggleFloorplanModal(); jumpToPreset('dollhouse');">
+          🏠 Inspect in 3D Dollhouse
+        </button>
+      </div>
+
+      <!-- TAB 3: Live 360 Matterport Showcase Iframe -->
+      <div id="modal-tab-tour360" class="flex-1 bg-black rounded-lg overflow-hidden hidden relative">
+        <iframe id="mp-tour-iframe" src="about:blank" data-src="https://my.matterport.com/show/?m=rfwtuskak8Q&play=1" class="w-full h-full border-0" allow="fullscreen; xr-spatial-tracking"></iframe>
+      </div>
+    </div>
+
+    <!-- FLOATING PHOTO PIN INSPECTOR CARD (Bottom-Right) -->
+    <div id="pin-popup-card" class="glass-panel absolute bottom-14 right-3 w-80 p-2.5 z-20 hidden flex-col gap-2">
+      <div class="flex items-center justify-between">
+        <span id="pin-popup-title" class="text-xs font-bold text-emerald-300 truncate pr-2">Matterport 3D Pin</span>
+        <button class="text-xs text-slate-400 hover:text-white px-1" onclick="document.getElementById('pin-popup-card').classList.add('hidden')">✕</button>
+      </div>
+      <img id="pin-popup-img" src="mp_assets/snapshots/snap_06_NSSv2dnAa8L.jpg" alt="Pin Preview" class="w-full h-40 object-cover rounded border border-slate-700 cursor-pointer" onclick="openModalTab('photos')" />
+      <div class="flex items-center justify-between text-[11px]">
+        <span id="pin-popup-coords" class="font-mono text-slate-300">+52' E, +321' S</span>
+        <div class="flex gap-1">
+          <button class="btn-tool text-[11px] py-1 px-2" onclick="openModalTab('photos')">All 27 Photos</button>
+          <button class="btn-tool active text-[11px] py-1 px-2" onclick="teleportToActivePhoto()">Walk Here</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP-RIGHT: Interactive GIS Overlays, Sun Simulator & AG Build Sandbox -->
+    <div class="glass-panel custom-scroll absolute top-3 right-3 p-3.5 max-h-[calc(100vh-24px)] overflow-y-auto z-20 flex flex-col gap-3" style="width: 330px;">
+      <div>
+        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center justify-between">
+          <span>1. GIS &amp; Matterport 3D Overlays</span>
+          <span id="mp-status-badge" class="text-[10px] font-mono text-emerald-400">Loading 3D Scan...</span>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button id="toggle-boundary" class="btn-tool active text-xs" onclick="toggleLayer('boundary')">Parcel Perimeter</button>
+          <button id="toggle-riparian" class="btn-tool active text-xs" onclick="toggleLayer('riparian')">Creek Buffer (50')</button>
+          <button id="toggle-contours" class="btn-tool active text-xs" onclick="toggleLayer('contours')">GIS Contours (1m)</button>
+          <button id="toggle-labels" class="btn-tool active text-xs" onclick="toggleLayer('labels')">3D Callout Labels</button>
+          <button id="toggle-mpmesh" class="btn-tool active text-xs col-span-2" onclick="toggleLayer('mpmesh')">📡 Matterport 3D Scan Mesh (308k Tris)</button>
+          <button id="toggle-mppins" class="btn-tool active text-xs col-span-2" onclick="toggleLayer('mppins')">📍 27 Georeferenced Photo Pins &amp; 179 Sweeps</button>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-700/70 pt-2.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-amber-300">☀️ 2. Sun &amp; Shadow (49.47° N)</span>
+          <span id="sun-readout" class="text-xs font-mono font-bold text-white">14:30 PDT</span>
+        </div>
+        <input id="slider-time" type="range" min="5.5" max="20.5" step="0.1" value="14.5" oninput="updateSunFromUI()" />
+        <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-0.5 mb-2">
+          <span>05:30 Dawn</span>
+          <span>12:30 Noon</span>
+          <span>20:30 Dusk</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1">
+          <button id="season-summer" class="btn-tool active text-[11px] py-1" onclick="setSeason('summer')">Jun 21 (High)</button>
+          <button id="season-equinox" class="btn-tool text-[11px] py-1" onclick="setSeason('equinox')">Sep/Mar 21</button>
+          <button id="season-winter" class="btn-tool text-[11px] py-1" onclick="setSeason('winter')">Dec 21 (Low)</button>
+        </div>
+        <div id="sun-angles" class="text-[10px] font-mono text-slate-400 mt-1.5 flex justify-between">
+          <span>Solar Alt: 54.2°</span>
+          <span>Azimuth: 226° SW</span>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-700/70 pt-2.5">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-sky-300">🏗️ 3. Proposed AG Build Sandbox</span>
+          <span id="sandbox-count" class="text-[10px] font-mono text-slate-400">1 Placed</span>
+        </div>
+        <div class="space-y-1.5">
+          <button class="btn-spawn" onclick="spawnProposedStructure('guest')">
+            <div>
+              <div class="font-semibold text-emerald-300">+ Secondary Dwelling / Guest House</div>
+              <div class="text-[10px] text-slate-400 font-mono">28' × 36' (1,008 sq ft) • 16' H</div>
+            </div>
+            <span class="text-xs font-mono text-emerald-400">Spawn</span>
+          </button>
+          <button class="btn-spawn" onclick="spawnProposedStructure('barn')">
+            <div>
+              <div class="font-semibold text-amber-300">+ Agricultural Barn / Equestrian Arena</div>
+              <div class="text-[10px] text-slate-400 font-mono">42' × 76' (3,192 sq ft) • 24' H</div>
+            </div>
+            <span class="text-xs font-mono text-amber-400">Spawn</span>
+          </button>
+          <button class="btn-spawn" onclick="spawnProposedStructure('home')">
+            <div>
+              <div class="font-semibold text-sky-300">+ New Primary Residence / Custom Home</div>
+              <div class="text-[10px] text-slate-400 font-mono">44' × 58' (2,552 sq ft) • 22' H</div>
+            </div>
+            <span class="text-xs font-mono text-sky-400">Spawn</span>
+          </button>
+          <button class="btn-spawn" onclick="spawnProposedStructure('greenhouse')">
+            <div>
+              <div class="font-semibold text-purple-300">+ Shop / Commercial Greenhouse</div>
+              <div class="text-[10px] text-slate-400 font-mono">26' × 52' (1,352 sq ft) • 15' H</div>
+            </div>
+            <span class="text-xs font-mono text-purple-400">Spawn</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="inspector-panel" class="border-t border-slate-700/70 pt-2.5 hidden">
+        <div class="flex items-center justify-between mb-1.5">
+          <span id="inspector-title" class="text-xs font-bold text-white">Selected Structure</span>
+          <button class="text-[11px] text-rose-400 hover:text-rose-300 font-semibold px-1.5 py-0.5 rounded bg-rose-950/60 border border-rose-700/40" onclick="deleteSelectedStructure()">Delete</button>
+        </div>
+        <div id="inspector-compliance" class="mb-2 px-2.5 py-1.5 rounded text-[11px] font-mono border bg-emerald-950/60 border-emerald-500/40 text-emerald-300">
+          ✓ AG Setback &amp; Creek Riparian Buffer OK
+        </div>
+        <div class="space-y-2 text-[11px]">
+          <div>
+            <div class="flex justify-between font-mono text-slate-300"><span>East/West (X):</span><span id="val-pos-x" class="text-white">0 ft</span></div>
+            <input id="slider-pos-x" type="range" min="-255" max="255" step="1" value="40" oninput="updateSelectedFromSliders()" />
+          </div>
+          <div>
+            <div class="flex justify-between font-mono text-slate-300"><span>North/South (Z):</span><span id="val-pos-z" class="text-white">0 ft</span></div>
+            <input id="slider-pos-z" type="range" min="-375" max="375" step="1" value="-80" oninput="updateSelectedFromSliders()" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <div class="flex justify-between font-mono text-slate-300"><span>Width:</span><span id="val-width" class="text-white">36'</span></div>
+              <input id="slider-width" type="range" min="16" max="120" step="2" value="36" oninput="updateSelectedFromSliders()" />
+            </div>
+            <div>
+              <div class="flex justify-between font-mono text-slate-300"><span>Length:</span><span id="val-depth" class="text-white">48'</span></div>
+              <input id="slider-depth" type="range" min="16" max="160" step="2" value="48" oninput="updateSelectedFromSliders()" />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <div class="flex justify-between font-mono text-slate-300"><span>Height:</span><span id="val-height" class="text-white">18'</span></div>
+              <input id="slider-height" type="range" min="10" max="36" step="1" value="18" oninput="updateSelectedFromSliders()" />
+            </div>
+            <div>
+              <div class="flex justify-between font-mono text-slate-300"><span>Rotate:</span><span id="val-rot" class="text-white">0°</span></div>
+              <input id="slider-rot" type="range" min="0" max="355" step="5" value="0" oninput="updateSelectedFromSliders()" />
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 italic pt-0.5">Tip: Click &amp; drag any proposed building directly on the 3D terrain.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM-LEFT: Controls Legend -->
+    <div class="glass-panel absolute bottom-3 left-3 px-3.5 py-2.5 z-20 flex flex-wrap items-center gap-4 text-[11px]">
+      <div class="flex items-center gap-2"><span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-600 font-mono text-white font-semibold">WASD / Arrows</span><span class="text-slate-300">Walk / Pan</span></div>
+      <div class="flex items-center gap-2"><span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-600 font-mono text-white font-semibold">Mouse Drag</span><span class="text-slate-300">Look / Orbit</span></div>
+      <div class="flex items-center gap-2"><span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-600 font-mono text-white font-semibold">Scroll</span><span class="text-slate-300">Zoom</span></div>
+      <div class="flex items-center gap-2"><span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-600 font-mono text-emerald-300 font-semibold">V</span><span class="text-slate-300">Switch View (1.75m POV / Bird's-Eye)</span></div>
+      <div class="flex items-center gap-2"><span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-600 font-mono text-amber-300 font-semibold">Shift</span><span class="text-slate-300">Fast Walk</span></div>
+    </div>
+  </div>
+  <script>
+    // ============================================================================
+    // 1. REAL-WORLD GIS CONSTANTS FOR 1346 RUSSELL ROAD, GIBSONS, BC
+    //    PID: 012-421-847 | Lot: 561 ft frontage x 806 ft depth (10.83 Acres)
+    // ============================================================================
+    const FT_TO_M = 0.3048;
+    const M_TO_FT = 3.28084;
+    const PARCEL_W = 561; // East-West frontage along Russell Road (feet)
+    const PARCEL_D = 806; // North-South depth (feet)
+    const WORLD_W = 860;  // Surrounding context mesh width (feet)
+    const WORLD_D = 1080; // Surrounding context mesh depth (feet)
+    const EYE_HEIGHT_M = 1.75;
+    const EYE_HEIGHT_FT = EYE_HEIGHT_M * M_TO_FT; // 5.7415 ft (5'9")
+    const BASE_ASL_FT = 312.0; // Base elevation ASL in feet (~95.1m ASL in Gibsons plateau)
+    const GIBSONS_LAT = 49.47; // 49.47° N Latitude
+
+    // Shirley Creek centerline path: enters near North-East/Central-North (X ~ +75, Z = -403)
+    // and meanders Southwest across the property to the Russell Road culvert (X ~ -210, Z = +403).
+    function getCreekCenterX(z) {
+      const t = (z + 403) / 806;
+      const baseLine = 75 - t * 285;
+      const meander1 = Math.sin(t * Math.PI * 2.3 + 0.4) * 38;
+      const meander2 = Math.cos(t * Math.PI * 4.7 - 0.8) * 14;
+      return baseLine + meander1 + meander2;
+    }
+
+    function getDistanceToCreek(x, z) {
+      let minDist = Infinity, closestZ = z;
+      for (let dz = -60; dz <= 60; dz += 6) {
+        const sz = z + dz;
+        const cx = getCreekCenterX(sz);
+        const d = Math.hypot(x - cx, z - sz);
+        if (d < minDist) { minDist = d; closestZ = sz; }
+      }
+      return { dist: minDist, creekX: getCreekCenterX(closestZ), creekZ: closestZ };
+    }
+
+    // GIS Topographic Elevation Model (local elevation offset in feet above BASE_ASL_FT)
+    function getTerrainHeightAt(x, z) {
+      const nx = x / PARCEL_W;
+      const nz = z / PARCEL_D;
+      let h = 22.0
+        - nz * 26.0
+        + nx * 11.0
+        + Math.sin(nx * 3.8 + nz * 2.5) * 4.5
+        + Math.cos(nx * 2.2 - nz * 4.1) * 3.2
+        + Math.sin(nx * 7.0 + nz * 6.0) * 1.1;
+
+      // Flatten homestead & shop pad around (x: 55..140, z: 160..310)
+      const distHome = Math.hypot(x - 88, z - 245);
+      if (distHome < 95) {
+        const padFactor = Math.max(0, 1 - distHome / 95);
+        h = h * (1 - padFactor * 0.65) + 14.5 * (padFactor * 0.65);
+      }
+
+      // Flatten Russell Road embankment along z = +395..+445
+      if (z > 395) {
+        const roadBlend = Math.min(1, Math.max(0, (z - 395) / 25));
+        const roadElevation = 10.5 + nx * 6.0;
+        h = h * (1 - roadBlend * 0.85) + roadElevation * (roadBlend * 0.85);
+      }
+
+      // Carve Shirley Creek channel & riparian valley ravine
+      const { dist } = getDistanceToCreek(x, z);
+      if (dist < 82.0) {
+        const vNorm = dist / 82.0;
+        h -= 0.5 * (1 + Math.cos(vNorm * Math.PI)) * 11.5;
+      }
+      if (dist < 13.5) {
+        const cNorm = dist / 13.5;
+        const culvertMask = (z > 402 && z < 445) ? 0.15 : 1.0;
+        h -= 0.5 * (1 + Math.cos(cNorm * Math.PI)) * 5.2 * culvertMask;
+      }
+      return h;
+    }
+    window.__getTerrainHeightAt = getTerrainHeightAt;
+
+    function getTerrainSlopeAt(x, z) {
+      const eps = 2.0;
+      const dHdX = (getTerrainHeightAt(x + eps, z) - getTerrainHeightAt(x - eps, z)) / (2 * eps);
+      const dHdZ = (getTerrainHeightAt(x, z + eps) - getTerrainHeightAt(x, z - eps)) / (2 * eps);
+      const grad = Math.hypot(dHdX, dHdZ);
+      const slopePct = grad * 100;
+      const slopeDeg = Math.atan(grad) * (180 / Math.PI);
+      const aspectAngle = Math.atan2(-dHdX, dHdZ);
+      const dirs = ['S', 'SE', 'E', 'NE', 'N', 'NW', 'W', 'SW'];
+      const idx = Math.round(((aspectAngle * 180 / Math.PI) + 360) % 360 / 45) % 8;
+      return { slopePct, slopeDeg, aspect: dirs[idx] };
+    }
+
+    function getLandCoverZone(x, z) {
+      if (Math.abs(x) > PARCEL_W / 2 || Math.abs(z) > PARCEL_D / 2) {
+        return z > PARCEL_D / 2 ? 'Russell Rd R.O.W.' : 'Adjacent Rural Lot';
+      }
+      const { dist } = getDistanceToCreek(x, z);
+      if (dist < 14) return 'Shirley Creek Channel';
+      if (dist < 50) return 'Riparian Buffer (SPEA)';
+      if (x > 25 && x < 175 && z > 125 && z < 360) return 'Homestead & Shop Pad';
+      if ((x < -35 && z < 60) || (x > 135 && z < -150) || (x < -195) || (z > 345 && (x < 45 || x > 125))) {
+        return 'Mature Coastal Forest';
+      }
+      return 'Open Agricultural Meadow';
+    }
+
+    // ============================================================================
+    // 2. SCENE, CAMERA & RENDERER SETUP
+    // ============================================================================
+    const canvas = document.getElementById('webgl-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x9bc5e8);
+    scene.fog = new THREE.FogExp2(0x9bc5e8, 0.00032);
+
+    const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 1.0, 3200);
+
+    const hemiLight = new THREE.HemisphereLight(0xdbeafe, 0x3f5238, 0.62);
+    scene.add(hemiLight);
+
+    const sunLight = new THREE.DirectionalLight(0xfff6e5, 1.15);
+    sunLight.position.set(-280, 420, 260);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 50;
+    sunLight.shadow.camera.far = 1600;
+    sunLight.shadow.camera.left = -520;
+    sunLight.shadow.camera.right = 520;
+    sunLight.shadow.camera.top = 520;
+    sunLight.shadow.camera.bottom = -520;
+    sunLight.shadow.bias = -0.0005;
+    scene.add(sunLight);
+
+    // ============================================================================
+    // 3. PROCEDURAL SATELLITE IMAGERY & GIS CONTOUR TEXTURE GENERATOR
+    // ============================================================================
+    let terrainMesh = null, texNoContours = null, texWithContours = null;
+
+    function buildSatelliteGISTextures() {
+      const size = 1024;
+      const hash = (n) => { const x = Math.sin(n) * 43758.5453123; return x - Math.floor(x); };
+      const noise2D = (x, y) => {
+        const ix = Math.floor(x), iy = Math.floor(y), fx = x - ix, fy = y - iy;
+        const u = fx * fx * (3 - 2 * fx), v = fy * fy * (3 - 2 * fy);
+        return (hash(ix + iy * 57) * (1 - u) + hash(ix + 1 + iy * 57) * u) * (1 - v) +
+               (hash(ix + (iy + 1) * 57) * (1 - u) + hash(ix + 1 + (iy + 1) * 57) * u) * v;
+      };
+
+      const createCanvas = (drawContours) => {
+        const c = document.createElement('canvas');
+        c.width = size; c.height = size;
+        const ctx = c.getContext('2d');
+        const imgData = ctx.createImageData(size, size);
+        const data = imgData.data;
+
+        for (let py = 0; py < size; py++) {
+          const wz = ((py / size) - 0.5) * WORLD_D;
+          for (let px = 0; px < size; px++) {
+            const wx = ((px / size) - 0.5) * WORLD_W;
+            const idx = (py * size + px) * 4;
+            const h = getTerrainHeightAt(wx, wz);
+            const { dist: creekDist } = getDistanceToCreek(wx, wz);
+            const n1 = noise2D(wx * 0.04, wz * 0.04);
+            const n2 = noise2D(wx * 0.15, wz * 0.15);
+            const mowSwath = Math.sin((wx * 0.85 + wz * 0.25) * 0.22) * 0.5 + 0.5;
+
+            let r = 92 + n1 * 26 + mowSwath * 11 + n2 * 8;
+            let g = 132 + n1 * 28 + mowSwath * 14 + n2 * 10;
+            let b = 64 + n1 * 14 + mowSwath * 5;
+
+            const inParcel = Math.abs(wx) <= PARCEL_W / 2 && Math.abs(wz) <= PARCEL_D / 2;
+            const zone = getLandCoverZone(wx, wz);
+            if (zone === 'Mature Coastal Forest') {
+              r = 44 + n1 * 18 + n2 * 8; g = 76 + n1 * 22 + n2 * 10; b = 42 + n1 * 12;
+            }
+            if (creekDist < 55) {
+              const rip = (1 - creekDist / 55) * 0.4;
+              r = r * (1 - rip) + (48 + n2 * 14) * rip;
+              g = g * (1 - rip) + (98 + n2 * 18) * rip;
+              b = b * (1 - rip) + (52 + n2 * 10) * rip;
+            }
+            if (creekDist < 14) {
+              const bf = 1 - creekDist / 14;
+              r = 88 + n2 * 25 - bf * 35; g = 94 + n2 * 25 - bf * 25; b = 98 + n2 * 25 - bf * 10;
+            }
+
+            // Gravel Driveway access off Russell Road
+            let onDriveway = false;
+            if (wz >= 165 && wz <= 420) {
+              const tDrive = (420 - wz) / 255;
+              const mainDriveX = 76 + Math.sin(tDrive * Math.PI * 0.85) * 18;
+              if (Math.abs(wx - mainDriveX) < 8.5) onDriveway = true;
+              if (wz >= 158 && wz <= 235 && Math.abs(wx - (92 + ((235 - wz) / 77) * 40)) < 11.0) onDriveway = true;
+              if (Math.hypot(wx - 74, wz - 255) < 22) onDriveway = true;
+            }
+            if (onDriveway) { r = 148 + n2 * 22; g = 144 + n2 * 20; b = 136 + n2 * 18; }
+
+            // Russell Road pavement along southern frontage
+            if (wz > 408 && wz < 448) {
+              if (wz >= 415 && wz <= 439) {
+                r = 62 + n2 * 10; g = 65 + n2 * 10; b = 70 + n2 * 10;
+                if (Math.abs(wz - 427) < 0.9 && Math.sin(wx * 0.25) > 0) { r = 215; g = 175; b = 45; }
+              } else {
+                r = 132 + n2 * 15; g = 126 + n2 * 14; b = 114 + n2 * 12;
+              }
+            }
+            if (!inParcel && wz <= 408) { r *= 0.76; g *= 0.78; b *= 0.76; }
+
+            // GIS Contour Lines (1m minor, 5m index)
+            if (drawContours && wz < 410) {
+              const aslM = (BASE_ASL_FT + h) * FT_TO_M;
+              const mod1 = Math.abs(aslM - Math.round(aslM));
+              const mod5 = Math.abs((aslM / 5.0) - Math.round(aslM / 5.0));
+              if (mod5 < 0.022) {
+                r = r * 0.35 + 245 * 0.65; g = g * 0.35 + 185 * 0.65; b = b * 0.35 + 75 * 0.65;
+              } else if (mod1 < 0.032) {
+                r = r * 0.65 + 225 * 0.35; g = g * 0.65 + 210 * 0.35; b = b * 0.65 + 145 * 0.35;
+              }
+            }
+            data[idx] = Math.min(255, Math.max(0, r));
+            data[idx + 1] = Math.min(255, Math.max(0, g));
+            data[idx + 2] = Math.min(255, Math.max(0, b));
+            data[idx + 3] = 255;
+          }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        return new THREE.CanvasTexture(c);
+      };
+
+      texWithContours = createCanvas(true);
+      texNoContours = createCanvas(false);
+    }
+
+    // ============================================================================
+    // 4. BUILD 3D TERRAIN MESH & SHIRLEY CREEK WATER RIBBON
+    // ============================================================================
+    function buildTerrainAndCreek() {
+      buildSatelliteGISTextures();
+      const terrainGeo = new THREE.PlaneGeometry(WORLD_W, WORLD_D, 140, 170);
+      terrainGeo.rotateX(-Math.PI / 2);
+
+      const posAttr = terrainGeo.attributes.position;
+      for (let i = 0; i < posAttr.count; i++) {
+        posAttr.setY(i, getTerrainHeightAt(posAttr.getX(i), posAttr.getZ(i)));
+      }
+      terrainGeo.computeVertexNormals();
+
+      terrainMesh = new THREE.Mesh(terrainGeo, new THREE.MeshStandardMaterial({
+        map: texWithContours, roughness: 0.88, metalness: 0.04
+      }));
+      terrainMesh.receiveShadow = true;
+      terrainMesh.userData.isTerrain = true;
+      scene.add(terrainMesh);
+
+      // Shirley Creek water surface ribbon
+      const creekSegs = 90, waterHalfWidth = 6.2;
+      const creekVerts = [], creekNorms = [], creekUvs = [], creekIndices = [];
+      for (let i = 0; i <= creekSegs; i++) {
+        const t = i / creekSegs;
+        const cz = -425 + t * 860;
+        const cx = getCreekCenterX(cz);
+        const waterY = getTerrainHeightAt(cx, cz) + 1.65;
+        creekVerts.push(cx - waterHalfWidth, waterY, cz, cx + waterHalfWidth, waterY, cz);
+        creekNorms.push(0, 1, 0, 0, 1, 0);
+        creekUvs.push(0, t * 20, 1, t * 20);
+        if (i < creekSegs) {
+          const a = i * 2, b = a + 1, c = a + 2, d = a + 3;
+          creekIndices.push(a, c, b, b, c, d);
+        }
+      }
+      const creekGeo = new THREE.BufferGeometry();
+      creekGeo.setIndex(creekIndices);
+      creekGeo.setAttribute('position', new THREE.Float32BufferAttribute(creekVerts, 3));
+      creekGeo.setAttribute('normal', new THREE.Float32BufferAttribute(creekNorms, 3));
+      creekGeo.setAttribute('uv', new THREE.Float32BufferAttribute(creekUvs, 2));
+      scene.add(new THREE.Mesh(creekGeo, new THREE.MeshStandardMaterial({
+        color: 0x1e88b8, emissive: 0x082f49, roughness: 0.18, metalness: 0.55, transparent: true, opacity: 0.84
+      })));
+
+      // Timber farm crossing bridge over Shirley Creek at Z = +115
+      const bridgeZ = 115, bridgeX = getCreekCenterX(bridgeZ);
+      const bridgeGroup = new THREE.Group();
+      bridgeGroup.position.set(bridgeX, getTerrainHeightAt(bridgeX - 14, bridgeZ) + 0.6, bridgeZ);
+      bridgeGroup.rotation.y = -0.32;
+      const deckMat = new THREE.MeshStandardMaterial({ color: 0x7c5836, roughness: 0.85 });
+      bridgeGroup.add(new THREE.Mesh(new THREE.BoxGeometry(28, 0.8, 10), deckMat));
+      for (const side of [-4.5, 4.5]) {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(28, 0.4, 0.4), deckMat);
+        rail.position.set(0, 3.2, side);
+        bridgeGroup.add(rail);
+      }
+      scene.add(bridgeGroup);
+    }
+
+    // ============================================================================
+    // 5. EXISTING STRUCTURES (1963 RANCHER, DETACHED SHOP, FENCING & TREES)
+    // ============================================================================
+    const staticLabels = [];
+
+    function createGableRoofGeometry(width, length, roofRise) {
+      const hw = width / 2, hl = length / 2, h = roofRise;
+      const vertices = [
+        -hw, 0,  hl,   hw, 0,  hl,   hw, h, 0,  -hw, h, 0,
+         hw, 0, -hl,  -hw, 0, -hl,  -hw, h, 0,   hw, h, 0,
+        -hw, 0, -hl,  -hw, 0,  hl,  -hw, h, 0,
+         hw, 0,  hl,   hw, 0, -hl,   hw, h, 0
+      ];
+      const geo = new THREE.BufferGeometry();
+      geo.setIndex([0,1,2, 0,2,3, 4,5,6, 4,6,7, 8,9,10, 11,12,13]);
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+      geo.computeVertexNormals();
+      return geo;
+    }
+
+    let rancherRoofGroup = null;
+    let isDollhouseMode = false;
+    const roomLabels = [];
+
+    function buildExistingStructures() {
+      // A. MAIN RESIDENCE: 1,279 sq ft Single-Level 1963 Rancher/Bungalow + Carport + Patio
+      //    Exact 3D interior & exterior built from attached architectural floor plan (image.png)
+      const rx = 62, rz = 248, ry = getTerrainHeightAt(rx, rz);
+      const rancherGroup = new THREE.Group();
+      rancherGroup.position.set(rx, ry, rz);
+      rancherGroup.rotation.y = 0.0;
+
+      const sidingMat = new THREE.MeshStandardMaterial({ color: 0xb58963, roughness: 0.78 });
+      const intWallMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.65 });
+      const floorWoodMat = new THREE.MeshStandardMaterial({ color: 0xc89d66, roughness: 0.55 });
+      const floorTileMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.4 });
+      const counterMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.45 });
+      const applianceMat = new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.3, metalness: 0.5 });
+      const roofMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.85 });
+      const glassMat = new THREE.MeshStandardMaterial({ color: 0x7dd3fc, emissive: 0x0c4a6e, roughness: 0.15, transparent: true, opacity: 0.65 });
+      const stoneMat = new THREE.MeshStandardMaterial({ color: 0x292524, roughness: 0.9 });
+      const foundMat = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.9 });
+
+      // Main floor slab & crawlspace foundation (Living/Office/Beds/Bath/Dining: X=-23..+10.5, Z=-13.2..+12.8)
+      const mainFloor = new THREE.Mesh(new THREE.BoxGeometry(43.0, 1.8, 26.2), floorWoodMat);
+      mainFloor.position.set(-1.5, 0.9, -0.1);
+      mainFloor.receiveShadow = true;
+      rancherGroup.add(mainFloor);
+
+      // Kitchen projecting wing floor (9'5" x 19'7", projects 2.6' South at bottom: X=+10.0..+19.8, Z=-3.5..+15.6)
+      const kitchFloor = new THREE.Mesh(new THREE.BoxGeometry(9.8, 1.8, 19.2), floorTileMat);
+      kitchFloor.position.set(14.9, 0.91, 6.0);
+      rancherGroup.add(kitchFloor);
+
+      // Storage (5'x5'10") & Laundry Room (11'7"x10') floor wing (X=+19.8..+36.4, Z=-13.2..-3.2)
+      const laundryFloor = new THREE.Mesh(new THREE.BoxGeometry(16.6, 1.8, 10.0), floorTileMat);
+      laundryFloor.position.set(28.1, 0.91, -8.2);
+      rancherGroup.add(laundryFloor);
+
+      // Carport concrete slab (X=+19.8..+36.4, Z=-3.2..+15.6)
+      const carportSlab = new THREE.Mesh(new THREE.BoxGeometry(16.8, 0.8, 19.0), foundMat);
+      carportSlab.position.set(28.2, 0.4, 6.2);
+      rancherGroup.add(carportSlab);
+
+      // Curved quarter-circle entry steps in top-left corner of Carport (linking Kitchen & Laundry doors)
+      for (let s = 0; s < 3; s++) {
+        const rStep = 4.6 - s * 1.1;
+        const stepCyl = new THREE.Mesh(new THREE.CylinderGeometry(rStep, rStep, 0.45, 12), foundMat);
+        stepCyl.position.set(21.2, 0.8 + s * 0.4, -1.8);
+        rancherGroup.add(stepCyl);
+      }
+
+      // Helper to add wall segments (height = 8.2 ft above floor Y=1.8)
+      const wallH = 8.2, wallY = 1.8 + wallH / 2;
+      const addWall = (x1, z1, x2, z2, thick = 0.45, mat = intWallMat, h = wallH) => {
+        const len = Math.hypot(x2 - x1, z2 - z1);
+        const wMesh = new THREE.Mesh(new THREE.BoxGeometry(len, h, thick), mat);
+        wMesh.position.set((x1 + x2) / 2, 1.8 + h / 2, (z1 + z2) / 2);
+        wMesh.rotation.y = -Math.atan2(z2 - z1, x2 - x1);
+        wMesh.castShadow = true; wMesh.receiveShadow = true;
+        rancherGroup.add(wMesh);
+      };
+
+      // Exterior Perimeter Walls (wood siding outside)
+      addWall(-23.0, -13.2,  36.4, -13.2, 0.6, sidingMat); // North exterior wall (Office, Bed1, Bath, Bed2, Storage, Laundry)
+      addWall(-23.0, -13.2, -23.0,  12.8, 0.6, sidingMat); // West exterior wall (Office & Living Room)
+      addWall(-23.0,  12.8,  -5.2,  12.8, 0.6, sidingMat); // South Living Room wall
+      addWall( -1.8,  12.8,  10.0,  12.8, 0.6, sidingMat); // South Dining Room wall (with recessed front entry door gap)
+      addWall( 10.0,  12.8,  10.0,  15.6, 0.6, sidingMat); // Kitchen South step-out
+      addWall( 10.0,  15.6,  19.8,  15.6, 0.6, sidingMat); // Kitchen South window wall
+      addWall( 19.8,  15.6,  19.8,  -0.2, 0.6, sidingMat); // Kitchen East wall (facing Carport)
+      addWall( 19.8,  -3.2,  36.4,  -3.2, 0.6, sidingMat); // Laundry South wall (facing Carport)
+      addWall( 36.4, -13.2,  36.4,  15.6, 0.6, sidingMat); // Carport & Laundry East wall
+
+      // Interior Partition Walls (matching image.png room layout & doorways)
+      addWall(-23.0,  -0.2, -17.5,  -0.2); // Office / Living Room left divider
+      addWall(-13.5,  -0.2,  -9.2,  -0.2); // Office / Living Room right divider
+      addWall( -9.2, -13.2,  -9.2,   0.2); // Office / Bedroom 1 wall
+      addWall( -9.2,   0.2,  -0.4,   0.2); // Bedroom 1 / Living Room wall
+      addWall( -0.4, -13.2,  -0.4,  -3.1); // Bedroom 1 / Bathroom wall
+      addWall(  6.4, -13.2,   6.4,  -3.1); // Bathroom / Bedroom 2 wall
+      addWall( 19.8, -13.2,  19.8,  -3.2); // Bedroom 2 / Storage & Laundry wall
+      addWall( 19.8,  -7.4,  24.8,  -7.4); // Storage bottom wall (5' x 5'10")
+      addWall( 24.8, -13.2,  24.8,  -7.4); // Storage / Laundry divider
+      addWall( -0.4,  -3.1,  19.8,  -3.1); // Central Hallway North wall
+      addWall(  1.2,   0.5,   8.4,   0.5); // Central Hallway Coat Closet (10'3" x 6'9" hallway)
+      addWall(  1.2,   2.6,   8.4,   2.6);
+      addWall(  1.2,   0.5,   1.2,   2.6);
+      addWall(  8.4,   0.5,   8.4,   2.6);
+
+      // Angled Corner Wood-Burning Fireplace in Living Room (22'7" x 12'11")
+      const fpHearth = new THREE.Mesh(new THREE.BoxGeometry(4.8, 8.2, 3.2), stoneMat);
+      fpHearth.position.set(-6.8, 5.9, 2.2);
+      fpHearth.rotation.y = -0.68;
+      fpHearth.castShadow = true;
+      rancherGroup.add(fpHearth);
+
+      const chimney = new THREE.Mesh(new THREE.BoxGeometry(3.0, 15.5, 2.6), stoneMat);
+      chimney.position.set(-6.8, 9.5, 2.2);
+      chimney.rotation.y = -0.68;
+      chimney.castShadow = true;
+      rancherGroup.add(chimney);
+
+      // Kitchen U-Shaped Cabinetry, Range/Stove, Double Sink & Fridge (9'5" x 19'7")
+      const cLeft = new THREE.Mesh(new THREE.BoxGeometry(2.2, 3.0, 11.5), counterMat);
+      cLeft.position.set(11.4, 3.3, 9.2);
+      const cBot = new THREE.Mesh(new THREE.BoxGeometry(7.2, 3.0, 2.2), counterMat);
+      cBot.position.set(15.0, 3.3, 14.2);
+      const cTop = new THREE.Mesh(new THREE.BoxGeometry(4.6, 3.0, 2.2), counterMat);
+      cTop.position.set(12.6, 3.3, 3.8);
+      const stove = new THREE.Mesh(new THREE.BoxGeometry(2.4, 3.15, 2.6), applianceMat);
+      stove.position.set(11.4, 3.35, 8.5);
+      const sink = new THREE.Mesh(new THREE.BoxGeometry(3.2, 3.1, 1.8), applianceMat);
+      sink.position.set(15.2, 3.35, 14.2);
+      const fridge = new THREE.Mesh(new THREE.BoxGeometry(2.6, 6.0, 2.8), applianceMat);
+      fridge.position.set(18.2, 4.8, 7.5);
+      rancherGroup.add(cLeft, cBot, cTop, stove, sink, fridge);
+
+      // Bathroom Bathtub, Vanity Sink & Toilet (6'10" x 10'1")
+      const tub = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.0, 5.2), applianceMat);
+      tub.position.set(1.1, 2.8, -10.4);
+      const vanity = new THREE.Mesh(new THREE.BoxGeometry(1.8, 2.8, 3.6), counterMat);
+      vanity.position.set(5.3, 3.2, -7.8);
+      rancherGroup.add(tub, vanity);
+
+      // Exterior Windows matching floorplan positions
+      for (const wx of [-19, -14, -5, 3, 12, 22, 30]) {
+        const winN = new THREE.Mesh(new THREE.BoxGeometry(3.8, 3.6, 0.75), glassMat);
+        winN.position.set(wx, 6.4, -13.2);
+        rancherGroup.add(winN);
+      }
+      for (const wx of [-18, -11, 2, 6]) {
+        const winS = new THREE.Mesh(new THREE.BoxGeometry(4.2, 3.8, 0.75), glassMat);
+        winS.position.set(wx, 6.4, 12.8);
+        rancherGroup.add(winS);
+      }
+
+      // North-West Wooden Patio Deck outside Office/Living Room
+      const patio = new THREE.Mesh(new THREE.BoxGeometry(22, 1.2, 12), new THREE.MeshStandardMaterial({ color: 0x8c5a32 }));
+      patio.position.set(-14, 0.8, -19.2);
+      rancherGroup.add(patio);
+
+      // Toggleable Gable Roof Group (hidden when Dollhouse Roof Cutaway [R] is active)
+      rancherRoofGroup = new THREE.Group();
+      const mainRoof = new THREE.Mesh(createGableRoofGeometry(62, 31.5, 5.4), roofMat);
+      mainRoof.position.set(6.8, 10.0, 0.5);
+      mainRoof.castShadow = true;
+      rancherRoofGroup.add(mainRoof);
+      rancherGroup.add(rancherRoofGroup);
+
+      scene.add(rancherGroup);
+
+      // Room dimension labels (shown in Dollhouse / Inside mode)
+      const rooms = [
+        { dx: -16.1, dz: -6.7, title: 'OFFICE', sub: "13'10\" × 13'" },
+        { dx: -11.7, dz:  6.3, title: 'LIVING ROOM', sub: "22'7\" × 12'11\" • Fireplace" },
+        { dx:  -4.8, dz: -6.5, title: 'BEDROOM 1', sub: "8'10\" × 13'6\"" },
+        { dx:   3.0, dz: -8.2, title: 'BATHROOM', sub: "6'10\" × 10'1\"" },
+        { dx:  13.1, dz: -8.2, title: 'BEDROOM 2', sub: "12'1\" × 10'1\"" },
+        { dx:   4.8, dz: -1.2, title: 'HALLWAY', sub: "10'3\" × 6'9\"" },
+        { dx:   4.8, dz:  7.8, title: 'DINING ROOM', sub: "10'4\" × 10'6\"" },
+        { dx:  14.9, dz:  8.5, title: 'KITCHEN', sub: "9'5\" × 19'7\"" },
+        { dx:  22.3, dz: -10.3, title: 'STORAGE', sub: "5' × 5'10\"" },
+        { dx:  30.5, dz: -8.2, title: 'LAUNDRY ROOM', sub: "11'7\" × 10'" },
+        { dx:  28.2, dz:  6.2, title: 'CARPORT', sub: 'Covered Parking & Steps' }
+      ];
+      for (const rm of rooms) {
+        roomLabels.push({
+          pos: new THREE.Vector3(rx + rm.dx, ry + 9.2, rz + rm.dz),
+          title: rm.title,
+          sub: rm.sub,
+          color: '#fbbf24'
+        });
+      }
+
+      staticLabels.push({
+        pos: new THREE.Vector3(rx + 4, ry + 20, rz),
+        title: 'Existing 1963 Rancher (1,279 sq ft)',
+        sub: 'Press [R] for 3D Dollhouse Floor Plan Cutaway',
+        color: '#34d399'
+      });
+
+      // B. DETACHED WORKSHOP / SHOP OUTBUILDING (32' x 44' = 1,408 sq ft)
+      const sx = 134, sz = 170, sy = getTerrainHeightAt(sx, sz);
+      const shopGroup = new THREE.Group();
+      shopGroup.position.set(sx, sy, sz);
+      shopGroup.rotation.y = -0.18;
+
+      const shopBody = new THREE.Mesh(new THREE.BoxGeometry(32, 13.5, 44), new THREE.MeshStandardMaterial({ color: 0xd6d3d1 }));
+      shopBody.position.set(0, 8.0, 0);
+      shopBody.castShadow = true; shopBody.receiveShadow = true;
+      shopGroup.add(shopBody);
+
+      const shopRoof = new THREE.Mesh(createGableRoofGeometry(35, 46, 6.5), new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      shopRoof.position.set(0, 14.7, 0);
+      shopGroup.add(shopRoof);
+
+      const bayDoor = new THREE.Mesh(new THREE.BoxGeometry(12, 10.5, 0.6), new THREE.MeshStandardMaterial({ color: 0x475569 }));
+      bayDoor.position.set(-4, 6.5, 22.1);
+      shopGroup.add(bayDoor);
+
+      scene.add(shopGroup);
+      staticLabels.push({
+        pos: new THREE.Vector3(sx, sy + 24, sz),
+        title: 'Existing Detached Workshop / Shop',
+        sub: '32\' × 44\' (1,408 sq ft) • Roll-Up Bay Door',
+        color: '#38bdf8'
+      });
+
+      const ckZ = -40, ckX = getCreekCenterX(ckZ);
+      staticLabels.push({
+        pos: new THREE.Vector3(ckX, getTerrainHeightAt(ckX, ckZ) + 16, ckZ),
+        title: 'Shirley Creek (Year-Round Water Rights)',
+        sub: 'Riparian Ravine • 50\' (15m) SPEA Buffer',
+        color: '#60a5fa'
+      });
+
+      staticLabels.push({
+        pos: new THREE.Vector3(0, getTerrainHeightAt(0, 415) + 14, 415),
+        title: 'Russell Road Frontage (561.0 ft)',
+        sub: 'Driveway Access & Perimeter Fencing',
+        color: '#cbd5e1'
+      });
+
+      // C. PERIMETER FENCING ALONG RUSSELL ROAD
+      const fenceMat = new THREE.MeshStandardMaterial({ color: 0x78553a, roughness: 0.88 });
+      const fenceGroup = new THREE.Group();
+      const buildFence = (x1, z1, x2, z2) => {
+        const dist = Math.hypot(x2 - x1, z2 - z1), steps = Math.max(1, Math.floor(dist / 16));
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps, fx = x1 + (x2 - x1) * t, fz = z1 + (z2 - z1) * t, fy = getTerrainHeightAt(fx, fz);
+          const post = new THREE.Mesh(new THREE.BoxGeometry(0.5, 4.2, 0.5), fenceMat);
+          post.position.set(fx, fy + 2.0, fz);
+          fenceGroup.add(post);
+        }
+      };
+      buildFence(-278, 401, -225, 401);
+      buildFence(-190, 401, 58, 401);
+      buildFence(94, 401, 278, 401);
+      scene.add(fenceGroup);
+
+      // D. MATURE COASTAL TREES IN WOODED & RIPARIAN ZONES
+      const treeGroup = new THREE.Group();
+      const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3525 });
+      const firMat1 = new THREE.MeshStandardMaterial({ color: 0x1e4620 });
+      const firMat2 = new THREE.MeshStandardMaterial({ color: 0x265828 });
+      const mapleMat = new THREE.MeshStandardMaterial({ color: 0x3f702d });
+
+      const trunkGeo = new THREE.CylinderGeometry(0.8, 1.4, 14, 6); trunkGeo.translate(0, 7, 0);
+      const coneBotGeo = new THREE.ConeGeometry(9.5, 24, 7); coneBotGeo.translate(0, 21, 0);
+      const coneTopGeo = new THREE.ConeGeometry(6.8, 20, 7); coneTopGeo.translate(0, 33, 0);
+      const mapleCrownGeo = new THREE.SphereGeometry(10.5, 7, 6); mapleCrownGeo.translate(0, 22, 0);
+
+      let seed = 1346;
+      const rand = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+
+      for (let i = 0; i < 290; i++) {
+        const tx = (rand() - 0.5) * 640, tz = (rand() - 0.5) * 860;
+        if (tz > 392 || (tx > 20 && tx < 175 && tz > 130 && tz < 370)) continue;
+        const { dist: cDist } = getDistanceToCreek(tx, tz);
+        if (cDist < 13) continue;
+        const zone = getLandCoverZone(tx, tz);
+        let keep = false;
+        if (zone === 'Mature Coastal Forest' || zone === 'Adjacent Rural Lot') keep = rand() < 0.88;
+        else if (zone === 'Riparian Buffer (SPEA)') keep = rand() < 0.56;
+        else if (zone === 'Open Agricultural Meadow') keep = (Math.abs(tx) > 248 || Math.abs(tz) > 368) && rand() < 0.45;
+        if (!keep) continue;
+
+        const ty = getTerrainHeightAt(tx, tz), scale = 0.72 + rand() * 0.65;
+        const tInst = new THREE.Group();
+        tInst.position.set(tx, ty - 0.5, tz);
+        tInst.scale.set(scale, scale * (0.9 + rand() * 0.25), scale);
+        tInst.add(new THREE.Mesh(trunkGeo, trunkMat));
+        if (cDist < 48 && rand() < 0.42) {
+          const crown = new THREE.Mesh(mapleCrownGeo, mapleMat);
+          crown.castShadow = true;
+          tInst.add(crown);
+        } else {
+          const mat = rand() < 0.5 ? firMat1 : firMat2;
+          const c1 = new THREE.Mesh(coneBotGeo, mat); c1.castShadow = true;
+          const c2 = new THREE.Mesh(coneTopGeo, mat); c2.castShadow = true;
+          tInst.add(c1, c2);
+        }
+        treeGroup.add(tInst);
+      }
+      scene.add(treeGroup);
+    }
+
+    // ============================================================================
+    // 6. GIS BOUNDARY PERIMETER, CREEK BUFFER & MATTERPORT 3D SCAN OVERLAYS
+    // ============================================================================
+    const layerState = { boundary: true, riparian: true, contours: true, labels: true, mpmesh: true, mppins: true };
+    const boundaryGroup = new THREE.Group();
+    const riparianGroup = new THREE.Group();
+    const matterportMeshGroup = new THREE.Group();
+    const matterportPinsGroup = new THREE.Group();
+    scene.add(boundaryGroup, riparianGroup, matterportMeshGroup, matterportPinsGroup);
+
+    // Coordinate transform from Matterport metric space (mp_x, mp_y, mp_z) to 561'x806' Parcel feet (tx, ty, tz)
+    function mpToParcelXZ(mp_x, mp_y) {
+      let tx, tz;
+      if (mp_y <= 12.0) {
+        tx = 66.0 - (mp_y + 0.63) * M_TO_FT;
+      } else {
+        tx = (66.0 - 12.63 * M_TO_FT) - (mp_y - 12.0) * 2.10;
+      }
+      if (mp_x >= -2.0 && mp_x <= 16.0) {
+        tz = 248.0 - (mp_x - 7.12) * M_TO_FT;
+      } else if (mp_x < -2.0) {
+        tz = (248.0 - (-2.0 - 7.12) * M_TO_FT) + (-2.0 - mp_x) * 1.12;
+      } else {
+        tz = (248.0 - (16.0 - 7.12) * M_TO_FT) - (mp_x - 16.0) * 4.15;
+      }
+      return { x: tx, z: tz };
+    }
+
+    function mpToParcelXYZ(mp_x, mp_y, mp_z) {
+      const { x: tx, z: tz } = mpToParcelXZ(mp_x, mp_y);
+      let ty;
+      if (mp_x >= -2.0 && mp_x <= 16.0 && mp_y >= -12.0 && mp_y <= 12.0) {
+        ty = getTerrainHeightAt(62, 248) + 1.85 + (mp_z + 0.90) * M_TO_FT;
+      } else {
+        const gY = getTerrainHeightAt(tx, tz);
+        const relH = Math.max(0.25, Math.min(28.0, (mp_z + 1.55) * M_TO_FT * 0.55));
+        ty = gY + relH;
+      }
+      return { x: tx, y: ty, z: tz };
+    }
+
+    let mpSnapshots = [];
+    let activePhotoItem = null;
+
+    function selectMatterportPhoto(item, showPopupCard = false) {
+      if (!item) return;
+      activePhotoItem = item;
+      const { x, z } = mpToParcelXZ(item.x, item.y);
+      const coordStr = `${x >= 0 ? '+' : ''}${Math.round(x)}' E, ${z >= 0 ? '+' : ''}${Math.round(z)}' S`;
+      const mainImg = document.getElementById('modal-main-photo');
+      if (mainImg) mainImg.src = item.file;
+      const titleEl = document.getElementById('modal-photo-title');
+      if (titleEl) titleEl.textContent = item.title;
+      const coordsEl = document.getElementById('modal-photo-coords');
+      if (coordsEl) coordsEl.textContent = `Parcel Pos: ${coordStr} • Matterport ID: ${item.id}`;
+
+      if (showPopupCard) {
+        const card = document.getElementById('pin-popup-card');
+        if (card) {
+          card.classList.remove('hidden');
+          card.classList.add('flex');
+          document.getElementById('pin-popup-title').textContent = `📸 ${item.title}`;
+          document.getElementById('pin-popup-img').src = item.file;
+          document.getElementById('pin-popup-coords').textContent = coordStr;
+        }
+      }
+    }
+
+    function teleportToActivePhoto() {
+      if (!activePhotoItem) return;
+      const { x, z } = mpToParcelXZ(activePhotoItem.x, activePhotoItem.y);
+      const modal = document.getElementById('floorplan-modal');
+      if (modal && !modal.classList.contains('hidden')) toggleFloorplanModal();
+      setCameraMode('fp');
+      fpState.x = Math.max(-270, Math.min(270, x));
+      fpState.z = Math.max(-395, Math.min(395, z));
+      fpState.pitch = -0.02;
+    }
+
+    function switchModalTab(tabName) {
+      ['photos', 'floorplan', 'tour360'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const pane = document.getElementById(`modal-tab-${t}`);
+        if (btn) btn.classList.toggle('active', t === tabName);
+        if (pane) {
+          if (t === tabName) {
+            pane.classList.remove('hidden');
+            pane.classList.add('flex');
+          } else {
+            pane.classList.add('hidden');
+            pane.classList.remove('flex');
+          }
+        }
+      });
+      if (tabName === 'tour360') {
+        const ifr = document.getElementById('mp-tour-iframe');
+        if (ifr && ifr.getAttribute('src') === 'about:blank') {
+          ifr.setAttribute('src', ifr.getAttribute('data-src'));
+        }
+      }
+    }
+
+    function openModalTab(tabName) {
+      const modal = document.getElementById('floorplan-modal');
+      if (modal && modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      switchModalTab(tabName || 'photos');
+    }
+
+    async function loadMatterportAssets() {
+      const badge = document.getElementById('mp-status-badge');
+      try {
+        // 1. Load 27 Georeferenced Snapshots
+        const snapResp = await fetch('mp_assets/snapshots_meta.json');
+        if (snapResp.ok) {
+          mpSnapshots = await snapResp.json();
+          const grid = document.getElementById('modal-photo-grid');
+          const pinStemGeo = new THREE.CylinderGeometry(0.35, 0.35, 9, 8);
+          pinStemGeo.translate(0, 4.5, 0);
+          const pinHeadGeo = new THREE.SphereGeometry(2.1, 12, 10);
+          pinHeadGeo.translate(0, 9.8, 0);
+          const pinStemMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+          const pinHeadMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+
+          mpSnapshots.forEach((s, idx) => {
+            if (grid) {
+              const btn = document.createElement('div');
+              btn.className = 'group relative rounded overflow-hidden border border-slate-700 hover:border-emerald-400 cursor-pointer bg-slate-900';
+              btn.onclick = () => selectMatterportPhoto(s, false);
+              btn.innerHTML = `<img src="${s.file}" loading="lazy" class="w-full h-20 object-cover group-hover:scale-105 transition-transform" /><div class="p-1 text-[10px] text-slate-200 truncate font-medium bg-slate-950/90">${s.title}</div>`;
+              grid.appendChild(btn);
+            }
+            if (s.label === 'Dollhouse View') return;
+            const { x, z } = mpToParcelXZ(s.x, s.y);
+            const gY = (s.x >= -2 && s.x <= 16 && s.y >= -12 && s.y <= 12)
+              ? getTerrainHeightAt(62, 248) + 2.0
+              : getTerrainHeightAt(x, z);
+            const pinGrp = new THREE.Group();
+            pinGrp.position.set(x, gY, z);
+            const stem = new THREE.Mesh(pinStemGeo, pinStemMat);
+            const head = new THREE.Mesh(pinHeadGeo, pinHeadMat);
+            stem.userData.mpPhoto = s;
+            head.userData.mpPhoto = s;
+            pinGrp.add(stem, head);
+            matterportPinsGroup.add(pinGrp);
+          });
+          if (mpSnapshots.length > 9) selectMatterportPhoto(mpSnapshots[9], false);
+        }
+
+        // 2. Load 179 3D Sweep Locations
+        const swResp = await fetch('mp_assets/sweeps.json');
+        if (swResp.ok) {
+          const sweeps = await swResp.json();
+          const discGeo = new THREE.CylinderGeometry(1.3, 1.3, 0.25, 10);
+          const discMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.72 });
+          for (const sw of sweeps) {
+            const { x, z } = mpToParcelXZ(sw.x, sw.y);
+            const gY = (sw.x >= -2 && sw.x <= 16 && sw.y >= -12 && sw.y <= 12)
+              ? getTerrainHeightAt(62, 248) + 2.05
+              : getTerrainHeightAt(x, z) + 0.35;
+            const d = new THREE.Mesh(discGeo, discMat);
+            d.position.set(x, gY, z);
+            matterportPinsGroup.add(d);
+          }
+        }
+
+        // 3. Load & Parse Matterport 50k.dam Binary Protobuf 3D Mesh (198 Chunks, 308,351 Triangles)
+        if (badge) badge.textContent = 'Fetching 50k.dam Mesh...';
+        const damResp = await fetch('mp_assets/eb9d0e89e20144eab2598553bedda84a_50k.dam');
+        if (!damResp.ok) {
+          if (badge) badge.textContent = '27 Pins & 179 Sweeps Ready';
+          return;
+        }
+        const buf = await damResp.arrayBuffer();
+        const bytes = new Uint8Array(buf);
+        const view = new DataView(buf);
+        const dec = new TextDecoder('utf-8');
+
+        const readVarint = (pos) => {
+          let res = 0, shift = 0;
+          while (pos < bytes.length) {
+            const b = bytes[pos++];
+            res += (b & 0x7f) * Math.pow(2, shift);
+            if (!(b & 0x80)) return [res, pos];
+            shift += 7;
+          }
+          return [res, pos];
+        };
+
+        let pos = 0;
+        const texQueue = [];
+        const texCache = new Map();
+        const texLoader = new THREE.TextureLoader();
+        let totalTris = 0;
+
+        while (pos < bytes.length) {
+          let tag, l1;
+          [tag, pos] = readVarint(pos);
+          [l1, pos] = readVarint(pos);
+          const chunkEnd = pos + l1;
+          let cpos = pos;
+          let vOff = 0, vLen = 0, uvOff = 0, uvLen = 0, idxOff = 0, idxLen = 0, texName = '';
+
+          while (cpos < chunkEnd) {
+            let ctag, cl;
+            [ctag, cpos] = readVarint(cpos);
+            const cfn = ctag >>> 3;
+            [cl, cpos] = readVarint(cpos);
+            const subEnd = cpos + cl;
+            if (cfn === 1) {
+              let vpos = cpos;
+              while (vpos < subEnd) {
+                let vtag, vl;
+                [vtag, vpos] = readVarint(vpos);
+                const vfn = vtag >>> 3;
+                [vl, vpos] = readVarint(vpos);
+                if (vfn === 1) { vOff = vpos; vLen = vl; }
+                else if (vfn === 2) { uvOff = vpos; uvLen = vl; }
+                vpos += vl;
+              }
+            } else if (cfn === 2) {
+              let ipos = cpos, itag, il;
+              [itag, ipos] = readVarint(ipos);
+              [il, ipos] = readVarint(ipos);
+              idxOff = ipos; idxLen = il;
+            } else if (cfn === 4) {
+              texName = dec.decode(bytes.subarray(cpos, subEnd));
+            }
+            cpos = subEnd;
+          }
+          pos = chunkEnd;
+
+          if (vLen > 0 && idxLen > 0) {
+            const numVerts = vLen >>> 2;
+            const numPts = numVerts / 3;
+            const outPos = new Float32Array(numVerts);
+            const outNorm = new Float32Array(numVerts);
+            for (let i = 0; i < numPts; i++) {
+              const base = vOff + i * 12;
+              const mx = view.getFloat32(base, true);
+              const my = view.getFloat32(base + 4, true);
+              const mz = view.getFloat32(base + 8, true);
+              const p = mpToParcelXYZ(mx, my, mz);
+              const oi = i * 3;
+              outPos[oi] = p.x; outPos[oi + 1] = p.y; outPos[oi + 2] = p.z;
+              outNorm[oi] = 0; outNorm[oi + 1] = 1; outNorm[oi + 2] = 0;
+            }
+
+            const outUv = new Float32Array(numPts * 2);
+            if (uvLen === numPts * 8) {
+              for (let i = 0; i < numPts * 2; i++) {
+                outUv[i] = view.getFloat32(uvOff + i * 4, true);
+              }
+            }
+
+            const indices = [];
+            let ip = idxOff;
+            const iEnd = idxOff + idxLen;
+            while (ip < iEnd) {
+              let iv;
+              [iv, ip] = readVarint(ip);
+              indices.push(iv);
+            }
+            totalTris += (indices.length / 3) | 0;
+
+            const geo = new THREE.BufferGeometry();
+            geo.setIndex(indices);
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(outPos, 3));
+            geo.setAttribute('normal', new THREE.Float32BufferAttribute(outNorm, 3));
+            geo.setAttribute('uv', new THREE.Float32BufferAttribute(outUv, 2));
+
+            const mat = new THREE.MeshBasicMaterial({ color: 0xdbeafe, side: THREE.DoubleSide });
+            const mesh = new THREE.Mesh(geo, mat);
+            matterportMeshGroup.add(mesh);
+
+            if (texName) {
+              texQueue.push({ mat, url: `mp_assets/tex_low/${texName}` });
+            }
+          }
+        }
+
+        if (badge) badge.textContent = `${(totalTris / 1000).toFixed(0)}k Tris • Streaming Tex...`;
+
+        // Stream the 182 JPG texture atlases with a concurrency pool of 8
+        let qIdx = 0, loadedCount = 0;
+        const totalTex = texQueue.length;
+        const worker = () => {
+          if (qIdx >= totalTex) return;
+          const item = texQueue[qIdx++];
+          if (texCache.has(item.url)) {
+            item.mat.map = texCache.get(item.url);
+            item.mat.color.setHex(0xffffff);
+            item.mat.needsUpdate = true;
+            loadedCount++;
+            worker();
+            return;
+          }
+          const tex = texLoader.load(item.url, () => {
+            item.mat.map = tex;
+            item.mat.color.setHex(0xffffff);
+            item.mat.needsUpdate = true;
+            loadedCount++;
+            if (badge) {
+              badge.textContent = loadedCount >= totalTex
+                ? `✓ 308k Scan & 182 Tex Ready`
+                : `308k Tris • Tex ${loadedCount}/${totalTex}`;
+            }
+            worker();
+          });
+          texCache.set(item.url, tex);
+        };
+        for (let w = 0; w < 8; w++) worker();
+      } catch (err) {
+        if (badge) badge.textContent = '3D GIS Active';
+      }
+    }
+
+    function buildGISOverlays() {
+      const hw = PARCEL_W / 2, hd = PARCEL_D / 2;
+      const addDrapedLine = (x1, z1, x2, z2, steps, yOff) => {
+        const pts = [];
+        for (let i = 0; i <= steps; i++) {
+          const t = i / steps, px = x1 + (x2 - x1) * t, pz = z1 + (z2 - z1) * t;
+          pts.push(new THREE.Vector3(px, getTerrainHeightAt(px, pz) + yOff, pz));
+        }
+        return pts;
+      };
+
+      const perimPts = [
+        ...addDrapedLine(-hw, -hd,  hw, -hd, 60, 1.5),
+        ...addDrapedLine( hw, -hd,  hw,  hd, 80, 1.5),
+        ...addDrapedLine( hw,  hd, -hw,  hd, 60, 1.5),
+        ...addDrapedLine(-hw,  hd, -hw, -hd, 80, 1.5)
+      ];
+      boundaryGroup.add(new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints(perimPts),
+        new THREE.LineBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.95 })
+      ));
+
+      const cornerMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+      for (const [cx, cz] of [[-hw, -hd], [hw, -hd], [hw, hd], [-hw, hd]]) {
+        const pin = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 14, 8), cornerMat);
+        pin.position.set(cx, getTerrainHeightAt(cx, cz) + 7, cz);
+        boundaryGroup.add(pin);
+      }
+
+      // Shirley Creek 50 ft Riparian Setback Buffer Corridor
+      const ripSegs = 85, bufferHalfW = 50.0;
+      const ripVerts = [], ripNorms = [], ripUvs = [], ripIdx = [], leftPts = [], rightPts = [];
+      for (let i = 0; i <= ripSegs; i++) {
+        const t = i / ripSegs, cz = -hd + t * PARCEL_D, cx = getCreekCenterX(cz);
+        const lx = Math.max(-hw, Math.min(hw, cx - bufferHalfW));
+        const rx = Math.max(-hw, Math.min(hw, cx + bufferHalfW));
+        const ly = getTerrainHeightAt(lx, cz) + 0.9, ry = getTerrainHeightAt(rx, cz) + 0.9;
+        ripVerts.push(lx, ly, cz, rx, ry, cz);
+        ripNorms.push(0, 1, 0, 0, 1, 0);
+        ripUvs.push(0, t, 1, t);
+        leftPts.push(new THREE.Vector3(lx, ly + 0.6, cz));
+        rightPts.push(new THREE.Vector3(rx, ry + 0.6, cz));
+        if (i < ripSegs) {
+          const a = i * 2, b = a + 1, c = a + 2, d = a + 3;
+          ripIdx.push(a, c, b, b, c, d);
+        }
+      }
+      const ripGeo = new THREE.BufferGeometry();
+      ripGeo.setIndex(ripIdx);
+      ripGeo.setAttribute('position', new THREE.Float32BufferAttribute(ripVerts, 3));
+      ripGeo.setAttribute('normal', new THREE.Float32BufferAttribute(ripNorms, 3));
+      ripGeo.setAttribute('uv', new THREE.Float32BufferAttribute(ripUvs, 2));
+      riparianGroup.add(new THREE.Mesh(ripGeo, new THREE.MeshBasicMaterial({
+        color: 0xf59e0b, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false
+      })));
+
+      const edgeMat = new THREE.LineBasicMaterial({ color: 0xf97316, transparent: true, opacity: 0.9 });
+      riparianGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(leftPts), edgeMat));
+      riparianGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(rightPts), edgeMat));
+    }
+
+    function toggleLayer(layer) {
+      layerState[layer] = !layerState[layer];
+      const btn = document.getElementById(`toggle-${layer}`);
+      if (btn) btn.classList.toggle('active', layerState[layer]);
+      if (layer === 'boundary') boundaryGroup.visible = layerState.boundary;
+      if (layer === 'riparian') riparianGroup.visible = layerState.riparian;
+      if (layer === 'mpmesh') matterportMeshGroup.visible = layerState.mpmesh;
+      if (layer === 'mppins') matterportPinsGroup.visible = layerState.mppins;
+      if (layer === 'contours' && terrainMesh) {
+        terrainMesh.material.map = layerState.contours ? texWithContours : texNoContours;
+        terrainMesh.material.needsUpdate = true;
+      }
+    }
+
+    // ============================================================================
+    // 7. INTERACTIVE AG BUILD SANDBOX
+    // ============================================================================
+    const proposedStructures = [];
+    let selectedStructure = null;
+    const sandboxGroup = new THREE.Group();
+    scene.add(sandboxGroup);
+
+    const STRUCTURE_PRESETS = {
+      guest: { name: 'Secondary Dwelling / Guest House', w: 28, d: 36, h: 16, color: 0x10b981, defaultX: -35, defaultZ: 185 },
+      barn: { name: 'Agricultural Barn / Equestrian Arena', w: 42, d: 76, h: 24, color: 0xf59e0b, defaultX: 115, defaultZ: -65 },
+      home: { name: 'New Primary Residence / Custom Home', w: 44, d: 58, h: 22, color: 0x38bdf8, defaultX: 95, defaultZ: 55 },
+      greenhouse: { name: 'Shop / Commercial Greenhouse', w: 26, d: 52, h: 15, color: 0xa855f7, defaultX: 175, defaultZ: 110 }
+    };
+
+    function checkStructureCompliance(item) {
+      const { x, z, w, d } = item;
+      const hw = PARCEL_W / 2, hd = PARCEL_D / 2;
+      const r = Math.hypot(w / 2, d / 2) * 0.85;
+      const { dist: creekDist } = getDistanceToCreek(x, z);
+      const { slopePct } = getTerrainSlopeAt(x, z);
+      if (creekDist - r < 50) {
+        return { ok: false, msg: `⚠️ Setback Conflict: Inside 50' Shirley Creek Buffer (${Math.max(0, creekDist - r).toFixed(0)}' from creek)` };
+      }
+      if (Math.abs(x) + r > hw - 25 || z - r < -hd + 25 || z + r > hd - 50) {
+        return { ok: false, msg: `⚠️ Zoning Conflict: Encroaches AG Property Line Setback (25' side / 50' front)` };
+      }
+      return { ok: true, msg: `✓ AG Setback & Creek Buffer OK • Pad Slope: ${slopePct.toFixed(1)}%` };
+    }
+
+    function rebuildStructureMesh(item) {
+      while (item.group.children.length > 0) item.group.remove(item.group.children[0]);
+      const { w, d, h, color } = item;
+      const isSelected = (selectedStructure === item);
+      const compliance = checkStructureCompliance(item);
+      const baseColor = compliance.ok ? color : 0xef4444;
+
+      const boxGeo = new THREE.BoxGeometry(w, h, d);
+      boxGeo.translate(0, h / 2, 0);
+      const mesh = new THREE.Mesh(boxGeo, new THREE.MeshStandardMaterial({
+        color: baseColor, emissive: isSelected ? baseColor : 0x000000,
+        roughness: 0.45, metalness: 0.15, transparent: true, opacity: isSelected ? 0.88 : 0.74
+      }));
+      mesh.castShadow = true; mesh.receiveShadow = true;
+      mesh.userData.sandboxItem = item;
+      item.group.add(mesh);
+
+      const roofGeo = createGableRoofGeometry(w + 2, d + 2, Math.min(8, h * 0.32));
+      roofGeo.translate(0, h, 0);
+      item.group.add(new THREE.Mesh(roofGeo, new THREE.MeshStandardMaterial({
+        color: compliance.ok ? 0x1e293b : 0x7f1d1d, transparent: true, opacity: 0.85
+      })));
+
+      item.group.add(new THREE.LineSegments(
+        new THREE.EdgesGeometry(boxGeo),
+        new THREE.LineBasicMaterial({ color: isSelected ? 0xffffff : 0xe2e8f0 })
+      ));
+
+      item.group.position.set(item.x, getTerrainHeightAt(item.x, item.z), item.z);
+      item.group.rotation.y = (item.rot * Math.PI) / 180;
+    }
+
+    function spawnProposedStructure(typeKey) {
+      const preset = STRUCTURE_PRESETS[typeKey];
+      if (!preset) return;
+      const offset = proposedStructures.length * 18;
+      const item = {
+        id: Date.now() + Math.random(),
+        typeKey, name: preset.name, w: preset.w, d: preset.d, h: preset.h,
+        x: Math.max(-220, Math.min(220, preset.defaultX + (offset % 54))),
+        z: Math.max(-340, Math.min(340, preset.defaultZ - (offset % 70))),
+        rot: 0, color: preset.color, group: new THREE.Group()
+      };
+      sandboxGroup.add(item.group);
+      proposedStructures.push(item);
+      selectStructure(item);
+      document.getElementById('sandbox-count').textContent = `${proposedStructures.length} Placed`;
+    }
+
+    function selectStructure(item) {
+      selectedStructure = item;
+      for (const s of proposedStructures) rebuildStructureMesh(s);
+      const panel = document.getElementById('inspector-panel');
+      if (!item) { panel.classList.add('hidden'); return; }
+      panel.classList.remove('hidden');
+      document.getElementById('inspector-title').textContent = item.name;
+      document.getElementById('slider-pos-x').value = item.x;
+      document.getElementById('slider-pos-z').value = item.z;
+      document.getElementById('slider-width').value = item.w;
+      document.getElementById('slider-depth').value = item.d;
+      document.getElementById('slider-height').value = item.h;
+      document.getElementById('slider-rot').value = item.rot;
+      syncInspectorLabels();
+    }
+
+    function syncInspectorLabels() {
+      if (!selectedStructure) return;
+      const s = selectedStructure;
+      document.getElementById('val-pos-x').textContent = `${s.x >= 0 ? '+' : ''}${Math.round(s.x)} ft`;
+      document.getElementById('val-pos-z').textContent = `${s.z >= 0 ? '+' : ''}${Math.round(s.z)} ft`;
+      document.getElementById('val-width').textContent = `${s.w}'`;
+      document.getElementById('val-depth').textContent = `${s.d}'`;
+      document.getElementById('val-height').textContent = `${s.h}'`;
+      document.getElementById('val-rot').textContent = `${s.rot}°`;
+      const comp = checkStructureCompliance(s);
+      const compEl = document.getElementById('inspector-compliance');
+      compEl.textContent = comp.msg;
+      compEl.className = comp.ok
+        ? 'mb-2 px-2.5 py-1.5 rounded text-[11px] font-mono border bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
+        : 'mb-2 px-2.5 py-1.5 rounded text-[11px] font-mono border bg-rose-950/75 border-rose-500/60 text-rose-200';
+    }
+
+    function updateSelectedFromSliders() {
+      if (!selectedStructure) return;
+      selectedStructure.x = parseFloat(document.getElementById('slider-pos-x').value);
+      selectedStructure.z = parseFloat(document.getElementById('slider-pos-z').value);
+      selectedStructure.w = parseFloat(document.getElementById('slider-width').value);
+      selectedStructure.d = parseFloat(document.getElementById('slider-depth').value);
+      selectedStructure.h = parseFloat(document.getElementById('slider-height').value);
+      selectedStructure.rot = parseFloat(document.getElementById('slider-rot').value);
+      rebuildStructureMesh(selectedStructure);
+      syncInspectorLabels();
+    }
+
+    function deleteSelectedStructure() {
+      if (!selectedStructure) return;
+      sandboxGroup.remove(selectedStructure.group);
+      const idx = proposedStructures.indexOf(selectedStructure);
+      if (idx !== -1) proposedStructures.splice(idx, 1);
+      selectStructure(proposedStructures[proposedStructures.length - 1] || null);
+      document.getElementById('sandbox-count').textContent = `${proposedStructures.length} Placed`;
+    }
+
+    // ============================================================================
+    // 8. SOLAR POSITION & SHADOW SIMULATOR (GIBSONS 49.47° N)
+    // ============================================================================
+    let currentSeason = 'summer';
+
+    function setSeason(season) {
+      currentSeason = season;
+      ['summer', 'equinox', 'winter'].forEach(s => {
+        const el = document.getElementById(`season-${s}`);
+        if (el) el.classList.toggle('active', s === season);
+      });
+      updateSunFromUI();
+    }
+
+    function updateSunFromUI() {
+      const hour = parseFloat(document.getElementById('slider-time').value);
+      const hrs = Math.floor(hour), mins = Math.round((hour - hrs) * 60);
+      document.getElementById('sun-readout').textContent =
+        `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')} ${currentSeason === 'winter' ? 'PST' : 'PDT'}`;
+
+      const decDeg = currentSeason === 'summer' ? 23.44 : (currentSeason === 'winter' ? -23.44 : 0.0);
+      const latRad = GIBSONS_LAT * Math.PI / 180, decRad = decDeg * Math.PI / 180;
+      const hraRad = ((hour - 12.5) * 15) * Math.PI / 180;
+
+      const sinAlt = Math.sin(latRad) * Math.sin(decRad) + Math.cos(latRad) * Math.cos(decRad) * Math.cos(hraRad);
+      const altRad = Math.asin(Math.max(-0.15, Math.min(1, sinAlt)));
+      const altDeg = altRad * 180 / Math.PI;
+
+      const cosAz = (Math.sin(decRad) - Math.sin(altRad) * Math.sin(latRad)) / (Math.cos(altRad) * Math.cos(latRad) + 1e-5);
+      let azRad = Math.acos(Math.max(-1, Math.min(1, cosAz)));
+      if (hour > 12.5) azRad = 2 * Math.PI - azRad;
+      const azDeg = azRad * 180 / Math.PI;
+
+      const dist = 720, clampedAlt = Math.max(0.06, altRad), horiz = dist * Math.cos(clampedAlt);
+      sunLight.position.set(Math.sin(azRad) * horiz, dist * Math.sin(clampedAlt), -Math.cos(azRad) * horiz);
+
+      const warmth = Math.max(0, Math.min(1, (altDeg - 4) / 32));
+      sunLight.color.setHex(warmth > 0.45 ? 0xfff6e5 : 0xffb36b);
+      sunLight.intensity = 0.35 + warmth * 0.9;
+
+      const skyR = 0.18 + warmth * 0.43, skyG = 0.28 + warmth * 0.49, skyB = 0.45 + warmth * 0.46;
+      scene.background.r = skyR; scene.background.g = skyG; scene.background.b = skyB;
+      if (scene.fog) { scene.fog.color.r = skyR; scene.fog.color.g = skyG; scene.fog.color.b = skyB; }
+
+      const compassDirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+      document.getElementById('sun-angles').innerHTML =
+        `<span>Solar Alt: <strong>${Math.max(1, altDeg).toFixed(1)}°</strong></span><span>Azimuth: <strong>${azDeg.toFixed(0)}° ${compassDirs[Math.round(azDeg / 45) % 8]}</strong></span>`;
+    }
+
+    // ============================================================================
+    // 9. CAMERA CONTROLLERS & 3D LABELS
+    // ============================================================================
+    let cameraMode = 'orbit';
+    const fpState = { x: 72, z: 335, yaw: 0.15, pitch: 0.02 };
+    const orbitState = { target: new THREE.Vector3(10, 18, 20), theta: -0.35, phi: 0.92, radius: 740 };
+    const keys = {};
+    let isPointerDown = false, isDraggingBuilding = false;
+    const prevMouse = { x: 0, y: 0 }, raycaster = new THREE.Raycaster(), mouseNDC = new THREE.Vector2();
+
+    function setCameraMode(mode) {
+      cameraMode = mode;
+      document.getElementById('btn-mode-fp').classList.toggle('active', mode === 'fp');
+      document.getElementById('btn-mode-orbit').classList.toggle('active', mode === 'orbit');
+      document.getElementById('fp-crosshair').style.display = mode === 'fp' ? 'block' : 'none';
+    }
+
+    function toggleDollhouseRoof(forceState) {
+      isDollhouseMode = forceState !== undefined ? forceState : !isDollhouseMode;
+      if (rancherRoofGroup) rancherRoofGroup.visible = !isDollhouseMode;
+      const btn = document.getElementById('btn-dollhouse');
+      if (btn) btn.classList.toggle('active', isDollhouseMode);
+    }
+
+    function toggleFloorplanModal() {
+      const modal = document.getElementById('floorplan-modal');
+      if (!modal) return;
+      if (modal.classList.contains('hidden')) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function jumpToPreset(preset) {
+      if (preset === 'overview') {
+        setCameraMode('orbit'); orbitState.target.set(0, 18, 10); orbitState.theta = -0.28; orbitState.phi = 0.88; orbitState.radius = 760;
+      } else if (preset === 'homestead') {
+        setCameraMode('fp'); fpState.x = 74; fpState.z = 315; fpState.yaw = 0.12; fpState.pitch = 0.04;
+      } else if (preset === 'inside') {
+        toggleDollhouseRoof(false);
+        setCameraMode('fp'); fpState.x = 50; fpState.z = 256; fpState.yaw = -0.45; fpState.pitch = -0.02;
+      } else if (preset === 'dollhouse') {
+        toggleDollhouseRoof(true);
+        setCameraMode('orbit'); orbitState.target.set(68, getTerrainHeightAt(62, 248) + 4, 248); orbitState.theta = 0.08; orbitState.phi = 0.52; orbitState.radius = 85;
+      } else if (preset === 'creek') {
+        setCameraMode('fp'); fpState.x = getCreekCenterX(115) + 26; fpState.z = 115; fpState.yaw = 1.45; fpState.pitch = -0.08;
+      } else if (preset === 'meadow') {
+        setCameraMode('fp'); fpState.x = 120; fpState.z = -125; fpState.yaw = 0.4; fpState.pitch = 0.0;
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      keys[e.code] = true;
+      if (document.activeElement.tagName !== 'INPUT') {
+        if (e.code === 'KeyV') setCameraMode(cameraMode === 'fp' ? 'orbit' : 'fp');
+        if (e.code === 'KeyF') toggleFullScreen();
+        if (e.code === 'KeyR') toggleDollhouseRoof();
+      }
+    });
+    window.addEventListener('keyup', (e) => { keys[e.code] = false; });
+
+    canvas.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      isPointerDown = true; prevMouse.x = e.clientX; prevMouse.y = e.clientY;
+      mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouseNDC, camera);
+      if (layerState.mppins) {
+        const pinHits = raycaster.intersectObjects(matterportPinsGroup.children, true);
+        if (pinHits.length > 0 && pinHits[0].object.userData && pinHits[0].object.userData.mpPhoto) {
+          selectMatterportPhoto(pinHits[0].object.userData.mpPhoto, true);
+          return;
+        }
+      }
+      const hits = raycaster.intersectObjects(sandboxGroup.children, true);
+      if (hits.length > 0) {
+        let obj = hits[0].object;
+        while (obj && !obj.userData.sandboxItem) obj = obj.parent;
+        if (obj && obj.userData.sandboxItem) { selectStructure(obj.userData.sandboxItem); isDraggingBuilding = true; }
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isPointerDown) return;
+      const dx = e.clientX - prevMouse.x, dy = e.clientY - prevMouse.y;
+      prevMouse.x = e.clientX; prevMouse.y = e.clientY;
+
+      if (isDraggingBuilding && selectedStructure && terrainMesh) {
+        mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouseNDC, camera);
+        const groundHits = raycaster.intersectObjects([terrainMesh], false);
+        if (groundHits.length > 0) {
+          const pt = groundHits[0].point;
+          selectedStructure.x = Math.max(-255, Math.min(255, Math.round(pt.x)));
+          selectedStructure.z = Math.max(-375, Math.min(375, Math.round(pt.z)));
+          document.getElementById('slider-pos-x').value = selectedStructure.x;
+          document.getElementById('slider-pos-z').value = selectedStructure.z;
+          rebuildStructureMesh(selectedStructure);
+          syncInspectorLabels();
+        }
+        return;
+      }
+      if (cameraMode === 'fp') {
+        fpState.yaw -= dx * 0.0045;
+        fpState.pitch = Math.max(-1.25, Math.min(1.25, fpState.pitch - dy * 0.0045));
+      } else {
+        orbitState.theta -= dx * 0.0055;
+        orbitState.phi = Math.max(0.18, Math.min(1.46, orbitState.phi - dy * 0.0055));
+      }
+    });
+
+    window.addEventListener('mouseup', () => { isPointerDown = false; isDraggingBuilding = false; });
+    canvas.addEventListener('wheel', (e) => {
+      if (cameraMode === 'orbit') orbitState.radius = Math.max(45, Math.min(1450, orbitState.radius + e.deltaY * 0.45));
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const labelsContainer = document.getElementById('labels-container');
+    function update3DLabels() {
+      if (!layerState.labels) { labelsContainer.innerHTML = ''; return; }
+      const allLabels = [...staticLabels, ...(isDollhouseMode ? roomLabels : [])];
+      for (const s of proposedStructures) {
+        const gy = getTerrainHeightAt(s.x, s.z), sqFt = Math.round(s.w * s.d).toLocaleString();
+        const comp = checkStructureCompliance(s);
+        allLabels.push({
+          pos: new THREE.Vector3(s.x, gy + s.h + 10, s.z),
+          title: s.name,
+          sub: `${s.w}' × ${s.d}' (${sqFt} sq ft) • ${s.h}' H`,
+          color: comp.ok ? '#38bdf8' : '#f87171'
+        });
+      }
+      while (labelsContainer.children.length < allLabels.length) {
+        const div = document.createElement('div'); div.className = 'label-3d'; labelsContainer.appendChild(div);
+      }
+      while (labelsContainer.children.length > allLabels.length) labelsContainer.removeChild(labelsContainer.lastChild);
+
+      for (let i = 0; i < allLabels.length; i++) {
+        const item = allLabels[i], el = labelsContainer.children[i];
+        const proj = item.pos.clone().project(camera);
+        if (proj.z > 1 || proj.z < -1) { el.style.display = 'none'; continue; }
+        el.style.display = 'block';
+        el.style.left = `${(proj.x * 0.5 + 0.5) * window.innerWidth}px`;
+        el.style.top = `${(-(proj.y * 0.5) + 0.5) * window.innerHeight}px`;
+        el.style.borderColor = item.color;
+        el.innerHTML = `<div style="color:${item.color};font-weight:700;">${item.title}</div><div style="color:#cbd5e1;font-size:10px;">${item.sub}</div>`;
+      }
+    }
+
+    function updateTelemetryHUD(px, pz) {
+      const aslFt = BASE_ASL_FT + getTerrainHeightAt(px, pz), aslM = aslFt * FT_TO_M;
+      const { slopePct, slopeDeg, aspect } = getTerrainSlopeAt(px, pz);
+      document.getElementById('hud-elevation').innerHTML = `${aslFt.toFixed(1)} ft <span class="text-slate-400 font-normal">(${aslM.toFixed(1)} m)</span>`;
+      document.getElementById('hud-slope').innerHTML = `${slopePct.toFixed(1)}% <span class="text-slate-400 font-normal">(${slopeDeg.toFixed(1)}° ${aspect})</span>`;
+      document.getElementById('hud-coords').textContent = `${px >= 0 ? '+' : ''}${Math.round(px)}' E, ${pz >= 0 ? '+' : ''}${Math.round(pz)}' S`;
+      document.getElementById('hud-zone-badge').textContent = getLandCoverZone(px, pz);
+    }
+
+    buildTerrainAndCreek();
+    buildExistingStructures();
+    buildGISOverlays();
+    loadMatterportAssets();
+    updateSunFromUI();
+    spawnProposedStructure('guest');
+
+    let lastTime = performance.now();
+    function animate(now) {
+      requestAnimationFrame(animate);
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      const fwd = (keys['KeyW'] || keys['ArrowUp'] ? 1 : 0) - (keys['KeyS'] || keys['ArrowDown'] ? 1 : 0);
+      const str = (keys['KeyD'] || keys['ArrowRight'] ? 1 : 0) - (keys['KeyA'] || keys['ArrowLeft'] ? 1 : 0);
+      const fast = (keys['ShiftLeft'] || keys['ShiftRight']) ? 2.4 : 1.0;
+
+      if (cameraMode === 'fp') {
+        const moveSpeed = 38.0 * fast * dt;
+        if (fwd !== 0 || str !== 0) {
+          const sinY = Math.sin(fpState.yaw), cosY = Math.cos(fpState.yaw);
+          fpState.x = Math.max(-WORLD_W * 0.46, Math.min(WORLD_W * 0.46, fpState.x + (-sinY * fwd + cosY * str) * moveSpeed));
+          fpState.z = Math.max(-WORLD_D * 0.46, Math.min(WORLD_D * 0.46, fpState.z + (-cosY * fwd - sinY * str) * moveSpeed));
+        }
+        let groundY = getTerrainHeightAt(fpState.x, fpState.z);
+        // Step up onto the 1963 Rancher interior floor slab (+1.8 ft) when inside the house footprint
+        if (fpState.x >= 38 && fpState.x <= 98 && fpState.z >= 234 && fpState.z <= 264) {
+          groundY = getTerrainHeightAt(62, 248) + 1.8;
+        }
+        camera.position.set(fpState.x, groundY + EYE_HEIGHT_FT, fpState.z);
+        camera.rotation.order = 'YXZ';
+        camera.rotation.y = fpState.yaw; camera.rotation.x = fpState.pitch; camera.rotation.z = 0;
+        updateTelemetryHUD(fpState.x, fpState.z);
+      } else {
+        if (fwd !== 0 || str !== 0) {
+          const panSpeed = 160.0 * fast * dt;
+          const sinT = Math.sin(orbitState.theta), cosT = Math.cos(orbitState.theta);
+          orbitState.target.x = Math.max(-340, Math.min(340, orbitState.target.x + (-sinT * fwd + cosT * str) * panSpeed));
+          orbitState.target.z = Math.max(-440, Math.min(440, orbitState.target.z + (-cosT * fwd - sinT * str) * panSpeed));
+        }
+        orbitState.target.y = getTerrainHeightAt(orbitState.target.x, orbitState.target.z);
+        const ox = orbitState.target.x + orbitState.radius * Math.sin(orbitState.phi) * Math.sin(orbitState.theta);
+        const oy = orbitState.target.y + orbitState.radius * Math.cos(orbitState.phi);
+        const oz = orbitState.target.z + orbitState.radius * Math.sin(orbitState.phi) * Math.cos(orbitState.theta);
+        camera.position.set(ox, Math.max(orbitState.target.y + 12, oy), oz);
+        camera.lookAt(orbitState.target);
+        updateTelemetryHUD(orbitState.target.x, orbitState.target.z);
+      }
+
+      update3DLabels();
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "1346-russell-road-3d-gis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive 3D GIS Terrain, Agricultural Site-Planning Sandbox & Extracted Matterport 3D Digital Twin (rfwtuskak8Q) for 1346 Russell Road, Gibsons, BC (PID 012-421-847)",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve .",
+    "build": "echo 'Static 3D WebGL bundle ready for Vercel deployment'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
