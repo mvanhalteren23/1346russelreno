@@ -1,0 +1,28 @@
+{
+  "data" : {
+    "model" : {
+      "id" : "rfwtuskak8Q",
+      "floors" : [ {
+        "id" : "tsmq1wak12rhgn0mawksxcwcd",
+        "meshId" : 0,
+        "classification" : "Floor 1",
+        "label" : "Floor 1",
+        "sequence" : 0,
+        "dimensions" : {
+          "areaFloor" : 59672.57034580078,
+          "units" : "imperial"
+        }
+      }, {
+        "id" : "pd0i1c4yq9w0y2zsb07ed23sb",
+        "meshId" : 1,
+        "classification" : "Floor 2",
+        "label" : "Floor 2",
+        "sequence" : 1,
+        "dimensions" : {
+          "areaFloor" : 167146.77706480454,
+          "units" : "imperial"
+        }
+      } ]
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "data" : {
+    "model" : {
+      "id" : "rfwtuskak8Q",
+      "mattertags" : [ ],
+      "orderedLists" : [ ],
+      "labels" : [ ],
+      "measurementPaths" : [ ],
+      "activeHighlightReel" : null,
+      "image" : {
+        "id" : "WKiCPrwXHwJ",
+        "label" : "Kitchen",
+        "classification" : "Kitchen",
+        "category" : "snapshot",
+        "height" : 4320,
+        "width" : 7680,
+        "created" : "2026-05-01T14:51:57Z",
+        "modified" : "2026-05-01T14:52:11Z",
+        "status" : "available",
+        "filename" : "Kitchen.jpg",
+        "format" : "image",
+        "url" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-1c2abfc34cf499b11ed2dd5bb9793a1c53a32cbd-1794648425-1",
+        "resolutions" : [ "icon", "thumbnail", "preview", "web", "presentation", "original" ],
+        "type" : "photo2D",
+        "origin" : "vision",
+        "validUntil":"2099-01-01T09:27:05Z",
+        "thumbnailUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-1c2abfc34cf499b11ed2dd5bb9793a1c53a32cbd-1794648425-1&width=200&height=140&fit=crop&disable=upscale",
+        "presentationUrl" : "https://cdn-2.matterport.com/apifs/models/rfwtuskak8Q/images/WKiCPrwXHwJ/WKiCPrwXHwJ-Kitchen.jpg?t=2-1c2abfc34cf499b11ed2dd5bb9793a1c53a32cbd-1794648425-1&width=1920&height=1080&fit=crop&disable=upscale",
+        "snapshotLocation" : {
+          "viewMode" : "panorama",
+          "position" : {
+            "x" : 7.53173828125,
+            "y" : -4.878737926483154,
+            "z" : 0.34146052598953247
+          },
+          "rotation" : {
+            "x" : 0.6500760941713821,
+            "y" : 0.36643930910741307,
+            "z" : -0.32687739156920415,
+            "w" : -0.579891680042901
+          },
+          "zoom" : 1.0,
+          "floorVisibility" : [ ],
+          "anchor" : {
+            "id" : "cmn296qpm30261cwwps40yx3c",
+            "pano" : {
+              "id" : "cmn296qpm30261cwwps40yx3c",
+              "placement" : "auto"
+            }
+          }
+        }
+      }
+    },
+    "view" : {
+      "layers" : [ {
+        "layer" : {
+          "id" : "ckdpmh1c1phyywrhwfdktq86b",
+          "created" : "2026-05-01T14:52:12Z",
+          "modified" : "2026-05-04T23:33:08Z",
+          "type" : "matterport.user.data",
+          "name" : "matterport.user.data",
+          "label" : ""
+        },
+        "position" : 0,
+        "visible" : true
+      }, {
+        "layer" : {
+          "id" : "aaaaaaaaaaaaaaaaaaaaaaaaa",
+          "created" : "2026-05-01T05:12:09Z",
+          "modified" : "2026-09-22T09:48:22Z",
+          "type" : "matterport.base",
+          "name" : null,
+          "label" : ""
+        },
+        "position" : 1,
+        "visible" : true
+      } ]
+    }
+  }
+}
